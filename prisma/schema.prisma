@@ -14,7 +14,14 @@ enum ROLE {
   user
   admin
   author
-  team_meber
+  team_member
+}
+
+enum STATUS {
+  InDevelopment
+  EarlyAccess
+  Released
+  NonProvided
 }
 
 model User {
@@ -24,6 +31,111 @@ model User {
   password String
 
   role ROLE @default(user)
+
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  Team        Team[]
+  teamMemeber TeamMemeber[]
+}
+
+model Team {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  game         Game?
+  team_members TeamMemeber[]
+  author       User          @relation(fields: [userId], references: [id])
+  userId       String
+
+  updatedAt DateTime @updatedAt
+}
+
+model TeamMemeber {
+  id String @id @default(uuid())
+
+  Team   Team?   @relation(fields: [teamId], references: [id])
+  teamId String?
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Game {
+  id String @id @default(uuid())
+
+  title       String @unique
+  description String
+  status      STATUS @default(NonProvided)
+  rating      Int
+  views_count Int
+
+  team   Team   @relation(fields: [teamId], references: [id])
+  teamId String @unique
+
+  platforms Platform[]
+  genres    Genre[]
+  tags      Tag[]
+  file      File       @relation(fields: [fileId], references: [id])
+  fileId    String     @unique
+
+  cover_image Image  @relation("cover", fields: [imageId], references: [id])
+  imageId     String @unique
+
+  screenshots Image[] @relation("screenshots")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Platform {
+  id String @id @default(uuid())
+
+  name  String @unique
+  games Game[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Tag {
+  id String @id @default(uuid())
+
+  name  String @unique
+  games Game[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Genre {
+  id String @id @default(uuid())
+
+  name  String @unique
+  games Game[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model File {
+  id String @id @default(uuid())
+
+  url   String @unique
+  games Game?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Image {
+  id String @id @default(uuid())
+
+  url               String @unique
+  games_cover       Game?  @relation("cover")
+  games_screenshots Game[] @relation("screenshots")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

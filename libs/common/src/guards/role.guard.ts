@@ -1,8 +1,7 @@
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
-import { Observable } from 'rxjs';
-import { UserEntity } from '../../user/entities/user.entity';
+import { UserEntity } from '../entities/user/user.entity';
 
 @Injectable()
 export class RoleGuard extends AuthGuard('jwt') {

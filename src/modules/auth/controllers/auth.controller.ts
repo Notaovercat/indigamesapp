@@ -1,17 +1,15 @@
 import { Body, Controller, Post, Res, UseGuards } from '@nestjs/common';
-import { LocalGuard } from '../guards/local.guard';
-import { CurrentUser } from '../decorators/current-user.decorator';
-import { UserEntity } from '../../user/entities/user.entity';
+import { CreateUserDto, LocalGuard } from '@app/common';
+import { CurrentUser, UserEntity } from '@app/common';
 import { Response } from 'express';
 import { AuthService } from '../services/auth.service';
-import { RegisterDto } from '../dtos/register.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('register')
-  async register(@Body() user: RegisterDto) {
+  async register(@Body() user: CreateUserDto) {
     return this.authService.register(user);
   }
 

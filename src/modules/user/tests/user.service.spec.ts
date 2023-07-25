@@ -1,11 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserEntity } from '../entities/user.entity';
 import { faker } from '@faker-js/faker';
 import { UserService } from '../services/user.service';
 import { mockDeep, DeepMockProxy } from 'jest-mock-extended';
 import { PrismaModule, PrismaService } from 'nestjs-prisma';
 import { PrismaClient } from '@prisma/client';
-import { CreateUserDto } from '../dto/create-user.dto';
+import { CreateUserDto, UserEntity } from '@app/common';
 import { UnauthorizedException } from '@nestjs/common';
 import { hash } from 'bcryptjs';
 

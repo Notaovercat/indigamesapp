@@ -6,6 +6,7 @@ import { UserModule } from './modules/user/user.module';
 import { ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import * as Joi from 'joi';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -24,6 +25,6 @@ import * as Joi from 'joi';
     PassportModule,
   ],
   providers: [ConfigService],
-  controllers: [],
+  controllers: [AppController],
 })
 export class AppModule {}

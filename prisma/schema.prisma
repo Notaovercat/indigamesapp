@@ -71,11 +71,12 @@ model TeamMember {
 model Game {
   id String @id @default(uuid())
 
-  title       String @unique
+  title       String  @unique
   description String
-  status      STATUS @default(NonProvided)
-  rating      Float  @default(0)
-  views_count Int    @default(0)
+  status      STATUS  @default(NonProvided)
+  rating      Float   @default(0)
+  views_count Int     @default(0)
+  ifFeatured  Boolean @default(false)
 
   team        Team?
   platforms   Platform[]

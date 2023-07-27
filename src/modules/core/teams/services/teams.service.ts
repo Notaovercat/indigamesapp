@@ -27,4 +27,15 @@ export class TeamsService {
 
     return team;
   }
+
+  async checkIfUserInTeam(teamId: string, userId: string): Promise<boolean> {
+    const team = await this.prisma.team.findUniqueOrThrow({
+      where: {
+        id: teamId,
+      },
+    });
+
+    if (team.authorId === userId) return true;
+    return false;
+  }
 }

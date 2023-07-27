@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { UserService } from 'src/modules/user/services/user.service';
+import { UserService } from '../../user/services/user.service';
 import { hash } from 'bcryptjs';
 import { CreateUserDto, Payload, UserEntity } from '@app/common';
 import { ConfigService } from '@nestjs/config';

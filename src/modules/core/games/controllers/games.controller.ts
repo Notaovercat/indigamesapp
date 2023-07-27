@@ -1,6 +1,21 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
-import { CurrentUser, JwtGuard, UserEntity } from '@app/common';
-import { CreateGameDto } from '../dtos/create-game.dto';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  CurrentUser,
+  JwtGuard,
+  UserEntity,
+  CreateGameDto,
+  Roles,
+  RoleGuard,
+  UpdateGameDto,
+} from '@app/common';
 import { GamesService } from '../services/games.service';
 
 @Controller('games')
@@ -16,6 +31,18 @@ export class GamesController {
   @Get()
   getAllGames() {
     return this.gamesService.findAllGames();
+  }
+
+  @Roles('author')
+  @UseGuards(RoleGuard)
+  @UseGuards(JwtGuard)
+  @Patch(':id')
+  updateGame(
+    @Body() updateGameDto: UpdateGameDto,
+    @CurrentUser() user: UserEntity,
+    @Param('id') id: string,
+  ) {
+    return this.gamesService.updateGame(id, updateGameDto, user);
   }
 
   @Get(':id')

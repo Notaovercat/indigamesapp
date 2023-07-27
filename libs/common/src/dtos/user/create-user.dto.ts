@@ -1,11 +1,5 @@
 import { IUserCreate } from '@app/common';
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsString,
-  IsStrongPassword,
-  MinLength,
-} from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
 
 export class CreateUserDto implements IUserCreate {
   @IsString()
@@ -17,7 +11,7 @@ export class CreateUserDto implements IUserCreate {
   @IsNotEmpty()
   email: string;
 
-  @IsStrongPassword()
+  @IsString()
   @IsNotEmpty()
   password: string;
 }

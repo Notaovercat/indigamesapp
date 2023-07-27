@@ -1,9 +1,9 @@
 version: '3.8'
 
 services:
-  postgres:
+  database:
     image: postgres:latest
-    container_name: postgres
+    container_name: database
     restart: always
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -11,30 +11,31 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       PGDATA: '/var/lib/postgresql/data/pgdata'
     ports:
-      - ${POSTGRES_PORT}:5432
+      - 5432:5432
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - postgres
 
-  pgadmin:
-    container_name: pgadmin_container
-    image: dpage/pgadmin4:7.2
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin
-    ports:
-      - '5050:80'
+  test_database:
+    image: postgres:latest
+    container_name: test_database
     restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      PGDATA: '/var/lib/postgresql/data/pgdata'
+    ports:
+      - 5433:5432
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data
     networks:
       - postgres
 
 volumes:
   postgres_data:
-  pgadmin-data:
+  postgres_test_data:
 
 networks:
   postgres:

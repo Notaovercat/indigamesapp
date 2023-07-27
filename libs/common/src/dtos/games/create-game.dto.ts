@@ -1,6 +1,5 @@
 import { Type } from 'class-transformer';
 import {
-  ArrayNotEmpty,
   IsArray,
   IsNotEmpty,
   IsOptional,
@@ -24,7 +23,7 @@ export class CreateGameDto {
 
   @IsString()
   @IsOptional()
-  imageId: string;
+  coverImageId: string;
 
   @IsArray()
   @ValidateNested({ each: true })

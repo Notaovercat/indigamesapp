@@ -1,9 +1,18 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
-import { CreateGameDto } from '../dtos/create-game.dto';
-import { CreateTeamDto, UserEntity } from '@app/common';
+import {
+  CreateTeamDto,
+  UserEntity,
+  CreateGameDto,
+  GameEntity,
+  UpdateGameDto,
+} from '@app/common';
 import { TeamsService } from '../../teams/services/teams.service';
-import { GameEntity } from '../entities/game.entity';
 
 @Injectable()
 export class GamesService {
@@ -12,10 +21,7 @@ export class GamesService {
     private teamService: TeamsService,
   ) {}
 
-  async createGame(
-    dto: CreateGameDto,
-    user: UserEntity, // : Promise<GameEntity>
-  ) {
+  async createGame(dto: CreateGameDto, user: UserEntity): Promise<GameEntity> {
     const { team, ...createGameDto } = dto;
 
     const game = await this.prisma.game.create({
@@ -54,7 +60,40 @@ export class GamesService {
         },
       },
     });
+
+    await this.prisma.game.update({
+      where: { id: gameId },
+      data: {
+        views_count: {
+          increment: 1,
+        },
+      },
+    });
+
     return game;
+  }
+
+  async updateGame(gameId: string, dto: UpdateGameDto, user: UserEntity) {
+    const game = await this.findGameById(gameId);
+
+    if (!game.team) throw new InternalServerErrorException();
+
+    const checkIsInTeam = this.teamService.checkIfUserInTeam(
+      game.team.id,
+      user.id,
+    );
+
+    if (!checkIsInTeam)
+      throw new BadRequestException('You are not in the team');
+
+    return this.prisma.game.update({
+      where: {
+        id: game.id,
+      },
+      data: {
+        ...dto,
+      },
+    });
   }
 
   deleteGame(gameId: string) {

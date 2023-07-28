@@ -44,8 +44,18 @@ export class GamesService {
     return game;
   }
 
-  findAllGames(): Promise<GameEntity[]> {
-    return this.prisma.game.findMany();
+  findAllGames(
+    isFeatured?: boolean,
+    lastUpdated?: boolean,
+  ): Promise<GameEntity[]> {
+    return this.prisma.game.findMany({
+      where: {
+        isFeatured: isFeatured ? true : undefined,
+      },
+      orderBy: {
+        updatedAt: lastUpdated ? 'desc' : undefined,
+      },
+    });
   }
 
   async findGameById(gameId: string) {

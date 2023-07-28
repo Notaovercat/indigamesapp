@@ -3,8 +3,10 @@ import {
   Controller,
   Get,
   Param,
+  ParseBoolPipe,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -29,8 +31,11 @@ export class GamesController {
   }
 
   @Get()
-  getAllGames() {
-    return this.gamesService.findAllGames();
+  getAllGames(
+    @Query('isFeatured') isFeatured: boolean,
+    @Query('lastUpdated') lastUpdated: boolean,
+  ) {
+    return this.gamesService.findAllGames(isFeatured, lastUpdated);
   }
 
   // @Roles('author')

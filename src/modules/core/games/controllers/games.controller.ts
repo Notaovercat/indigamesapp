@@ -17,6 +17,7 @@ import {
   Roles,
   RoleGuard,
   UpdateGameDto,
+  ChangeVisibilityDto,
 } from '@app/common';
 import { GamesService } from '../services/games.service';
 
@@ -38,8 +39,21 @@ export class GamesController {
     return this.gamesService.findAllGames(isFeatured, lastUpdated);
   }
 
-  // @Roles('author')
-  @UseGuards(RoleGuard)
+  @UseGuards(JwtGuard)
+  @Get('my')
+  getMyGames(@CurrentUser() user: UserEntity) {
+    return this.gamesService.findMyGames(user.id);
+  }
+
+  @UseGuards(JwtGuard)
+  @Post('visible')
+  changeVisibility(
+    @Body() visiblyDto: ChangeVisibilityDto,
+    @CurrentUser() user: UserEntity,
+  ) {
+    return this.gamesService.changeVisibility(visiblyDto, user.id);
+  }
+
   @UseGuards(JwtGuard)
   @Patch(':id')
   updateGame(

@@ -12,6 +12,7 @@ import {
   CreateGameDto,
   GameEntity,
   UpdateGameDto,
+  ChangeVisibilityDto,
 } from '@app/common';
 import { TeamsService } from '../../teams/services/teams.service';
 
@@ -51,6 +52,7 @@ export class GamesService {
     return this.prisma.game.findMany({
       where: {
         isFeatured: isFeatured ? true : undefined,
+        isVisible: true,
       },
       orderBy: {
         updatedAt: lastUpdated ? 'desc' : undefined,
@@ -89,7 +91,7 @@ export class GamesService {
 
     if (!game.team) throw new InternalServerErrorException();
 
-    const checkIsInTeam = this.teamService.checkIfUserInTeam(
+    const checkIsInTeam = this.teamService.checkIsUserIsAuthor(
       game.team.id,
       user.id,
     );
@@ -106,7 +108,43 @@ export class GamesService {
     });
   }
 
+  async changeVisibility(dto: ChangeVisibilityDto, userId: string) {
+    await this.isUserAuthor(dto.gameId, userId);
+
+    return this.prisma.game.update({
+      where: {
+        id: dto.gameId,
+      },
+      data: {
+        isVisible: dto.isVisible,
+      },
+    });
+  }
+
   deleteGame(gameId: string) {
     return this.prisma.game.delete({ where: { id: gameId } });
+  }
+
+  async isUserAuthor(gameId: string, userId: string) {
+    const checkIsInTeam = await this.teamService.checkIsUserIsAuthor(
+      gameId,
+      userId,
+    );
+
+    if (!checkIsInTeam) throw new ForbiddenException('You are not in the team');
+    return;
+  }
+
+  async findMyGames(userId: string) {
+    return this.prisma.game.findMany({
+      where: {
+        team: {
+          authorId: userId,
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
   }
 }

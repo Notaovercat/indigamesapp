@@ -32,10 +32,11 @@ export class TeamsService {
     return team;
   }
 
-  async checkIfUserInTeam(teamId: string, userId: string): Promise<boolean> {
+  async checkIsUserIsAuthor(gameId: string, userId: string): Promise<boolean> {
+    console.log(gameId);
     const team = await this.prisma.team.findUniqueOrThrow({
       where: {
-        id: teamId,
+        gameId,
       },
     });
 
@@ -78,7 +79,7 @@ export class TeamsService {
     if (!team) {
       throw new NotFoundException('Team not found');
     }
-    const check = this.checkIfUserInTeam(team.id, userId);
+    const check = this.checkIsUserIsAuthor(team.id, userId);
 
     if (!check) throw new ForbiddenException('You are not in the team');
 

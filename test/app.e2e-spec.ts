@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import * as supertest from 'supertest';
-import { AppModule } from './../src/app.module';
+import { AppModule } from '../src/modules/app/app.module';
 import * as cookieParser from 'cookie-parser';
 
 import { CreateUserDto } from '../libs/common/src';

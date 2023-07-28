@@ -3,6 +3,7 @@ import {
   ForbiddenException,
   Injectable,
   InternalServerErrorException,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
@@ -15,9 +16,12 @@ import {
   ChangeVisibilityDto,
 } from '@app/common';
 import { TeamsService } from '../../teams/services/teams.service';
+import { PinoLogger } from 'nestjs-pino';
 
 @Injectable()
 export class GamesService {
+  private readonly logger = new Logger(GamesService.name);
+
   constructor(
     private prisma: PrismaService,
     private teamService: TeamsService,
@@ -60,7 +64,7 @@ export class GamesService {
     });
   }
 
-  async findGameById(gameId: string) {
+  async findGameById(gameId: string, userId?: string) {
     const game = await this.prisma.game.findUniqueOrThrow({
       where: {
         id: gameId,
@@ -73,6 +77,13 @@ export class GamesService {
         },
       },
     });
+
+    if (!game.isVisible && !userId) throw new NotFoundException('No such game');
+
+    if (!game.isVisible && userId) {
+      await this.isUserAuthor(game.id, userId);
+      return game;
+    }
 
     await this.prisma.game.update({
       where: { id: gameId },

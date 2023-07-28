@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Logger,
   Param,
   ParseBoolPipe,
   Patch,
@@ -18,11 +19,14 @@ import {
   RoleGuard,
   UpdateGameDto,
   ChangeVisibilityDto,
+  Public,
 } from '@app/common';
 import { GamesService } from '../services/games.service';
 
 @Controller('games')
 export class GamesController {
+  private readonly logger = new Logger(GamesService.name);
+
   constructor(private gamesService: GamesService) {}
 
   @UseGuards(JwtGuard)
@@ -55,6 +59,13 @@ export class GamesController {
   }
 
   @UseGuards(JwtGuard)
+  @Public()
+  @Get(':id')
+  getGameById(@Param('id') gameId: string, @CurrentUser() user?: UserEntity) {
+    return this.gamesService.findGameById(gameId, user?.id);
+  }
+
+  @UseGuards(JwtGuard)
   @Patch(':id')
   updateGame(
     @Body() updateGameDto: UpdateGameDto,
@@ -62,10 +73,5 @@ export class GamesController {
     @Param('id') id: string,
   ) {
     return this.gamesService.updateGame(id, updateGameDto, user);
-  }
-
-  @Get(':id')
-  getGameById(@Param('id') id: string) {
-    return this.gamesService.findGameById(id);
   }
 }

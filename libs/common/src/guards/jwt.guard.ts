@@ -1,6 +1,7 @@
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
+import { UserEntity } from '../entities';
 
 @Injectable()
 export class JwtGuard extends AuthGuard('jwt') {
@@ -14,6 +15,9 @@ export class JwtGuard extends AuthGuard('jwt') {
       context.getClass(),
     ]);
 
+    const user = context.switchToHttp().getRequest().cookies.Authentication;
+
+    if (isPublic && user) return super.canActivate(context);
     if (isPublic) return true;
 
     return super.canActivate(context);

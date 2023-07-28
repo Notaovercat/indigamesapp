@@ -7,6 +7,8 @@ export class GameEntity implements Game {
   status: STATUS;
   rating: number;
   views_count: number;
+  isFeatured: boolean;
+  isVisible: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

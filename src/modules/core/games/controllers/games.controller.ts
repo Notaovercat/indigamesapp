@@ -33,7 +33,7 @@ export class GamesController {
     return this.gamesService.findAllGames();
   }
 
-  @Roles('author')
+  // @Roles('author')
   @UseGuards(RoleGuard)
   @UseGuards(JwtGuard)
   @Patch(':id')

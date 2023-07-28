@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -83,8 +84,7 @@ export class GamesService {
       user.id,
     );
 
-    if (!checkIsInTeam)
-      throw new BadRequestException('You are not in the team');
+    if (!checkIsInTeam) throw new ForbiddenException('You are not in the team');
 
     return this.prisma.game.update({
       where: {

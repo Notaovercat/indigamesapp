@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import { CreateTeamDto, CreateTeamMemberDto, TeamEntity } from '@app/common';
 
@@ -37,5 +41,52 @@ export class TeamsService {
 
     if (team.authorId === userId) return true;
     return false;
+  }
+
+  async getTeamByGameId(gameId: string) {
+    return this.prisma.team.findUniqueOrThrow({
+      where: {
+        gameId,
+      },
+      include: {
+        team_members: {
+          select: {
+            id: true,
+            role: true,
+            user: {
+              select: {
+                id: true,
+                email: true,
+                username: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
+  async addUserToTheTeam(
+    gameId: string,
+    memberDto: CreateTeamMemberDto,
+    userId: string,
+  ) {
+    const team = await this.prisma.team.findUnique({
+      where: { gameId },
+    });
+
+    if (!team) {
+      throw new NotFoundException('Team not found');
+    }
+    const check = this.checkIfUserInTeam(team.id, userId);
+
+    if (!check) throw new ForbiddenException('You are not in the team');
+
+    return this.prisma.teamMember.create({
+      data: {
+        ...memberDto,
+        teamId: team.id,
+      },
+    });
   }
 }

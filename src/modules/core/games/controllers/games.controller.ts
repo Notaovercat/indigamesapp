@@ -4,7 +4,6 @@ import {
   Get,
   Logger,
   Param,
-  ParseBoolPipe,
   Patch,
   Post,
   Query,

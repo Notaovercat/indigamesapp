@@ -23,10 +23,14 @@ export class CreateGameDto {
 
   @IsString()
   @IsOptional()
-  coverImageId: string;
+  coverImageId?: string;
 
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => CreateTeamMemberDto)
   team: CreateTeamMemberDto[];
+
+  @IsArray()
+  @IsNotEmpty()
+  platforms: string[];
 }

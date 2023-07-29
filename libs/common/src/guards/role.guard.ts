@@ -13,7 +13,7 @@ export class RoleGuard extends AuthGuard('jwt') {
     const roles = this.reflector.getAllAndOverride('roles', [
       context.getHandler(),
       context.getClass(),
-    ]) as string[];
+    ]);
 
     const user = context.switchToHttp().getRequest().user as UserEntity;
 

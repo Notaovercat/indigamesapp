@@ -19,6 +19,7 @@ import {
   UpdateGameDto,
   ChangeVisibilityDto,
   Public,
+  DisconnectPlatformDto,
 } from '@app/common';
 import { GamesService } from '../services/games.service';
 
@@ -30,8 +31,8 @@ export class GamesController {
 
   @UseGuards(JwtGuard)
   @Post('create')
-  createGame(@Body() gameDto: CreateGameDto, @CurrentUser() user: UserEntity) {
-    return this.gamesService.createGame(gameDto, user);
+  createGame(@Body() dto: CreateGameDto, @CurrentUser() user: UserEntity) {
+    return this.gamesService.createGame(dto, user);
   }
 
   @Get()
@@ -51,10 +52,10 @@ export class GamesController {
   @UseGuards(JwtGuard)
   @Post('visible')
   changeVisibility(
-    @Body() visiblyDto: ChangeVisibilityDto,
+    @Body() dto: ChangeVisibilityDto,
     @CurrentUser() user: UserEntity,
   ) {
-    return this.gamesService.changeVisibility(visiblyDto, user.id);
+    return this.gamesService.changeVisibility(dto, user.id);
   }
 
   @UseGuards(JwtGuard)
@@ -67,10 +68,20 @@ export class GamesController {
   @UseGuards(JwtGuard)
   @Patch(':id')
   updateGame(
-    @Body() updateGameDto: UpdateGameDto,
-    @CurrentUser() user: UserEntity,
     @Param('id') id: string,
+    @Body() dto: UpdateGameDto,
+    @CurrentUser() user: UserEntity,
   ) {
-    return this.gamesService.updateGame(id, updateGameDto, user);
+    return this.gamesService.updateGame(id, dto, user.id);
+  }
+
+  @UseGuards(JwtGuard)
+  @Patch(':id/rmplatform')
+  removePlatform(
+    @Param('id') gameId: string,
+    @Body() dto: DisconnectPlatformDto,
+    @CurrentUser() user: UserEntity,
+  ) {
+    return this.gamesService.removePlatformFromGame(gameId, dto, user.id);
   }
 }

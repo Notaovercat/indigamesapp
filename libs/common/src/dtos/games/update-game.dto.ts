@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsArray, IsOptional, IsString } from 'class-validator';
 
 export class UpdateGameDto {
   @IsString()
@@ -16,4 +16,8 @@ export class UpdateGameDto {
   @IsString()
   @IsOptional()
   coverImageId?: string;
+
+  @IsArray()
+  @IsOptional()
+  platforms?: string[];
 }

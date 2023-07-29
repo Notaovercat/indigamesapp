@@ -33,6 +33,7 @@ export class TeamsService {
   }
 
   async checkIsUserIsAuthor(gameId: string, userId: string): Promise<boolean> {
+    console.log('36: at this');
     const team = await this.prisma.team.findUniqueOrThrow({
       where: {
         gameId,

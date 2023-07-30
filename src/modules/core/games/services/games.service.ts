@@ -27,7 +27,7 @@ export class GamesService {
   ) {}
 
   async createGame(dto: CreateGameDto, user: UserEntity): Promise<GameEntity> {
-    const { team, tags, platforms, ...createGameDto } = dto;
+    const { team, tags, platforms, genres, ...createGameDto } = dto;
 
     const game = await this.prisma.game.create({
       data: {
@@ -40,6 +40,9 @@ export class GamesService {
             where: { name: tag },
             create: { name: tag },
           })),
+        },
+        genres: {
+          connect: genres.map((genreId) => ({ id: genreId })),
         },
       },
     });
@@ -83,7 +86,13 @@ export class GamesService {
         team: {
           select: {
             id: true,
-            authorId: true,
+            author: {
+              select: {
+                id: true,
+                email: true,
+                username: true,
+              },
+            },
             team_members: {
               select: {
                 id: true,
@@ -101,6 +110,7 @@ export class GamesService {
         },
         platforms: true,
         tags: true,
+        genres: true,
       },
     });
 
@@ -126,7 +136,7 @@ export class GamesService {
   async updateGame(gameId: string, dto: UpdateGameDto, userId: string) {
     await this.isUserAuthor(gameId, userId);
 
-    const { platforms, tags, ...updateGameData } = dto;
+    const { platforms, tags, genres, ...updateGameData } = dto;
 
     return this.prisma.game.update({
       where: {
@@ -147,10 +157,16 @@ export class GamesService {
               })),
             }
           : undefined,
+        genres: genres
+          ? {
+              connect: genres.map((genreId) => ({ id: genreId })),
+            }
+          : undefined,
       },
       select: {
         platforms: true,
         tags: true,
+        genres: true,
       },
     });
   }

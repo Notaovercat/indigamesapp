@@ -24,4 +24,8 @@ export class UpdateGameDto {
   @IsArray()
   @IsOptional()
   tags?: string[];
+
+  @IsArray()
+  @IsOptional()
+  genres?: string[];
 }

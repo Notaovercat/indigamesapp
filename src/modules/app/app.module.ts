@@ -24,7 +24,9 @@ import { LoggerModule } from 'nestjs-pino';
         JWT_EXPIRES_IN: Joi.number().required(),
       }),
     }),
-    PrismaModule.forRoot({ isGlobal: true }),
+    PrismaModule.forRoot({
+      isGlobal: true,
+    }),
     // EventEmitterModule.forRoot(),
     AuthModule,
     UserModule,

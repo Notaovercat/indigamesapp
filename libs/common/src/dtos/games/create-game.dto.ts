@@ -37,4 +37,8 @@ export class CreateGameDto {
   @IsArray()
   @IsNotEmpty()
   tags: string[];
+
+  @IsArray()
+  @IsNotEmpty()
+  genres: string[];
 }

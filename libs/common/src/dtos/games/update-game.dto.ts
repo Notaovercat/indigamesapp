@@ -20,4 +20,8 @@ export class UpdateGameDto {
   @IsArray()
   @IsOptional()
   platforms?: string[];
+
+  @IsArray()
+  @IsOptional()
+  tags?: string[];
 }

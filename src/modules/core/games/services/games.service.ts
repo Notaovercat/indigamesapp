@@ -1,8 +1,6 @@
 import {
-  BadRequestException,
   ForbiddenException,
   Injectable,
-  InternalServerErrorException,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
@@ -14,10 +12,10 @@ import {
   GameEntity,
   UpdateGameDto,
   ChangeVisibilityDto,
-  DisconnectPlatformDto,
+  RemovePlatformDto as RemovePlatformDto,
+  RemoveTagDto,
 } from '@app/common';
 import { TeamsService } from '../../teams/services/teams.service';
-import { PinoLogger } from 'nestjs-pino';
 
 @Injectable()
 export class GamesService {
@@ -29,13 +27,19 @@ export class GamesService {
   ) {}
 
   async createGame(dto: CreateGameDto, user: UserEntity): Promise<GameEntity> {
-    const { team, platforms, ...createGameDto } = dto;
+    const { team, tags, platforms, ...createGameDto } = dto;
 
     const game = await this.prisma.game.create({
       data: {
         ...createGameDto,
         platforms: {
           connect: platforms.map((platformId) => ({ id: platformId })),
+        },
+        tags: {
+          connectOrCreate: tags.map((tag) => ({
+            where: { name: tag },
+            create: { name: tag },
+          })),
         },
       },
     });
@@ -96,6 +100,7 @@ export class GamesService {
           },
         },
         platforms: true,
+        tags: true,
       },
     });
 
@@ -121,7 +126,7 @@ export class GamesService {
   async updateGame(gameId: string, dto: UpdateGameDto, userId: string) {
     await this.isUserAuthor(gameId, userId);
 
-    const { platforms, ...updateGameData } = dto;
+    const { platforms, tags, ...updateGameData } = dto;
 
     return this.prisma.game.update({
       where: {
@@ -134,9 +139,18 @@ export class GamesService {
               connect: platforms.map((platformId) => ({ id: platformId })),
             }
           : undefined,
+        tags: tags
+          ? {
+              connectOrCreate: tags.map((tag) => ({
+                where: { name: tag },
+                create: { name: tag },
+              })),
+            }
+          : undefined,
       },
       select: {
         platforms: true,
+        tags: true,
       },
     });
   }
@@ -183,7 +197,7 @@ export class GamesService {
 
   async removePlatformFromGame(
     gameId: string,
-    dto: DisconnectPlatformDto,
+    dto: RemovePlatformDto,
     userId: string,
   ) {
     await this.isUserAuthor(gameId, userId);
@@ -202,6 +216,29 @@ export class GamesService {
         platforms: {
           disconnect: {
             id: dto.platformId,
+          },
+        },
+      },
+    });
+  }
+
+  async removeTagFromGame(gameId: string, dto: RemoveTagDto, userId: string) {
+    await this.isUserAuthor(gameId, userId);
+
+    const game = await this.prisma.game.findUniqueOrThrow({
+      where: {
+        id: gameId,
+      },
+    });
+
+    return this.prisma.game.update({
+      where: {
+        id: game.id,
+      },
+      data: {
+        tags: {
+          disconnect: {
+            id: dto.tagId,
           },
         },
       },

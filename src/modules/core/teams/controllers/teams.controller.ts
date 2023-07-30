@@ -18,8 +18,6 @@ export class TeamController {
     return this.teamsService.getTeamByGameId(gameId);
   }
 
-  // @Roles('author')
-  // @UseGuards(RoleGuard)
   @UseGuards(JwtGuard)
   @Post('game/:id')
   addUserToTheTeam(

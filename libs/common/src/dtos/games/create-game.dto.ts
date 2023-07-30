@@ -33,4 +33,8 @@ export class CreateGameDto {
   @IsArray()
   @IsNotEmpty()
   platforms: string[];
+
+  @IsArray()
+  @IsNotEmpty()
+  tags: string[];
 }

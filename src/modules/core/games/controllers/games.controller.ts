@@ -19,7 +19,8 @@ import {
   UpdateGameDto,
   ChangeVisibilityDto,
   Public,
-  DisconnectPlatformDto,
+  RemovePlatformDto,
+  RemoveTagDto,
 } from '@app/common';
 import { GamesService } from '../services/games.service';
 
@@ -79,9 +80,19 @@ export class GamesController {
   @Patch(':id/rmplatform')
   removePlatform(
     @Param('id') gameId: string,
-    @Body() dto: DisconnectPlatformDto,
+    @Body() dto: RemovePlatformDto,
     @CurrentUser() user: UserEntity,
   ) {
     return this.gamesService.removePlatformFromGame(gameId, dto, user.id);
+  }
+
+  @UseGuards(JwtGuard)
+  @Patch(':id/rmtag')
+  removeTag(
+    @Param('id') gameId: string,
+    @Body() dto: RemoveTagDto,
+    @CurrentUser() user: UserEntity,
+  ) {
+    return this.gamesService.removeTagFromGame(gameId, dto, user.id);
   }
 }

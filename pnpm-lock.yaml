@@ -92,6 +92,9 @@ dependencies:
   rxjs:
     specifier: ^7.8.1
     version: 7.8.1
+  socket.io:
+    specifier: ^4.7.1
+    version: 4.7.1
 
 devDependencies:
   '@nestjs/cli':

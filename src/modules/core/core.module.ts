@@ -4,6 +4,7 @@ import { PlatformsModule } from './platforms/platforms.module';
 import { TeamsModule } from './teams/teams.module';
 import { TagsModule } from './tags/tags.module';
 import { GenresModule } from './genres/genres.module';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [

@@ -1,7 +1,7 @@
 import {
   ForbiddenException,
   Injectable,
-  Logger,
+  // Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
@@ -19,7 +19,7 @@ import { TeamsService } from '../../teams/services/teams.service';
 
 @Injectable()
 export class GamesService {
-  private readonly logger = new Logger(GamesService.name);
+  // private readonly logger = new Logger(GamesService.name);
 
   constructor(
     private prisma: PrismaService,

@@ -2,7 +2,7 @@ import {
   Body,
   Controller,
   Get,
-  Logger,
+  // Logger,
   Param,
   Patch,
   Post,
@@ -14,8 +14,6 @@ import {
   JwtGuard,
   UserEntity,
   CreateGameDto,
-  Roles,
-  RoleGuard,
   UpdateGameDto,
   ChangeVisibilityDto,
   Public,
@@ -26,7 +24,7 @@ import { GamesService } from '../services/games.service';
 
 @Controller('games')
 export class GamesController {
-  private readonly logger = new Logger(GamesService.name);
+  // private readonly logger = new Logger(GamesService.name);
 
   constructor(private gamesService: GamesService) {}
 

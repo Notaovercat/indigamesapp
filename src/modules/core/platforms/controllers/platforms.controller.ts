@@ -5,7 +5,6 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
   UseGuards,
 } from '@nestjs/common';
 import { PlatformsService } from '../services/platforms.service';

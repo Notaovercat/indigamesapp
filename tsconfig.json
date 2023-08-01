@@ -18,7 +18,7 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "strict": true,
-    // "noUnusedLocals": true,
+    "noUnusedLocals": true,
     "strictPropertyInitialization": false,
     "paths": {
       "@app/common": ["libs/common/src"],

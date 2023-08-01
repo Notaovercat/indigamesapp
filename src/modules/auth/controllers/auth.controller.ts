@@ -1,13 +1,11 @@
 import {
   Body,
-  ClassSerializerInterceptor,
   Controller,
   HttpCode,
   HttpStatus,
   Post,
   Res,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import { CreateUserDto, LocalGuard } from '@app/common';
 import { CurrentUser, UserEntity } from '@app/common';

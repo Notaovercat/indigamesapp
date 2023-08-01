@@ -4,8 +4,6 @@ import {
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
-  BaseWsExceptionFilter,
-  WsException,
   OnGatewayDisconnect,
 } from '@nestjs/websockets';
 import {
@@ -15,7 +13,7 @@ import {
   WsJwtGuard,
 } from '@app/common';
 import { CommentsService } from '../services/comments.service';
-import { Logger, UseFilters, UseGuards } from '@nestjs/common';
+import { Logger, UseGuards } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway({

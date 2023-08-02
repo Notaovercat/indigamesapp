@@ -9,10 +9,10 @@ COPY package.json ./
 COPY pnpm-lock.yaml ./
 
 RUN npm i -g pnpm
-RUN pnpm i
+
+RUN pnpm install --frozen-lockfile
 
 COPY . .
-
 
 RUN npx prisma generate
 RUN pnpm run build
@@ -25,9 +25,10 @@ ENV NODE_ENV production
 WORKDIR /usr/src/app
 
 COPY package.json ./
-COPY yarn.lock ./
+COPY pnpm-lock.yaml ./
 
-RUN pnpm i -P
+RUN npm i -g pnpm
+RUN pnpm i --prod
 
 COPY  --from=development /usr/src/app/dist ./dist
 

@@ -22,7 +22,6 @@ import { LoggerModule } from 'nestjs-pino';
         JWT_SECRET: Joi.string().required(),
         JWT_EXPIRES_IN: Joi.number().required(),
         APP_PORT: Joi.number().required(),
-        SOCKET_PORT: Joi.number().required(),
       }),
     }),
     PrismaModule.forRoot({

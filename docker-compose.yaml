@@ -17,6 +17,24 @@ services:
     networks:
       - postgres
 
+  backend:
+    container_name: backend
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: development
+    command: pnpm run start:dev
+    ports:
+      - 3000:3000
+    environment:
+      - POSTGRES_HOST=database
+    volumes:
+      - backend_data:/usr/src/app
+    networks:
+      - postgres
+    depends_on:
+      - database
+
   test_database:
     image: postgres:latest
     container_name: test_database
@@ -36,6 +54,7 @@ services:
 volumes:
   postgres_data:
   postgres_test_data:
+  backend_data:
 
 networks:
   postgres:

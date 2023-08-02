@@ -10,7 +10,6 @@ import { ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import * as Joi from 'joi';
 import { CoreModule } from '../core/core.module';
-// import { EventEmitterModule } from '@nestjs/event-emitter';
 import { LoggerModule } from 'nestjs-pino';
 
 @Module({
@@ -29,7 +28,6 @@ import { LoggerModule } from 'nestjs-pino';
     PrismaModule.forRoot({
       isGlobal: true,
     }),
-    // EventEmitterModule.forRoot(),
     AuthModule,
     UserModule,
     PassportModule,

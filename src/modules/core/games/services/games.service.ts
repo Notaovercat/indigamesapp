@@ -16,6 +16,7 @@ import {
   RemoveTagDto,
 } from '@app/common';
 import { TeamsService } from '../../teams/services/teams.service';
+import { ImagesService } from '../../images/services/images.service';
 
 @Injectable()
 export class GamesService {
@@ -24,6 +25,7 @@ export class GamesService {
   constructor(
     private prisma: PrismaService,
     private teamService: TeamsService,
+    private imagesService: ImagesService,
   ) {}
 
   async createGame(dto: CreateGameDto, user: UserEntity): Promise<GameEntity> {
@@ -111,6 +113,8 @@ export class GamesService {
         platforms: true,
         tags: true,
         genres: true,
+        coverImage: true,
+        screenshots: true,
       },
     });
 
@@ -163,7 +167,7 @@ export class GamesService {
             }
           : undefined,
       },
-      select: {
+      include: {
         platforms: true,
         tags: true,
         genres: true,
@@ -259,5 +263,31 @@ export class GamesService {
         },
       },
     });
+  }
+
+  async uploadCover(gameId: string, userId: string, file: Express.Multer.File) {
+    await this.isUserAuthor(gameId, userId);
+
+    return this.imagesService.createCoverImage(file.filename, gameId);
+  }
+
+  async uploadScreenshot(
+    gameId: string,
+    userId: string,
+    file: Express.Multer.File,
+  ) {
+    await this.isUserAuthor(gameId, userId);
+
+    return this.imagesService.createScreenshot(file.filename, gameId);
+  }
+
+  async deleteCover(gameId: string, userId: string, coverId: string) {
+    await this.isUserAuthor(gameId, userId);
+    return this.imagesService.deleteCover(coverId);
+  }
+
+  async deleteScreenshot(gameId: string, userId: string, screenId: string) {
+    await this.isUserAuthor(gameId, userId);
+    return this.imagesService.deleteScreenshot(screenId);
   }
 }

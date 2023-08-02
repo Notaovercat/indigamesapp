@@ -84,13 +84,13 @@ model Game {
   isFeatured Boolean @default(false)
   isVisible  Boolean @default(false)
 
+  coverImage  CoverImage?
   team        Team?
   platforms   Platform[]
   genres      Genre[]
   tags        Tag[]
   file        File?
-  cover_image Image?     @relation("cover")
-  screenshots Image[]    @relation("screenshots")
+  screenshots Screenshot[]
   comments    Comment[]
 
   createdAt DateTime @default(now())
@@ -139,14 +139,24 @@ model File {
   updatedAt DateTime @updatedAt
 }
 
-model Image {
+model Screenshot {
   id String @id @default(uuid())
 
-  url String @unique
+  name String @unique
 
-  games_cover       Game   @relation("cover", fields: [gameId], references: [id], onDelete: Cascade)
-  gameId            String @unique
-  games_screenshots Game[] @relation("screenshots")
+  game Game[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CoverImage {
+  id String @id @default(uuid())
+
+  name String @unique
+
+  game   Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  gameId String @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

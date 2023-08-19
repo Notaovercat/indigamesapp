@@ -27,10 +27,6 @@ import { LoggerModule } from 'nestjs-pino';
     PrismaModule.forRoot({
       isGlobal: true,
     }),
-    AuthModule,
-    UserModule,
-    PassportModule,
-    CoreModule,
     LoggerModule.forRoot({
       pinoHttp: {
         transport: {
@@ -42,6 +38,11 @@ import { LoggerModule } from 'nestjs-pino';
         },
       },
     }),
+
+    AuthModule,
+    UserModule,
+    PassportModule,
+    CoreModule,
   ],
   providers: [ConfigService, providePrismaClientExceptionFilter()],
   controllers: [],

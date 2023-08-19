@@ -3,9 +3,11 @@ import { AppModule } from './modules/app/app.module';
 import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 import { ConfigService } from '@nestjs/config';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const config = app.get(ConfigService);
 
   const port = config.get<number>('APP_PORT') || 3000;
@@ -17,6 +19,8 @@ async function bootstrap() {
     }),
   );
 
+  app.enableCors();
+  app.useStaticAssets(join(__dirname, '../uploads'));
   app.use(cookieParser());
   await app.listen(port);
 }

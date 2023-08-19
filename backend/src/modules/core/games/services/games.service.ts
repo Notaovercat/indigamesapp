@@ -74,7 +74,21 @@ export class GamesService {
         isVisible: true,
       },
       orderBy: {
-        updatedAt: lastUpdated ? 'desc' : undefined,
+        updatedAt: lastUpdated ? 'desc' : 'asc',
+      },
+      include: {
+        coverImage: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        genres: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
     });
   }
@@ -125,6 +139,8 @@ export class GamesService {
       return game;
     }
 
+    // REDO THIS LATER
+    /*  
     await this.prisma.game.update({
       where: { id: gameId },
       data: {
@@ -133,6 +149,12 @@ export class GamesService {
         },
       },
     });
+    */
+    await this.prisma.$queryRaw`
+      UPDATE "Game"
+      SET "views_count" = "views_count" + 1
+      WHERE "id" = ${gameId}
+    `;
 
     return game;
   }

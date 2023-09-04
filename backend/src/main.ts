@@ -19,7 +19,10 @@ async function bootstrap() {
     }),
   );
 
-  app.enableCors();
+  app.enableCors({
+    origin: config.get<string>('CLIENT_API') || 'http://localhost:3000',
+    credentials: true,
+  });
   app.useStaticAssets(join(__dirname, '../uploads'));
   app.use(cookieParser());
   await app.listen(port);

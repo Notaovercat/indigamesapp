@@ -1,5 +1,5 @@
-import { ICoverImage } from "./coverImage";
-import { IGenre } from "./genres";
+import { ICoverImage } from "./coverImage.interface";
+import { IGenre } from "./genres.interface";
 
 export interface IGamePreview {
   id: string;

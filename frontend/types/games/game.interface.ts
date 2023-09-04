@@ -1,7 +1,7 @@
-import { ICoverImage } from "./coverImage";
-import { IGenre } from "./genres";
-import { Platform } from "./platform";
-import { IScreenshot } from "./screenshot";
+import { ICoverImage } from "./coverImage.interface";
+import { IGenre } from "./genres.interface";
+import { Platform } from "./platform.interface";
+import { IScreenshot } from "./screenshot.interface";
 
 export interface IGame {
   id: string;

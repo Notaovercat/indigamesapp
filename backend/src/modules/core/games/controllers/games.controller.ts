@@ -57,7 +57,7 @@ export class GamesController {
   constructor(private gamesService: GamesService) {}
 
   @UseGuards(JwtGuard)
-  @Post('create')
+  @Post()
   createGame(@Body() dto: CreateGameDto, @CurrentUser() user: UserEntity) {
     return this.gamesService.createGame(dto, user);
   }
@@ -137,32 +137,36 @@ export class GamesController {
   }
 
   @UseGuards(JwtGuard)
-  @Delete(':id/screenshot')
+  @Delete(':gameId/screenshot/:screenId')
   deleteScreenshot(
-    @Param('id') id: string,
+    @Param('gameId') gameId: string,
+    @Param('screenId') screenId: string,
     @CurrentUser() user: UserEntity,
-    @Body('imageId') imageId: string,
   ) {
-    return this.gamesService.deleteScreenshot(id, user.id, imageId);
+    return this.gamesService.deleteScreenshot(gameId, user.id, screenId);
   }
 
   @UseGuards(JwtGuard)
-  @Patch(':id/rmplatform')
+  @Patch(':gameId/rmplatform/:platformId')
   removePlatform(
-    @Param('id') gameId: string,
-    @Body() dto: RemovePlatformDto,
+    @Param('gameId') gameId: string,
+    @Param('platformId') platformId: string,
     @CurrentUser() user: UserEntity,
   ) {
-    return this.gamesService.removePlatformFromGame(gameId, dto, user.id);
+    return this.gamesService.removePlatformFromGame(
+      gameId,
+      platformId,
+      user.id,
+    );
   }
 
   @UseGuards(JwtGuard)
-  @Patch(':id/rmtag')
+  @Patch(':gameId/rmtag/:tagId')
   removeTag(
-    @Param('id') gameId: string,
-    @Body() dto: RemoveTagDto,
+    @Param('gameId') gameId: string,
+    @Param('tagId') tagId: string,
     @CurrentUser() user: UserEntity,
   ) {
-    return this.gamesService.removeTagFromGame(gameId, dto, user.id);
+    return this.gamesService.removeTagFromGame(gameId, tagId, user.id);
   }
 }

@@ -10,6 +10,14 @@ export class GenresService {
     return this.prisma.genre.findMany();
   }
 
+  findOneGenre(genreId: string) {
+    return this.prisma.genre.findFirstOrThrow({
+      where: {
+        id: genreId,
+      },
+    });
+  }
+
   createGenre(dto: CreateGenreDto) {
     return this.prisma.genre.create({ data: { ...dto } });
   }

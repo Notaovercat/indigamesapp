@@ -1,6 +1,12 @@
+<script setup lang="ts">
+definePageMeta({
+  name: "all",
+});
+</script>
+
 <template>
   <div
-    class="max-w-7xl bg-[#241468] text-white mx-auto flex flex-col my-5 rounded-lg"
+    class="max-w-screen-xl bg-[#241468] text-white mx-auto flex flex-col my-5 pb-2 rounded-lg"
   >
     <section class="banner max-w-7xl m-2">
       <MainBanner />

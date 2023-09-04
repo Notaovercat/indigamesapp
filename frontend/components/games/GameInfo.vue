@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { IGame } from "@/types/game";
+import { IGame } from "@/types/games/game.interface";
+
+const config = useRuntimeConfig();
+const { API_URL } = config.public;
 
 interface Props {
   content: IGame;
@@ -9,14 +12,7 @@ const { content } = defineProps<Props>();
 </script>
 
 <template>
-  <img
-    class="game-cover w-full object-fit h-96"
-    :src="
-      content.coverImage
-        ? `http://localhost:3000/images/${content.coverImage.name}`
-        : undefined
-    "
-  />
+  <GamesCoverImage :coverImageName="content.coverImage?.name" />
   <div class="game-main rounded-xl m-1">
     <div class="game-info grid grid-cols-1 md:grid-cols-3 gap-4 p-5">
       <div class="col-span-2 flex flex-col gap-7">
@@ -39,7 +35,7 @@ const { content } = defineProps<Props>();
             <li v-for="screen of content.screenshots" :key="screen.id">
               <img
                 class="h-auto max-w-full rounded-lg shadow-2xl cursor-pointer"
-                :src="`http://localhost:3000/images/${screen.name}`"
+                :src="`${API_URL}/images/${screen.name}`"
                 alt="screenshot"
               />
             </li>
@@ -49,3 +45,4 @@ const { content } = defineProps<Props>();
     </div>
   </div>
 </template>
+types/game.interface

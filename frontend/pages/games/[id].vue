@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IGame } from "@/types/game";
+import { IGame } from "@/types/games/game.interface";
 
 const route = useRoute();
 
@@ -23,3 +23,4 @@ useHead({
     <GamesGameInfo :content="game" />
   </div>
 </template>
+types/game.interface

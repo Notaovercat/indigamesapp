@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IGamePreview } from "@/types/gamePreview";
+import { IGamePreview } from "@/types/games/gamePreview.interface";
 
 const games = ref<IGamePreview[] | undefined>([]);
 
@@ -26,3 +26,4 @@ const error = gameStore.errorlg;
     <h1 v-else class="text-3xl font-bold">There is empty...</h1>
   </div>
 </template>
+types/gamePreview.interface

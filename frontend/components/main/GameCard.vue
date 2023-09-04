@@ -2,8 +2,10 @@
 interface Props {
   content: IGamePreview;
 }
+const config = useRuntimeConfig();
+const { API_URL } = config.public;
 
-import { IGamePreview } from "@/types/gamePreview";
+import { IGamePreview } from "@/types/games/gamePreview.interface";
 
 const props = defineProps<Props>();
 
@@ -19,7 +21,7 @@ const { content } = props;
       class="game-image h-36 w-full object-top"
       :src="
         content.coverImage
-          ? `http://localhost:3000/images/${content.coverImage.name}`
+          ? `${API_URL}/images/${content.coverImage.name}`
           : undefined
       "
       alt="gameCover"
@@ -40,3 +42,4 @@ const { content } = props;
     </div>
   </NuxtLink>
 </template>
+types/gamePreview.interface

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IGamePreview } from "@/types/gamePreview";
+import { IGamePreview } from "@/types/games/gamePreview.interface";
 
 const games = ref<IGamePreview[]>([]);
 
@@ -23,3 +23,4 @@ games.value = (await gameStore.getFeaturedGames()) as IGamePreview[];
     <h1 class="text-3xl font-bold">Wait for the updates...</h1>
   </div>
 </template>
+types/gamePreview.interface

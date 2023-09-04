@@ -6,7 +6,7 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
-import { CreateTeamMemberDto } from '@app/common';
+import { CreateTeamMemberDto } from '../teams/create-teammember.dto';
 
 export class CreateGameDto {
   @IsString()
@@ -16,10 +16,6 @@ export class CreateGameDto {
   @IsString()
   @IsNotEmpty()
   description: string;
-
-  @IsString()
-  @IsOptional()
-  fileId?: string;
 
   @IsString()
   @IsOptional()

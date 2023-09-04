@@ -4,6 +4,7 @@ import { PlatformsModule } from './platforms/platforms.module';
 import { TeamsModule } from './teams/teams.module';
 import { TagsModule } from './tags/tags.module';
 import { GenresModule } from './genres/genres.module';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { GenresModule } from './genres/genres.module';
     TeamsModule,
     TagsModule,
     GenresModule,
+    ProfileModule,
   ],
 })
 export class CoreModule {}

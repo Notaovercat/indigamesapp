@@ -4,7 +4,7 @@ import { hash } from 'bcryptjs';
 import { CreateUserDto, Payload, UserEntity } from '@app/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { Response } from 'express';
+import { Response, response } from 'express';
 
 @Injectable()
 export class AuthService {

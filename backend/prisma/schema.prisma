@@ -23,11 +23,12 @@ enum STATUS {
 }
 
 model User {
-  id       String @id @default(uuid())
-  username String @unique
-  email    String @unique
-  password String
-  role     ROLE   @default(user)
+  id          String  @id @default(uuid())
+  username    String  @unique
+  email       String  @unique
+  password    String
+  description String?
+  role        ROLE    @default(user)
 
   team        Team[]
   teamMemeber TeamMember[]

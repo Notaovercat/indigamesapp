@@ -1,13 +1,14 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { CreateUserDto, LocalGuard } from '@app/common';
+import { CreateUserDto, JwtGuard, LocalGuard, Public } from '@app/common';
 import { CurrentUser, UserEntity } from '@app/common';
 import { Response } from 'express';
 import { AuthService } from '../services/auth.service';
@@ -25,7 +26,7 @@ export class AuthController {
 
   @UseGuards(LocalGuard)
   @Post('login')
-  @HttpCode(HttpStatus.CREATED)
+  @HttpCode(HttpStatus.OK)
   async login(
     @CurrentUser() user: UserEntity,
     @Res({ passthrough: true }) response: Response,
@@ -33,4 +34,28 @@ export class AuthController {
     await this.authService.login(user, response);
     response.send('Success');
   }
+
+  @UseGuards(JwtGuard)
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
+  async logOut(@Res({ passthrough: true }) response: Response) {
+    response.clearCookie('Authentication');
+    response.send('Success');
+  }
+
+  @Public()
+  @UseGuards(JwtGuard)
+  @Get('check')
+  @HttpCode(HttpStatus.OK)
+  async check(@CurrentUser() user: UserEntity) {
+    if (user) return user.id;
+    else return null;
+  }
+
+  // @UseGuards(JwtGuard)
+  // @Get('check')
+  // @HttpCode(HttpStatus.OK)
+  // async check(@CurrentUser() user: UserEntity) {
+  //   return user.id;
+  // }
 }

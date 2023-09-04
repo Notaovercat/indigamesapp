@@ -1,9 +1,18 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { TeamsService } from '../services/teams.service';
 import {
   CreateTeamMemberDto,
   CurrentUser,
   JwtGuard,
+  RemoveTeamMemberDto,
   UserEntity,
 } from '@app/common';
 
@@ -24,5 +33,15 @@ export class TeamController {
     @CurrentUser() user: UserEntity,
   ) {
     return this.teamsService.addUserToTheTeam(gameId, dto, user.id);
+  }
+
+  @UseGuards(JwtGuard)
+  @Delete('game/:id')
+  removeUserFromTeam(
+    @Param('id') gameId: string,
+    @Body() dto: RemoveTeamMemberDto,
+    @CurrentUser() user: UserEntity,
+  ) {
+    return this.teamsService.removeUserFromTeam(gameId, dto, user.id);
   }
 }

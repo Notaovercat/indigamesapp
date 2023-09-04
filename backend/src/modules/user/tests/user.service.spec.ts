@@ -6,11 +6,22 @@ import { PrismaModule, PrismaService } from 'nestjs-prisma';
 import { PrismaClient } from '@prisma/client';
 import { CreateUserDto, UserEntity } from '@app/common';
 import { UnauthorizedException } from '@nestjs/common';
-import { hash } from 'bcryptjs';
+import { hash, hashSync } from 'bcryptjs';
 
 describe('User Service', () => {
   let userService: UserService;
   let prisma: DeepMockProxy<PrismaService>;
+
+  const fakeUser: UserEntity = {
+    id: faker.string.uuid(),
+    username: faker.internet.userName(),
+    email: faker.internet.email(),
+    description: "Hi, I'm developer",
+    role: 'user',
+    password: hashSync(faker.internet.password(), 12),
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
 
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
@@ -30,16 +41,6 @@ describe('User Service', () => {
   });
 
   it('should create a new user', async () => {
-    const fakeUser: UserEntity = {
-      id: faker.string.uuid(),
-      username: faker.internet.userName(),
-      email: faker.internet.email(),
-      role: 'user',
-      password: await hash(faker.internet.password(), 12),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-
     const userDto = {
       username: fakeUser.username,
       email: fakeUser.email,
@@ -52,32 +53,15 @@ describe('User Service', () => {
   });
 
   it('should find user by id', async () => {
-    const fakeUser: UserEntity = {
-      id: faker.string.uuid(),
-      username: faker.internet.userName(),
-      email: faker.internet.email(),
-      role: 'user',
-      password: await hash(faker.internet.password(), 12),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-
-    prisma.user.findUnique.mockResolvedValueOnce(fakeUser);
-    const user = await userService.findById(fakeUser.id);
-    expect(user).toEqual(fakeUser);
+    const { password, ...userWithoutPassword } = fakeUser;
+    prisma.user.findUnique.mockResolvedValueOnce(
+      userWithoutPassword as UserEntity,
+    );
+    const user = await userService.findById(userWithoutPassword.id);
+    expect(user).toEqual(userWithoutPassword);
   });
 
   it('should find user by email', async () => {
-    const fakeUser: UserEntity = {
-      id: faker.string.uuid(),
-      username: faker.internet.userName(),
-      email: faker.internet.email(),
-      role: 'user',
-      password: await hash(faker.internet.password(), 12),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-
     prisma.user.findUnique.mockResolvedValueOnce(fakeUser);
     const user = await userService.findByEmail(fakeUser.email);
     expect(user).toEqual(fakeUser);
@@ -87,47 +71,37 @@ describe('User Service', () => {
     const rawPassword = faker.internet.password();
     const hashedPassword = await hash(rawPassword, 12);
 
-    const fakeUser: UserEntity = {
-      id: faker.string.uuid(),
-      username: faker.internet.userName(),
-      email: faker.internet.email(),
-      role: 'user',
+    const fakeUserVerified = {
+      ...fakeUser,
       password: hashedPassword,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+    } as UserEntity;
 
     const userDto = {
       email: fakeUser.email,
       password: rawPassword,
     };
 
-    userService.findByEmail = jest.fn().mockResolvedValue(fakeUser);
+    userService.findByEmail = jest.fn().mockResolvedValue(fakeUserVerified);
 
     const user = await userService.verifyUser(userDto.email, userDto.password);
-    expect(user).toEqual(fakeUser);
+    expect(user).toEqual(fakeUserVerified);
   });
 
   it('should throw 401 error', async () => {
     const rawPassword = faker.internet.password();
     const hashedPassword = await hash(rawPassword, 12);
 
-    const fakeUser: UserEntity = {
-      id: faker.string.uuid(),
-      username: faker.internet.userName(),
-      email: faker.internet.email(),
-      role: 'user',
+    const user = {
+      ...fakeUser,
       password: hashedPassword,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+    } as UserEntity;
 
     const userDto = {
-      email: fakeUser.email,
+      email: user.email,
       password: 'wrong',
     };
 
-    userService.findByEmail = jest.fn().mockResolvedValue(fakeUser);
+    userService.findByEmail = jest.fn().mockResolvedValue(user);
     await expect(
       userService.verifyUser(userDto.email, userDto.password),
     ).rejects.toThrow(UnauthorizedException);

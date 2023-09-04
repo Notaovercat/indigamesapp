@@ -16,7 +16,7 @@ export class UserService {
   }
 
   async findById(id: string) {
-    const user = (await this.prisma.user.findUnique({
+    const user = (await this.prisma.user.findFirstOrThrow({
       where: { id },
     })) as UserEntity;
 
@@ -26,7 +26,7 @@ export class UserService {
   }
 
   findByEmail(email: string): Promise<UserEntity | null> {
-    return this.prisma.user.findUnique({ where: { email } });
+    return this.prisma.user.findFirst({ where: { email } });
   }
 
   async verifyUser(email: string, password: string): Promise<UserEntity> {

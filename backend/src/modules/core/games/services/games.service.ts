@@ -1,7 +1,6 @@
 import {
   ForbiddenException,
   Injectable,
-  // Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
@@ -12,8 +11,6 @@ import {
   GameEntity,
   UpdateGameDto,
   ChangeVisibilityDto,
-  RemovePlatformDto as RemovePlatformDto,
-  RemoveTagDto,
 } from '@app/common';
 import { TeamsService } from '../../teams/services/teams.service';
 import { ImagesService } from '../../images/services/images.service';
@@ -28,6 +25,7 @@ export class GamesService {
     private imagesService: ImagesService,
   ) {}
 
+  // creating a game
   async createGame(dto: CreateGameDto, user: UserEntity): Promise<GameEntity> {
     const { team, tags, platforms, genres, ...createGameDto } = dto;
 
@@ -35,9 +33,11 @@ export class GamesService {
       data: {
         ...createGameDto,
         platforms: {
+          // connecting platforms to the game by id
           connect: platforms.map((platformId) => ({ id: platformId })),
         },
         tags: {
+          // connect or create tags by name
           connectOrCreate: tags.map((tag) => ({
             where: { name: tag },
             create: { name: tag },
@@ -49,14 +49,18 @@ export class GamesService {
       },
     });
 
+    // trying to create team
     try {
-      const teamMembers: CreateTeamDto = {
+      const teamMembers = {
         authorId: user.id,
         teamMembers: team,
         gameId: game.id,
-      };
+      } as CreateTeamDto;
+
+      // calling the team service to create team
       await this.teamService.createTeam(teamMembers);
     } catch (err) {
+      // if an error occures in the team servise, deleting the game
       console.log(err);
       this.deleteGame(game.id);
     }
@@ -64,6 +68,7 @@ export class GamesService {
     return game;
   }
 
+  // return all games
   findAllGames(
     isFeatured?: boolean,
     lastUpdated?: boolean,
@@ -93,6 +98,11 @@ export class GamesService {
     });
   }
 
+  /* 
+   find game by
+   if game is not visible, return 404,
+   if user requseting his game, return if userid provided 
+   */
   async findGameById(gameId: string, userId?: string) {
     const game = await this.prisma.game.findUniqueOrThrow({
       where: {
@@ -132,8 +142,11 @@ export class GamesService {
       },
     });
 
+    // check if game is visible
+    // if not visble and not user id provided - return 404
     if (!game.isVisible && !userId) throw new NotFoundException('No such game');
 
+    // if userid provided, check if user is author
     if (!game.isVisible && userId) {
       await this.isUserAuthor(game.id, userId);
       return game;
@@ -160,6 +173,7 @@ export class GamesService {
   }
 
   async updateGame(gameId: string, dto: UpdateGameDto, userId: string) {
+    // check if user author
     await this.isUserAuthor(gameId, userId);
 
     const { platforms, tags, genres, ...updateGameData } = dto;
@@ -197,6 +211,8 @@ export class GamesService {
     });
   }
 
+  // for game author only
+  // change visibility of the game
   async changeVisibility(dto: ChangeVisibilityDto, userId: string) {
     await this.isUserAuthor(dto.gameId, userId);
 
@@ -214,7 +230,9 @@ export class GamesService {
     return this.prisma.game.delete({ where: { id: gameId } });
   }
 
+  // check if user is author of the game
   async isUserAuthor(gameId: string, userId: string) {
+    // calling the team service
     const checkIsInTeam = await this.teamService.checkIsUserIsAuthor(
       gameId,
       userId,
@@ -239,9 +257,10 @@ export class GamesService {
 
   async removePlatformFromGame(
     gameId: string,
-    dto: RemovePlatformDto,
+    platformId: string,
     userId: string,
   ) {
+    // check if user author
     await this.isUserAuthor(gameId, userId);
 
     const game = await this.prisma.game.findUniqueOrThrow({
@@ -257,14 +276,15 @@ export class GamesService {
       data: {
         platforms: {
           disconnect: {
-            id: dto.platformId,
+            id: platformId,
           },
         },
       },
     });
   }
 
-  async removeTagFromGame(gameId: string, dto: RemoveTagDto, userId: string) {
+  async removeTagFromGame(gameId: string, tagId: string, userId: string) {
+    // check if user author
     await this.isUserAuthor(gameId, userId);
 
     const game = await this.prisma.game.findUniqueOrThrow({
@@ -280,7 +300,7 @@ export class GamesService {
       data: {
         tags: {
           disconnect: {
-            id: dto.tagId,
+            id: tagId,
           },
         },
       },
@@ -288,6 +308,7 @@ export class GamesService {
   }
 
   async uploadCover(gameId: string, userId: string, file: Express.Multer.File) {
+    // check if user author
     await this.isUserAuthor(gameId, userId);
 
     return this.imagesService.createCoverImage(file.filename, gameId);
@@ -298,17 +319,26 @@ export class GamesService {
     userId: string,
     file: Express.Multer.File,
   ) {
+    // check if user author
     await this.isUserAuthor(gameId, userId);
 
     return this.imagesService.createScreenshot(file.filename, gameId);
   }
 
   async deleteCover(gameId: string, userId: string, coverId: string) {
+    // check if user author
     await this.isUserAuthor(gameId, userId);
     return this.imagesService.deleteCover(coverId);
+    // const deletedCover = await this.imagesService.deleteCover(coverId);
+
+    // deleting from folder
+    // const filePath =
+    //   path.join(__dirname, '../uploads/images/') + deletedCover.name;
+    // return fs.unlink(filePath, (err) => console.log(err));
   }
 
   async deleteScreenshot(gameId: string, userId: string, screenId: string) {
+    // check if user author
     await this.isUserAuthor(gameId, userId);
     return this.imagesService.deleteScreenshot(screenId);
   }

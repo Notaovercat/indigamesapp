@@ -1,6 +1,7 @@
 import {
   ForbiddenException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
@@ -17,7 +18,7 @@ import { ImagesService } from '../../images/services/images.service';
 
 @Injectable()
 export class GamesService {
-  // private readonly logger = new Logger(GamesService.name);
+  private readonly logger = new Logger(GamesService.name);
 
   constructor(
     private prisma: PrismaService,
@@ -99,12 +100,16 @@ export class GamesService {
   }
 
   /* 
-   find game by
+   find game by id
    if game is not visible, return 404,
    if user requseting his game, return if userid provided 
    */
-  async findGameById(gameId: string, userId?: string) {
-    const game = await this.prisma.game.findUniqueOrThrow({
+  async findGameById(gameId: string, userId?: string, isManage = false) {
+    if (isManage && !userId) throw new ForbiddenException('No such game');
+    if (isManage && userId)
+      await this.teamService.checkIsUserIsAuthor(gameId, userId);
+
+    const game = await this.prisma.game.findFirstOrThrow({
       where: {
         id: gameId,
       },
@@ -143,8 +148,9 @@ export class GamesService {
     });
 
     // check if game is visible
-    // if not visble and not user id provided - return 404
-    if (!game.isVisible && !userId) throw new NotFoundException('No such game');
+    // if not visble and not user id provided - return 403
+    if (!game.isVisible && !userId)
+      throw new ForbiddenException('No such game');
 
     // if userid provided, check if user is author
     if (!game.isVisible && userId) {

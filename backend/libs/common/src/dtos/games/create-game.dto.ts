@@ -17,10 +17,6 @@ export class CreateGameDto {
   @IsNotEmpty()
   description: string;
 
-  @IsString()
-  @IsOptional()
-  coverImageId?: string;
-
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => CreateTeamMemberDto)

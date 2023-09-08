@@ -93,7 +93,7 @@ export class GamesController {
     @Query('isManage') isManage: boolean,
     @CurrentUser() user?: UserEntity,
   ) {
-    this.logger.debug(user);
+    // this.logger.debug(user);
     return this.gamesService.findGameById(gameId, user?.id, isManage);
   }
 

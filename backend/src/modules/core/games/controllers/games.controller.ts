@@ -85,11 +85,16 @@ export class GamesController {
     return this.gamesService.changeVisibility(dto, user.id);
   }
 
-  @UseGuards(JwtGuard)
   @Public()
+  @UseGuards(JwtGuard)
   @Get(':id')
-  getGameById(@Param('id') gameId: string, @CurrentUser() user?: UserEntity) {
-    return this.gamesService.findGameById(gameId, user?.id);
+  getGameById(
+    @Param('id') gameId: string,
+    @Query('isManage') isManage: boolean,
+    @CurrentUser() user?: UserEntity,
+  ) {
+    this.logger.debug(user);
+    return this.gamesService.findGameById(gameId, user?.id, isManage);
   }
 
   @UseGuards(JwtGuard)

@@ -1,9 +1,10 @@
-import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Logger, Param, Query } from '@nestjs/common';
 import { ProfileService } from '../services/profile.service';
-import { CurrentUser, JwtGuard, Public, UserEntity } from '@app/common';
 
 @Controller('profile')
 export class ProfileController {
+  private logger = new Logger();
+
   constructor(private profileService: ProfileService) {}
 
   @Get(':id')

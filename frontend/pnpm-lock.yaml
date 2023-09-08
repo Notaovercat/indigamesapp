@@ -29,6 +29,9 @@ dependencies:
   jwt-decode:
     specifier: ^3.1.2
     version: 3.1.2
+  lazy-load-list:
+    specifier: ^1.2.3
+    version: 1.2.3
   pinia:
     specifier: ^2.1.6
     version: 2.1.6(vue@3.3.4)
@@ -4524,6 +4527,10 @@ packages:
       picocolors: 1.0.0
       shell-quote: 1.8.1
     dev: true
+
+  /lazy-load-list@1.2.3:
+    resolution: {integrity: sha512-omwxO41TQsSdxqAHpOKjMqP5NiKgdzPNkQzQMlEyZDeZMzXc3auohe8rBMr+FIQrkoL0bofsajye7XgSE4NIzA==}
+    dev: false
 
   /lazystream@1.0.1:
     resolution: {integrity: sha512-b94GiNHQNy6JNTrt5w6zNyffMrNkXZb3KTkCZJb2V1xaEGCk093vkZ2jk3tpaeP33/OiXC+WvK9AxUebnf5nbw==}

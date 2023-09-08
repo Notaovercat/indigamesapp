@@ -7,6 +7,16 @@ import { compare } from 'bcryptjs';
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
+  findUsers() {
+    return this.prisma.user.findMany({
+      select: {
+        id: true,
+        email: true,
+        username: true,
+      },
+    });
+  }
+
   create(createUserDto: CreateUserDto): Promise<UserEntity> {
     return this.prisma.user.create({
       data: {

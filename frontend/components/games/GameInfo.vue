@@ -17,6 +17,14 @@ const { content } = defineProps<Props>();
     <div class="game-info grid grid-cols-1 md:grid-cols-3 gap-4 p-5">
       <div class="col-span-2 flex flex-col gap-7">
         <div class="game-description">
+          <NuxtLink
+            class="blocx bg-pink-900 text-white p-3 rounded shadow"
+            v-if="useAuth().userId === content.team.author.id"
+            :to="`${$route.params.id}/manage`"
+          >
+            Manage
+          </NuxtLink>
+
           <h1 class="game-title font-bold text-5xl pl-5 pt-6">
             {{ content.title }}
           </h1>
@@ -45,4 +53,3 @@ const { content } = defineProps<Props>();
     </div>
   </div>
 </template>
-types/game.interface

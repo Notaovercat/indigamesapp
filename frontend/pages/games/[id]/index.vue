@@ -1,15 +1,18 @@
 <script setup lang="ts">
+definePageMeta({
+  name: "game-id",
+});
 import { IGame } from "@/types/games/game.interface";
 
 const route = useRoute();
 
-const gameStore = useGames();
+const useGameStore = useGames();
 
 const gameId = route.params.id as string;
 
-const game = (await gameStore.getGameById(gameId)) as IGame;
+await useGameStore.getGameById(gameId);
 
-if (!game) showError({ statusCode: 404, statusMessage: "Page Not Found" });
+const game = useGameStore.game as IGame;
 
 useHead({
   title: game.title,

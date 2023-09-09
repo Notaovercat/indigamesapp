@@ -15,7 +15,7 @@ const { content } = props;
 <template>
   <NuxtLink
     class="game-card relative shadow-xl bg-white rounded-xl w-64 h-[350px] shrink-0 overflow-y-hidden flex flex-col cursor-pointer select-none hover:scale-110 transition-all"
-    :to="{ name: 'games-id', params: { id: content.id } }"
+    :to="{ name: 'game-id', params: { id: content.id } }"
   >
     <img
       class="game-image h-36 w-full object-top"

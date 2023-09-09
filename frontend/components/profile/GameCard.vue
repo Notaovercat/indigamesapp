@@ -11,7 +11,9 @@ const { API_URL } = config.public;
 </script>
 
 <template>
-  <div class="sm:flex bg-[#35157f] text-white rounded p-2 shadow-xl">
+  <div
+    class="sm:flex bg-[#35157f] text-white rounded p-2 shadow-xl cursor-pointer select-none hover:bg-[#472399] transition-all"
+  >
     <div class="mb-4 flex-shrink-0 sm:mb-0 sm:mr-4">
       <img
         class="h-32 w-full rounded-xl bg-white text-gray-300 sm:w-32"

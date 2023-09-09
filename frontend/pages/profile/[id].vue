@@ -9,18 +9,23 @@ const useAuthStore = useAuth();
 const profileId = route.params["id"] as string;
 let isYourProfile = false;
 
+// const useProfileStore = useProfile();
+
+// onBeforeMount(async () => {
 const useProfileStore = useProfile();
+isYourProfile = profileId === useAuthStore.userId;
 
-onBeforeMount(async () => {
-  isYourProfile = profileId === useAuthStore.userId;
+// make requests to the server via pinia
+await Promise.all([
+  useProfileStore.getProfileGames(profileId, isYourProfile),
+  useProfileStore.getProfileTeams(profileId, isYourProfile),
+  useProfileStore.getProfile(profileId),
+]);
 
-  // make requests to the server via pinia
-  await Promise.all([
-    useProfileStore.getProfileGames(profileId, isYourProfile),
-    useProfileStore.getProfileTeams(profileId, isYourProfile),
-    useProfileStore.getProfile(profileId),
-  ]);
-});
+// await useProfileStore.getProfileGames(profileId, isYourProfile);
+// await useProfileStore.getProfile(profileId);
+// await useProfileStore.getProfileTeams(profileId, isYourProfile);
+// });
 </script>
 
 <template>

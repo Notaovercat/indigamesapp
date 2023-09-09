@@ -53,20 +53,16 @@ export const useAuth = defineStore("auth", () => {
   }
 
   async function logOut() {
-    await useFetch(`/auth/logout`, {
-      baseURL: apiUrl,
+    await useMyFetch(`/auth/logout`, {
       method: "post",
-      credentials: "include",
     });
     return navigateTo({ name: "login" });
   }
 
   async function checkIfLoggedIn() {
     try {
-      const { data } = await useFetch<string>(`/auth/check`, {
-        baseURL: apiUrl,
+      const { data } = await useMyFetch<string>(`/auth/check`, {
         method: "get",
-        credentials: "include",
       });
 
       if (!data.value) {

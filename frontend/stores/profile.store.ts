@@ -11,12 +11,6 @@ export const useProfile = defineStore("profile", () => {
   const profileGames = ref<IGameCard[]>([]);
   const profileTeams = ref<IUserTeams[]>([]);
   const profileInfo = ref<IProfile>();
-  //   {
-  //   id: "",
-  //   username: "",
-  //   email: "",
-  //   description: "",
-  // }
 
   // error messages
   const gameErrorMsg = ref("");
@@ -30,19 +24,11 @@ export const useProfile = defineStore("profile", () => {
 
   // get profile by id
   async function getProfile(id: string) {
-    // return useFetch<IProfile>(`profile/${id}`, {
-    //   baseURL: apiUrl,
-    //   method: "get",
-    //   credentials: "include",
-    // });
-
     // set loading to true
     profileLoading.value = true;
 
-    const { data, error } = await useFetch<IProfile>(`profile/${id}`, {
-      baseURL: apiUrl,
+    const { data, error } = await useMyFetch<IProfile>(`profile/${id}`, {
       method: "get",
-      credentials: "include",
     });
 
     // if error, set errorMsg value
@@ -54,25 +40,14 @@ export const useProfile = defineStore("profile", () => {
   }
 
   async function getProfileGames(id: string, isYourProfile: boolean) {
-    // return useFetch<IGameCard[]>(
-    //   `profile/${id}/games?isYourProfile=${isYourProfile}`,
-    //   {
-    //     baseURL: apiUrl,
-    //     method: "get",
-    //     credentials: "include",
-    //   }
-    // );
-
     // set loading to true
     gameLoading.value = true;
 
     // make a reaquest
-    const { data, error } = await useFetch<IGameCard[]>(
+    const { data, error } = await useMyFetch<IGameCard[]>(
       `profile/${id}/games?isYourProfile=${isYourProfile}`,
       {
-        baseURL: apiUrl,
         method: "get",
-        credentials: "include",
       }
     );
 
@@ -85,21 +60,10 @@ export const useProfile = defineStore("profile", () => {
   }
 
   async function getProfileTeams(id: string, isYourProfile: boolean) {
-    // return useFetch<IUserTeams[]>(
-    //   `profile/${id}/teams?isYourProfile=${isYourProfile}`,
-    //   {
-    //     baseURL: apiUrl,
-    //     method: "get",
-    //     credentials: "include",
-    //   }
-    // );
-
-    const { data, error } = await useFetch<IUserTeams[]>(
+    const { data, error } = await useMyFetch<IUserTeams[]>(
       `profile/${id}/teams?isYourProfile=${isYourProfile}`,
       {
-        baseURL: apiUrl,
         method: "get",
-        credentials: "include",
       }
     );
 

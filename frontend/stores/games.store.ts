@@ -6,11 +6,16 @@ export const useGames = defineStore("game", () => {
   const config = useRuntimeConfig();
   const apiUrl = config.public.API_URL;
   const errorlg = ref("");
+  // @ts-ignore
+  const game: Ref<IGame> = ref({});
 
   async function getFeaturedGames(): Promise<IGamePreview[] | undefined> {
     try {
       const res = await axios.get<IGamePreview[]>(
-        `${apiUrl}/games?isFeatured=true`
+        `${apiUrl}/games?isFeatured=true`,
+        {
+          withCredentials: true,
+        }
       );
 
       return res.data;
@@ -31,15 +36,23 @@ export const useGames = defineStore("game", () => {
     }
   }
 
-  async function getGameById(id: string) {
-    try {
-      const res = await axios.get<IGame>(`${apiUrl}/games/${id}`);
-      return res.data;
-    } catch (e) {
-      if (e instanceof AxiosError) {
-        console.log(e.message);
+  async function getGameById(id: string, isManage = false) {
+    const { data, error } = await useMyFetch<IGame>(
+      `games/${id}?isManage=${isManage}`,
+      {
+        method: "get",
+        cache: "no-cache",
       }
+    );
+
+    if (error.value) {
+      showError({
+        statusCode: error.value.statusCode,
+        statusMessage: error.value.data.message,
+      });
     }
+
+    if (data.value) game.value = data.value;
   }
 
   return {
@@ -47,5 +60,6 @@ export const useGames = defineStore("game", () => {
     getLastGames,
     getGameById,
     errorlg,
+    game,
   };
 });

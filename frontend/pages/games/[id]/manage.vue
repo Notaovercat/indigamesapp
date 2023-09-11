@@ -17,7 +17,7 @@ import {
 } from "@headlessui/vue";
 import {
   PhotoIcon,
-  UserGroupIcon,
+  Cog6ToothIcon,
   WindowIcon,
   ArrowUturnLeftIcon,
 } from "@heroicons/vue/24/outline";
@@ -36,8 +36,8 @@ const categories = reactive([
   },
   {
     id: 3,
-    name: "Team",
-    icon: UserGroupIcon,
+    name: "Configure",
+    icon: Cog6ToothIcon,
   },
 ]);
 
@@ -52,11 +52,11 @@ await useGameStore.getGameById(gameId, true);
 
 const game = useGameStore.game as IGame;
 
+const openGoBack = ref(false);
+
 useHead({
   title: `${game.title} - Manage`,
 });
-
-const openGoBack = ref(false);
 </script>
 
 <template>
@@ -73,8 +73,9 @@ const openGoBack = ref(false);
         as="ul"
         class="col-span-1 w-full h-full flex flex-col px-3 gap-3"
       >
-        <div class="flex justify-center text-3xl font-bold py-8">
-          <h1>Manage Game</h1>
+        <div class="flex flex-col text-center justify-center py-8">
+          <h1 class="text-3xl font-bold">Manage Game</h1>
+          <h2 class="text-2xl font-md">{{ game.title }}</h2>
         </div>
         <Tab
           as="li"
@@ -112,14 +113,28 @@ const openGoBack = ref(false);
       </TabList>
 
       <!-- GAME -->
-      <div class="bg-red-600 col-span-3 min-h-screen">
-        <TabPanels>
-          <TabPanel> <ManageImages /> </TabPanel>
-          <TabPanel>
-            <ManageData :game="game" />
-          </TabPanel>
-          <TabPanel> Team </TabPanel>
-        </TabPanels>
+      <div class="col-span-3 min-h-screen">
+        <div
+          class="min-h-screen data-page text-black overflow-hidden mx-auto flex flex-col rounded-lg py-2 md:py-0 md:pl-2"
+        >
+          <div
+            class="min-h-screen bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-e-xl w-full"
+          >
+            <TabPanels>
+              <TabPanel>
+                <ManageImages
+                  :game-id="game.id"
+                  :cover-image="game.coverImage"
+                  :screenshots="game.screenshots"
+                />
+              </TabPanel>
+              <TabPanel>
+                <ManageData :game="game" />
+              </TabPanel>
+              <TabPanel> <ManageConfigure :game="game" /> </TabPanel>
+            </TabPanels>
+          </div>
+        </div>
       </div>
     </TabGroup>
   </div>

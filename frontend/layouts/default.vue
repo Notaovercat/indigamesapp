@@ -46,13 +46,13 @@ watch(
         <div class="flex items-center">
           <div class="flex-shrink-0">
             <img
-              class="block h-8 w-auto lg:hidden"
-              src="../assets/images/blyat.png"
+              class="block h-14 w-auto lg:hidden"
+              src="../assets/images/logo.png"
               alt="logo1"
             />
             <img
-              class="hidden h-8 w-auto lg:block"
-              src="../assets/images/blyat.png"
+              class="hidden h-14 w-auto lg:block"
+              src="../assets/images/logo.png"
               alt="logo2"
             />
           </div>
@@ -216,7 +216,7 @@ watch(
 	>
 		<div class="flex gap-7 text-white items-center">
 			<div>
-				<img src="../assets/images/blyat.png" class="h-16" alt="logo" />
+				<img src="../assets/images/logo.png" class="h-16" alt="logo" />
 			</div>
 
 			<div class="flex gap-5">

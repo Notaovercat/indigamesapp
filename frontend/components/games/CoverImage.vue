@@ -7,14 +7,38 @@ const { coverImageName } = defineProps<Props>();
 
 const config = useRuntimeConfig();
 const { API_URL } = config.public;
+
+// const placeholderImage = "https://images8.alphacoders.com/127/1274266.png";
 </script>
 <template>
-  <img
-    class="game-cover w-full object-cover h-96"
-    :src="
-      coverImageName
-        ? `${API_URL}/images/${coverImageName}`
-        : 'https://images.unsplash.com/photo-1498736297812-3a08021f206f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1779&q=80'
-    "
-  />
+  <div
+    class="flex relative w-full overflow-hidden rounded select-none"
+    v-if="!coverImageName"
+  >
+    <img
+      class="game-cover object-contain h-80 pointer-events-none"
+      src="../../assets/images/cover.png"
+      alt="cover-image"
+    />
+  </div>
+
+  <div v-else class="flex relative w-full overflow-hidden rounded">
+    <img
+      class="game-cover object-none w-full h-80 relative z-10"
+      :src="`${API_URL}/images/${coverImageName}`"
+      alt="cover-image-bg"
+    />
+
+    <img
+      class="absolute w-full h-80 object-cover blur-xl"
+      :src="`${API_URL}/images/${coverImageName}`"
+      alt="cover-image-bg"
+    />
+  </div>
 </template>
+<!-- 
+:src="game-cover absolute w-full h-80 object-fill blur-2xl
+        coverImageName
+          ? `${API_URL}/images/${coverImageName}`
+          : `../../assets/images/cover.png`
+      " -->

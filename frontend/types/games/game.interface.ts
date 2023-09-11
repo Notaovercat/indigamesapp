@@ -1,68 +1,75 @@
+export enum STATUS {
+  InDevelopment = "InDevelopment",
+  EarlyAccess = "EarlyAccess",
+  Released = "Released",
+  NonProvided = "NonProvided",
+}
+
 export interface IGame {
   id: string;
   title: string;
   description: string;
-  status: string;
+  status: STATUS;
   rating: number;
   views_count: number;
   isFeatured: boolean;
   isVisible: boolean;
   createdAt: string;
   updatedAt: string;
-  team: Team;
-  platforms: Platform[];
-  tags: Tag[];
-  genres: Genre[];
-  coverImage: Image;
-  screenshots: Image[];
+  team: ITeam;
+  platforms: IPlatform[];
+  tags: ITag[];
+  genres: IGenre[];
+  coverImage: IImage;
+  screenshots: IImage[];
 }
 
-interface Team {
+interface ITeam {
   id: string;
-  author: Author;
-  team_members: TeamMember[];
+  author: IAuthor;
+  team_members: ITeamMember[];
 }
 
-interface Author {
+export interface IAuthor {
   id: string;
   email: string;
   username: string;
 }
 
-interface TeamMember {
+export interface ITeamMember {
   id: string;
-  user: User;
+  user: IUser;
   role: string;
 }
 
-export interface User {
+export interface IUser {
   id: string;
   username: string;
   email: string;
 }
 
-export interface Platform {
+export interface IPlatform {
   id: string;
   name: string;
   createdAt: string;
   updatedAt: string;
 }
 
-export interface Tag {
+export interface ITag {
   id: string;
   name: string;
   createdAt: string;
   updatedAt: string;
 }
 
-export interface Genre {
+export interface IGenre {
   id: string;
   name: string;
   createdAt: string;
   updatedAt: string;
 }
 
-interface Image {
+export interface IImage {
   id: string;
   name: string;
 }

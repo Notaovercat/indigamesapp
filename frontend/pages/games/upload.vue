@@ -32,12 +32,6 @@ const useGenreStore = useGenres();
 const usePlatformStore = usePlatforms();
 const useUserStore = useUser();
 
-// onBeforeMount(async () => {
-// const useGenreStore = useGenres();
-// const usePlatformStore = usePlatforms();
-// const useUserStore = useUser();
-// });
-
 await Promise.all([
   useGenreStore.getGenres(),
   usePlatformStore.getPlatforms(),
@@ -185,6 +179,10 @@ const createGame = async () => {
   if (data.value) {
     useRouter().push({ name: "profile", params: { id: useAuth().userId } });
   }
+};
+
+const clear = () => {
+  team.value = [];
 };
 </script>
 
@@ -521,7 +519,7 @@ const createGame = async () => {
 
                   <div class="w-full flex justify-end gap-2 mt-2">
                     <button
-                      @click="clearTeam"
+                      @click="clear"
                       type="submit"
                       class="rounded-md bg-slate-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-600"
                     >
@@ -529,9 +527,9 @@ const createGame = async () => {
                     </button>
                     <button
                       @click="addUserToTheTeam"
-                      class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                      class="rounded-md flex items-center justify-center gap-2 bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                     >
-                      Add
+                      Add <UserPlusIcon class="w-5" />
                     </button>
                   </div>
                   <div>
@@ -540,8 +538,10 @@ const createGame = async () => {
                 </div>
                 <div class="overflow-x-scroll p-2">
                   <ul class="flex gap-2">
-                    <li v-for="member in team" :key="member.userId" class="">
+                    <li v-for="(member, index) in team" :key="index">
                       <GamesTeamCard
+                        :userId="member.userId"
+                        :isManage="false"
                         :username="
                           //@ts-ignore
                           users.find((user) => user.id === member.userId)

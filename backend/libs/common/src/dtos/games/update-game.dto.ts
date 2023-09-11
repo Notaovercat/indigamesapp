@@ -1,4 +1,5 @@
-import { IsArray, IsOptional, IsString } from 'class-validator';
+import { STATUS } from '@prisma/client';
+import { IsArray, IsEnum, IsOptional, IsString } from 'class-validator';
 
 export class UpdateGameDto {
   @IsString()
@@ -13,9 +14,9 @@ export class UpdateGameDto {
   @IsOptional()
   fileId?: string;
 
-  @IsString()
+  @IsEnum(STATUS)
   @IsOptional()
-  coverImageId?: string;
+  status?: string;
 
   @IsArray()
   @IsOptional()

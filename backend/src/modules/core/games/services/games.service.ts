@@ -15,6 +15,7 @@ import {
 } from '@app/common';
 import { TeamsService } from '../../teams/services/teams.service';
 import { ImagesService } from '../../images/services/images.service';
+import { STATUS } from '@prisma/client';
 
 @Injectable()
 export class GamesService {
@@ -169,11 +170,13 @@ export class GamesService {
       },
     });
     */
-    await this.prisma.$queryRaw`
+    if (userId !== game.team?.author?.id) {
+      await this.prisma.$queryRaw`
       UPDATE "Game"
       SET "views_count" = "views_count" + 1
       WHERE "id" = ${gameId}
     `;
+    }
 
     return game;
   }
@@ -190,6 +193,8 @@ export class GamesService {
       },
       data: {
         ...updateGameData,
+        status: updateGameData.status as STATUS,
+        team: {},
         platforms: platforms
           ? {
               connect: platforms.map((platformId) => ({ id: platformId })),

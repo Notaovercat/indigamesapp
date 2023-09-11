@@ -22,6 +22,7 @@ async function bootstrap() {
   app.enableCors({
     origin: config.get<string>('CLIENT_API') || 'http://localhost:3000',
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   });
   app.useStaticAssets(join(__dirname, '../uploads'));
   app.use(cookieParser());

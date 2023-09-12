@@ -19,3 +19,8 @@ body {
   font-weight: 400;
   color: #555;
 }
+
+ol {
+  list-style-type: decimal;
+  padding-left: 3rem;
+}

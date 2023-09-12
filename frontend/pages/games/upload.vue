@@ -21,12 +21,12 @@ import {
   ComboboxOption,
   ComboboxOptions,
 } from "@headlessui/vue";
-// @ts-ignore
-import LazyList from "lazy-load-list/vue";
 import { IGenre } from "@/types/genre/genre.interface";
 import { ICreateGame } from "@/types/games/createGame.interface";
 import { IPlatform } from "@/types/platform/platform.interface";
 import { IUser } from "@/types/user/user.interface";
+import { QuillEditor } from "@vueup/vue-quill";
+import "@vueup/vue-quill/dist/vue-quill.snow.css";
 
 const useGenreStore = useGenres();
 const usePlatformStore = usePlatforms();
@@ -114,10 +114,6 @@ const addUserToTheTeam = () => {
   });
 };
 
-const clearTeam = () => {
-  team.value = [];
-};
-
 // create game function
 const cgErrorMsg = ref("");
 const titleErrorMsg = ref("");
@@ -173,7 +169,6 @@ const createGame = async () => {
   });
 
   if (error.value) {
-    console.log(error.value);
     cgErrorMsg.value = "Error while game creating, please, try again later";
   }
   if (data.value) {
@@ -242,14 +237,21 @@ const clear = () => {
                   class="block text-sm font-medium leading-6 text-gray-900"
                   >Description <span class="text-red-600">*</span></label
                 >
-                <div class="mt-2">
-                  <textarea
+                <div class="mt-2 text-black">
+                  <ClientOnly>
+                    <QuillEditor
+                      theme="snow"
+                      v-model:content="game.description"
+                      content-type="html"
+                    />
+                  </ClientOnly>
+                  <!-- <textarea
                     v-model="game.description"
                     id="description"
                     name="description"
                     rows="3"
                     class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  />
+                  /> -->
                 </div>
                 <p class="mt-3 text-sm leading-6 text-gray-600">
                   Write what is your game about.

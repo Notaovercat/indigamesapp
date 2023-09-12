@@ -19,6 +19,8 @@ import {
 import { IGenre } from "@/types/genre/genre.interface";
 import { IPlatform } from "@/types/platform/platform.interface";
 import { IGame } from "@/types/games/game.interface";
+import { QuillEditor } from "@vueup/vue-quill";
+import "@vueup/vue-quill/dist/vue-quill.snow.css";
 
 interface Props {
   game: IGame;
@@ -169,13 +171,20 @@ const saveChanges = async () => {
           >Description <span class="text-red-600">*</span></label
         >
         <div class="mt-2">
-          <textarea
+          <!-- <textarea
             v-model="game.description"
             id="description"
             name="description"
             rows="3"
             class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-          />
+          /> -->
+          <ClientOnly>
+            <QuillEditor
+              theme="snow"
+              v-model:content="game.description"
+              content-type="html"
+            />
+          </ClientOnly>
         </div>
         <p class="mt-3 text-sm leading-6 text-gray-600">
           Write what is your game about.

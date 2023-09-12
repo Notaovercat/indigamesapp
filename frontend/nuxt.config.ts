@@ -6,6 +6,7 @@ export default defineNuxtConfig({
   pinia: {
     autoImports: ["defineStore", ["defineStore", "definePiniaStore"]],
   },
+  plugins: ["@/plugins/domPurify.plugin"],
   imports: {
     dirs: ["stores"],
   },

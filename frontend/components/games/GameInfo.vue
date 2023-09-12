@@ -53,7 +53,8 @@ const { content } = defineProps<Props>();
 
           <!-- DESCRIPTON -->
           <div class="description py-2 pl-3 text-xl leading-9">
-            {{ content.description }}
+            <div v-dompurify-html="content.description"></div>
+            <!-- {{ content.description }} -->
           </div>
         </div>
         <GamesDownload />

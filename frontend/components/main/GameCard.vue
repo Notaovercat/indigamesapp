@@ -31,9 +31,10 @@ const { content } = props;
       <h1 class="card-title text-3xl font-bold text-black">
         {{ content.title }}
       </h1>
-      <p class="card-desc pl-2 text-base line-clamp-3 text-gray-800">
-        {{ content.description }}
-      </p>
+      <p
+        v-dompurify-html="content.description"
+        class="card-desc pl-2 text-base line-clamp-3 text-gray-800"
+      ></p>
       <ul class="flex p-2 absolute bottom-0 right-0">
         <li v-for="genre of content.genres" class="text-2xl text-black">
           <span>{{ genre.name }}</span>

@@ -16,7 +16,7 @@ const { API_URL } = config.public;
     v-if="!coverImageName"
   >
     <img
-      class="game-cover object-contain h-80 pointer-events-none"
+      class="game-cover object-fill h-80 pointer-events-none"
       src="../../assets/images/cover.png"
       alt="cover-image"
     />
@@ -24,7 +24,7 @@ const { API_URL } = config.public;
 
   <div v-else class="flex relative w-full overflow-hidden rounded">
     <img
-      class="game-cover object-none w-full h-80 relative z-10"
+      class="game-cover object-contain w-full h-80 relative z-10"
       :src="`${API_URL}/images/${coverImageName}`"
       alt="cover-image-bg"
     />

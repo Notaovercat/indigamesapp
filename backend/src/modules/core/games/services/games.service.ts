@@ -27,7 +27,7 @@ export class GamesService {
     private imagesService: ImagesService,
   ) {}
 
-  // creating a game
+  // create a game
   async createGame(dto: CreateGameDto, user: UserEntity): Promise<GameEntity> {
     const { team, tags, platforms, genres, ...createGameDto } = dto;
 
@@ -150,8 +150,7 @@ export class GamesService {
 
     // check if game is visible
     // if not visble and not user id provided - return 403
-    if (!game.isVisible && !userId)
-      throw new ForbiddenException('No such game');
+    if (!game.isVisible && !userId) throw new NotFoundException('No such game');
 
     // if userid provided, check if user is author
     if (!game.isVisible && userId) {
@@ -253,6 +252,7 @@ export class GamesService {
     return;
   }
 
+  // find games created by user
   async findMyGames(userId: string) {
     return this.prisma.game.findMany({
       where: {
@@ -318,6 +318,7 @@ export class GamesService {
     });
   }
 
+  // upload cover for the game
   async uploadCover(gameId: string, userId: string, file: Express.Multer.File) {
     // check if user author
     await this.isUserAuthor(gameId, userId);
@@ -325,6 +326,7 @@ export class GamesService {
     return this.imagesService.createCoverImage(file.filename, gameId);
   }
 
+  // upload screensghot for the game
   async uploadScreenshot(
     gameId: string,
     userId: string,
@@ -336,6 +338,7 @@ export class GamesService {
     return this.imagesService.createScreenshot(file.filename, gameId);
   }
 
+  // delete cover from game
   async deleteCover(gameId: string, userId: string, coverId: string) {
     // check if user author
     await this.isUserAuthor(gameId, userId);
@@ -348,6 +351,7 @@ export class GamesService {
     // return fs.unlink(filePath, (err) => console.log(err));
   }
 
+  // delete screenshot from game
   async deleteScreenshot(gameId: string, userId: string, screenId: string) {
     // check if user author
     await this.isUserAuthor(gameId, userId);

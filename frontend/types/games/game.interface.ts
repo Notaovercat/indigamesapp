@@ -24,7 +24,7 @@ export interface IGame {
   screenshots: IImage[];
 }
 
-interface ITeam {
+export interface ITeam {
   id: string;
   author: IAuthor;
   team_members: ITeamMember[];

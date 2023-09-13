@@ -36,18 +36,47 @@ const { content } = defineProps<Props>();
             </NuxtLink>
           </h1>
 
+          <!-- RATING and views -->
+          <div class="px-7 pt-4 pb-5">
+            <GamesRating
+              :views_count="content.views_count"
+              :rating="content.rating"
+              :rating_cound="content._count.rated"
+            />
+          </div>
+
+          <!-- STATUS -->
           <div
             v-if="content.status !== STATUS.NonProvided"
             class="text-2xl py-3"
           >
-            <p>Status: {{ content.status }}</p>
+            <GamesStatus :status="content.status" />
           </div>
-          <!-- RATING and views -->
-          <div class="px-7 pt-7 pb-5">
-            <GamesRating
-              :views_count="content.views_count"
-              :rating="content.rating"
-            />
+
+          <!-- GENRE -->
+          <div class="flex gap-3 text-2xl py-3">
+            <p>Genres:</p>
+            <ul class="flex flex-col gap-y-1">
+              <NuxtLink
+                class="text-pink-300 font-bold hover:text-[#ea1179] transition-all cursor-pointer"
+                v-for="genre of content.genres"
+              >
+                {{ genre.name }}
+              </NuxtLink>
+            </ul>
+          </div>
+
+          <!-- PLATFORMS -->
+          <div class="flex gap-3 text-2xl py-3">
+            <p>Platfrorms:</p>
+            <ul class="flex flex-col gap-y-1">
+              <NuxtLink
+                class="text-pink-300 font-bold hover:text-[#ea1179] transition-all cursor-pointer"
+                v-for="platform of content.platforms"
+              >
+                {{ platform.name }}
+              </NuxtLink>
+            </ul>
           </div>
 
           <!-- TEAM -->

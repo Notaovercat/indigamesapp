@@ -19,7 +19,9 @@ const { team } = defineProps<Props>();
         class="text-2xl flex gap-2"
       >
         <span class="">By</span>
-        <span class="hover:text-[#ea1179] font-bold transition-all">
+        <span
+          class="hover:text-[#ea1179] text-pink-300 font-bold transition-all"
+        >
           {{ team.author.username }}
         </span>
       </NuxtLink>

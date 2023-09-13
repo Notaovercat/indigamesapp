@@ -145,6 +145,11 @@ export class GamesService {
         genres: true,
         coverImage: true,
         screenshots: true,
+        _count: {
+          select: {
+            rated: true,
+          },
+        },
       },
     });
 
@@ -356,5 +361,59 @@ export class GamesService {
     // check if user author
     await this.isUserAuthor(gameId, userId);
     return this.imagesService.deleteScreenshot(screenId);
+  }
+
+  async rateGame(gameId: string, userId: string, rate: number) {
+    // upsert isnt working
+    const rating = await this.prisma.rating.findFirst({
+      where: {
+        userId,
+        gameId,
+      },
+    });
+
+    if (!rating) {
+      this.logger.debug('creating');
+      await this.prisma.rating.create({
+        data: {
+          userId,
+          gameId,
+          rate,
+        },
+      });
+    } else {
+      this.logger.debug('updating');
+      await this.prisma.rating.update({
+        where: {
+          id: rating.id,
+        },
+        data: {
+          rate,
+        },
+      });
+    }
+
+    const ratesArr = await this.prisma.rating.findMany({
+      where: {
+        gameId,
+      },
+    });
+
+    const newRating =
+      ratesArr.reduce((acc, rating) => rating.rate + acc, 0) / ratesArr.length;
+
+    await this.prisma.game.update({
+      where: {
+        id: gameId,
+      },
+      data: {
+        rating: newRating,
+      },
+      select: {
+        rating: true,
+      },
+    });
+
+    return newRating;
   }
 }

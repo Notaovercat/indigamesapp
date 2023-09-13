@@ -142,6 +142,16 @@ export class GamesController {
   }
 
   @UseGuards(JwtGuard)
+  @Patch(':id/rating')
+  rateGame(
+    @Param('id') gameId: string,
+    @CurrentUser() user: UserEntity,
+    @Body('rating') rating: number,
+  ) {
+    return this.gamesService.rateGame(gameId, user.id, rating);
+  }
+
+  @UseGuards(JwtGuard)
   @Delete(':gameId/screenshot/:screenId')
   deleteScreenshot(
     @Param('gameId') gameId: string,

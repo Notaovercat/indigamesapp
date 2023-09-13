@@ -22,6 +22,11 @@ export interface IGame {
   genres: IGenre[];
   coverImage: IImage;
   screenshots: IImage[];
+  _count: Count;
+}
+
+export interface Count {
+  rated: number;
 }
 
 export interface ITeam {

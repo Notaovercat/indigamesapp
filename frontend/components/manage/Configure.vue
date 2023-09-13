@@ -179,7 +179,9 @@ const addUserToTheTeam = async () => {
 
   if (data.value)
     team.value.push({
-      ...data.value,
+      id: selectedPerson.value.id,
+      role: role.value,
+      user: selectedPerson.value,
     });
   isLoading.value = false;
 };

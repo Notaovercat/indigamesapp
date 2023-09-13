@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { IGame } from "@/types/games/game.interface";
-import { EyeIcon, StarIcon, WrenchIcon } from "@heroicons/vue/20/solid";
+import { WrenchIcon } from "@heroicons/vue/20/solid";
+import { STATUS } from "@/types/games/game.interface";
 
 interface Props {
   content: IGame;
@@ -16,9 +17,11 @@ const { content } = defineProps<Props>();
   <div class="game-main rounded-xl m-1">
     <div class="game-info grid grid-cols-1 md:grid-cols-3 md:gap-4 md:p-5">
       <div class="col-span-2 flex flex-col gap-7">
-        <div class="game-description">
+        <div class="game-description flex flex-col">
           <!-- TITLE -->
-          <h1 class="game-title flex font-bold text-4xl pt-6 gap-4">
+          <h1
+            class="game-title flex justify-center sm:justify-start font-bold text-4xl pt-6 gap-4"
+          >
             {{ content.title }}
 
             <!-- MANAGE BUTTON -->
@@ -33,28 +36,63 @@ const { content } = defineProps<Props>();
             </NuxtLink>
           </h1>
 
+          <div
+            v-if="content.status !== STATUS.NonProvided"
+            class="text-2xl py-3"
+          >
+            <p>Status: {{ content.status }}</p>
+          </div>
           <!-- RATING and views -->
-          <div class="p-7 gap-7 flex">
-            <div>
-              <button v-for="i in 5" :class="{ 'mr-1': i < 5 }">
-                <StarIcon
-                  class="h-8 w-8"
-                  :class="[
-                    content.rating >= i ? 'text-yellow-500' : 'text-gray-500',
-                  ]"
-                />
-              </button>
-            </div>
-
-            <div class="flex text-gray-200 justify-center items-center gap-3">
-              <EyeIcon class="h-5 w-5" /> {{ content.views_count }}
-            </div>
+          <div class="px-7 pt-7 pb-5">
+            <GamesRating
+              :views_count="content.views_count"
+              :rating="content.rating"
+            />
           </div>
 
+          <!-- TEAM -->
+          <div class="relative">
+            <div class="absolute inset-0 flex items-center" aria-hidden="true">
+              <div class="w-full sm:w-1/2 border-t border-white" />
+            </div>
+            <div class="relative flex justify-center sm:justify-start sm:pl-2">
+              <span
+                class="bg-[#241468] px-3 text-lg font-semibold leading-6 text-white rounded"
+              >
+                Author
+              </span>
+            </div>
+          </div>
+          <GamesTeam :team="content.team" />
+
           <!-- DESCRIPTON -->
+          <div class="relative">
+            <div class="absolute inset-0 flex items-center" aria-hidden="true">
+              <div class="w-full sm:w-1/2 border-t border-white" />
+            </div>
+            <div class="relative flex justify-center sm:justify-start sm:pl-2">
+              <span
+                class="bg-[#241468] px-3 text-lg font-semibold leading-6 text-white rounded"
+              >
+                About the game
+              </span>
+            </div>
+          </div>
           <div class="description py-2 pl-3 text-xl leading-9">
             <div v-dompurify-html="content.description"></div>
-            <!-- {{ content.description }} -->
+          </div>
+        </div>
+
+        <div class="relative">
+          <div class="absolute inset-0 flex items-center" aria-hidden="true">
+            <div class="w-full sm:w-1/2 border-t border-white" />
+          </div>
+          <div class="relative flex justify-center sm:justify-start sm:pl-2">
+            <span
+              class="bg-[#241468] px-3 text-lg font-semibold leading-6 text-white rounded"
+            >
+              Download
+            </span>
           </div>
         </div>
         <GamesDownload />
@@ -90,3 +128,20 @@ const { content } = defineProps<Props>();
     </div>
   </div>
 </template>
+
+<style scoped>
+::-webkit-scrollbar-track {
+  background-color: #ea117a69;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #ea1179;
+}
+</style>

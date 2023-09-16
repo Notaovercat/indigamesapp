@@ -58,8 +58,9 @@ const { content } = defineProps<Props>();
             <p>Genres:</p>
             <ul class="flex flex-col gap-y-1">
               <NuxtLink
-                class="text-pink-300 font-bold hover:text-[#ea1179] transition-all cursor-pointer"
+                class="text-teal-300 opacity-75 hover:opacity-100 font-bold transition-all cursor-pointer"
                 v-for="genre of content.genres"
+                :to="{ name: 'all', query: { genre: genre.name } }"
               >
                 {{ genre.name }}
               </NuxtLink>
@@ -71,8 +72,9 @@ const { content } = defineProps<Props>();
             <p>Platfrorms:</p>
             <ul class="flex flex-col gap-y-1">
               <NuxtLink
-                class="text-pink-300 font-bold hover:text-[#ea1179] transition-all cursor-pointer"
+                class="text-teal-300 opacity-75 hover:opacity-100 font-bold transition-all cursor-pointer"
                 v-for="platform of content.platforms"
+                :to="{ name: 'all', query: { platform: platform.name } }"
               >
                 {{ platform.name }}
               </NuxtLink>

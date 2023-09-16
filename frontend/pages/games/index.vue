@@ -38,7 +38,16 @@ watch(
           <div
             class="flex flex-col pl-6 items-center md:items-start md:h-[72rem] overflow-hidden"
           >
-            <h1 class="pt-2 font-bold text-3xl pb-6">All games</h1>
+            <h1 class="pt-2 font-bold text-3xl pb-6">
+              All
+              <span v-if="useRoute().query.genre">{{
+                useRoute().query.genre
+              }}</span>
+              games
+              <span v-if="useRoute().query.platform"
+                >on {{ useRoute().query.platform }}</span
+              >
+            </h1>
             <ul
               v-if="games && games.length > 0"
               class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-9"

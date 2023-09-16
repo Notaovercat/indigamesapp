@@ -9,7 +9,6 @@ import {
   Post,
   Query,
   UploadedFile,
-  UploadedFiles,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -21,8 +20,7 @@ import {
   UpdateGameDto,
   ChangeVisibilityDto,
   Public,
-  RemovePlatformDto,
-  RemoveTagDto,
+  GameQueryDto,
 } from '@app/common';
 import { GamesService } from '../services/games.service';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -52,7 +50,7 @@ const storageOptions = {
 
 @Controller('games')
 export class GamesController {
-  private readonly logger = new Logger(GamesService.name);
+  private readonly logger = new Logger(GamesController.name);
 
   constructor(private gamesService: GamesService) {}
 
@@ -63,11 +61,8 @@ export class GamesController {
   }
 
   @Get()
-  getAllGames(
-    @Query('isFeatured') isFeatured: boolean,
-    @Query('lastUpdated') lastUpdated: boolean,
-  ) {
-    return this.gamesService.findAllGames(isFeatured, lastUpdated);
+  getAllGames(@Query() query: GameQueryDto) {
+    return this.gamesService.findAllGames(query);
   }
 
   @UseGuards(JwtGuard)

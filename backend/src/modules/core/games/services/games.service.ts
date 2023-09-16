@@ -12,6 +12,7 @@ import {
   GameEntity,
   UpdateGameDto,
   ChangeVisibilityDto,
+  GameQueryDto,
 } from '@app/common';
 import { TeamsService } from '../../teams/services/teams.service';
 import { ImagesService } from '../../images/services/images.service';
@@ -71,18 +72,35 @@ export class GamesService {
   }
 
   // return all games
-  findAllGames(
-    isFeatured?: boolean,
-    lastUpdated?: boolean,
-  ): Promise<GameEntity[]> {
+  findAllGames(query: GameQueryDto): Promise<GameEntity[]> {
+    const { genre, platform, tags, take, skip, lastUpdated, isFeatured } =
+      query;
+
     return this.prisma.game.findMany({
       where: {
-        isFeatured: isFeatured ? true : undefined,
         isVisible: true,
+        isFeatured: isFeatured ? true : undefined,
+        genres: genre
+          ? {
+              some: {
+                name: genre,
+              },
+            }
+          : undefined,
+
+        platforms: platform
+          ? {
+              some: {
+                name: platform,
+              },
+            }
+          : undefined,
       },
       orderBy: {
-        updatedAt: lastUpdated ? 'desc' : 'asc',
+        createdAt: lastUpdated ? 'desc' : 'asc',
       },
+      take,
+      skip,
       include: {
         coverImage: {
           select: {
@@ -191,6 +209,33 @@ export class GamesService {
 
     const { platforms, tags, genres, ...updateGameData } = dto;
 
+    // if dto has tags, disconnect the old ones
+    if (tags && tags.length > 0) {
+      const currentGame = await this.prisma.game.findUnique({
+        where: {
+          id: gameId,
+        },
+        select: {
+          tags: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      });
+
+      await this.prisma.game.update({
+        where: {
+          id: gameId,
+        },
+        data: {
+          tags: {
+            disconnect: currentGame?.tags,
+          },
+        },
+      });
+    }
+
     return this.prisma.game.update({
       where: {
         id: gameId,
@@ -198,10 +243,32 @@ export class GamesService {
       data: {
         ...updateGameData,
         status: updateGameData.status as STATUS,
-        team: {},
+        // platforms: platforms
+        //   ? {
+        //       connect: platforms.map((platformId) => ({ id: platformId })),
+        //     }
+        //   : undefined,
+        // tags: tags
+        //   ? {
+        //       connectOrCreate: tags.map((tag) => ({
+        //         where: { name: tag },
+        //         create: { name: tag },
+        //       })),
+        //     }
+        //   : undefined,
+        // genres: genres
+        //   ? {
+        //       connect: genres.map((genreId) => ({ id: genreId })),
+        //     }
+        //   : undefined,
+        genres: genres
+          ? {
+              set: genres.map((genresId) => ({ id: genresId })),
+            }
+          : undefined,
         platforms: platforms
           ? {
-              connect: platforms.map((platformId) => ({ id: platformId })),
+              set: platforms.map((platformId) => ({ id: platformId })),
             }
           : undefined,
         tags: tags
@@ -210,11 +277,6 @@ export class GamesService {
                 where: { name: tag },
                 create: { name: tag },
               })),
-            }
-          : undefined,
-        genres: genres
-          ? {
-              connect: genres.map((genreId) => ({ id: genreId })),
             }
           : undefined,
       },

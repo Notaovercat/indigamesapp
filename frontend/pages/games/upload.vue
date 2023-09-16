@@ -21,9 +21,8 @@ import {
   ComboboxOption,
   ComboboxOptions,
 } from "@headlessui/vue";
-import { IGenre } from "@/types/genre/genre.interface";
+import { IGenre, IPlatform } from "@/types/games/game.interface";
 import { ICreateGame } from "@/types/games/createGame.interface";
-import { IPlatform } from "@/types/platform/platform.interface";
 import { IUser } from "@/types/user/user.interface";
 import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
@@ -154,9 +153,11 @@ const createGame = async () => {
   game.platforms = selectedplatforms.value.map((platrform) => platrform.id);
   game.tags = tags.value
     .split(",")
-    .map((tag) => tag.trim().replace(/[\s]+/g, "-").toLowerCase())
+    .map((tag) => tag.trim().replace(/[\s]+/g, " "))
     .filter((tag) => tag.length !== 0);
   game.team = team.value;
+
+  // console.log(game);
 
   const config = useRuntimeConfig();
   const apiUrl = config.public.API_URL;

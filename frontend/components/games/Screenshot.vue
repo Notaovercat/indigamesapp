@@ -27,7 +27,7 @@ const onDelete = () => {
   <div class="bg-white relative rounded-lg overflow-hidden shrink-0">
     <img
       @click="open = true"
-      class="min-w-[20rem] h-80 object-fill shrink-0 cursor-pointer hover:opacity-75 hover:shadow-2xl transition-all ease-in-out duration-75"
+      class="max-w-[20rem] max-h-[80rem] object-cover shrink-0 cursor-pointer hover:opacity-75 hover:shadow-2xl transition-all ease-in-out duration-75"
       :src="`${API_URL}/images/${screenName}`"
       alt="screenshot"
     />
@@ -49,7 +49,7 @@ const onDelete = () => {
         class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0"
       >
         <DialogPanel
-          class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6"
+          class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all"
         >
           <div>
             <div class="flex justify-center items-start p-2">

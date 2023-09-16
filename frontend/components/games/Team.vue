@@ -20,7 +20,7 @@ const { team } = defineProps<Props>();
       >
         <span class="">By</span>
         <span
-          class="hover:text-[#ea1179] text-pink-300 font-bold transition-all"
+          class="text-teal-300 opacity-75 hover:opacity-100 font-bold transition-all"
         >
           {{ team.author.username }}
         </span>

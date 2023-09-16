@@ -40,26 +40,36 @@ watch(
 );
 </script>
 <template>
-  <Disclosure as="nav" class="bg-[#332088]" v-slot="{ open }">
+  <Disclosure
+    as="nav"
+    class="bg-gradient-to-r from-purple-700 via-blue-900 to-rose-800 select-none"
+    v-slot="{ open }"
+  >
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div class="flex h-16 items-center justify-between">
+      <div class="flex h-auto p-2 md:h-[6rem] items-center justify-between">
         <div class="flex items-center">
-          <div class="flex-shrink-0">
+          <NuxtLink
+            :to="{ name: 'main' }"
+            class="flex-shrink-0 relative cursor-pointer group"
+          >
             <img
-              class="block h-14 w-auto lg:hidden"
+              class="block h-10 w-auto sm:hidden relative z-10 group-hover:scale-150 duration-75 transition-all"
               src="../assets/images/logo.png"
               alt="logo1"
             />
             <img
-              class="hidden h-14 w-auto lg:block"
+              class="hidden h-20 w-auto sm:block relative z-10 group-hover:scale-110 duration-75 transition-all"
               src="../assets/images/logo.png"
               alt="logo2"
             />
-          </div>
+            <div
+              class="bg-cyan-300 top-0 absolute h-16 rounded-full w-full blur-md block opacity-0 group-hover:opacity-100 transition-all duration-75"
+            />
+          </NuxtLink>
           <div class="hidden sm:ml-6 sm:block">
             <div class="flex space-x-4">
               <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-              <NavButton name="All games" path="all" />
+              <NavButton name="Browse all games" path="all" />
               <NavButton name="Upload your game" path="upload" />
             </div>
           </div>
@@ -110,7 +120,7 @@ watch(
               class="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none hover:bg-[#EA1179] focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 transition-all"
               @click="router.push({ name: 'login' })"
             >
-              <ArrowLeftOnRectangleIcon class="h-8 w-8" aria-hidden="true" />
+              <ArrowLeftOnRectangleIcon class="h-14 w-14" aria-hidden="true" />
             </button>
           </div>
         </div>
@@ -124,7 +134,7 @@ watch(
                 if (isAuthed && !open && !profile) getProfile();
               }
             "
-            class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+            class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-cyan-300 hover:text-black focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
           >
             <Bars3Icon v-if="!open" class="block h-6 w-6" aria-hidden="true" />
             <XMarkIcon v-else class="block h-6 w-6" aria-hidden="true" />
@@ -137,7 +147,8 @@ watch(
       <div class="space-y-1 px-2 pb-3 pt-2">
         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
 
-        <NavMobileButton name="All games" path="" />
+        <NavMobileButton name="All games" path="all" />
+        <NavMobileButton name="Upload your game" path="upload" />
       </div>
 
       <!-- MOBILE PROFILE INFO -->

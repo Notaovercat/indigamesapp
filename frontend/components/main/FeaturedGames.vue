@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { IGamePreview } from "@/types/games/gamePreview.interface";
 
-const games = ref<IGamePreview[]>([]);
-
 const gameStore = useGames();
 
-games.value = (await gameStore.getFeaturedGames()) as IGamePreview[];
+if (gameStore.featuredGames.length <= 0) await gameStore.getFeaturedGames();
+
+const games: Ref<IGamePreview[]> = ref(gameStore.featuredGames);
+
+const errorMsg = ref(gameStore.errorMsg);
 </script>
 
 <template>
@@ -23,4 +25,3 @@ games.value = (await gameStore.getFeaturedGames()) as IGamePreview[];
     <h1 class="text-3xl font-bold">Wait for the updates...</h1>
   </div>
 </template>
-types/gamePreview.interface

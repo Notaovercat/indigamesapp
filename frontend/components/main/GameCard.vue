@@ -14,30 +14,41 @@ const { content } = props;
 
 <template>
   <NuxtLink
-    class="game-card relative shadow-xl bg-white rounded-xl w-64 h-[350px] shrink-0 overflow-y-hidden flex flex-col cursor-pointer select-none hover:scale-110 transition-all"
+    class="game-card relative shadow-xl bg-gradient-to-t from-blue-900 via-purple-900 to-purple-800 rounded-xl w-64 h-96 shrink-0 overflow-y-hidden flex flex-col cursor-pointer select-none hover:scale-110 transition-all"
     :to="{ name: 'game-id', params: { id: content.id } }"
   >
     <img
-      class="game-image h-36 w-full object-top"
-      :src="
-        content.coverImage
-          ? `${API_URL}/images/${content.coverImage.name}`
-          : undefined
-      "
+      class="h-44 w-full object-cover object-left"
+      v-if="content.coverImage"
+      :src="`${API_URL}/images/${content.coverImage.name}`"
       alt="gameCover"
     />
 
+    <img
+      v-else
+      class="h-44 w-full object-cover object-left"
+      src="../../assets/images/cover.png"
+      alt="noGameCover"
+    />
+
     <div class="card-info px-2 pt-1 pb-0 flex flex-col gap-3">
-      <h1 class="card-title text-3xl font-bold text-black">
+      <h1 class="card-title text-3xl font-bold text-white">
         {{ content.title }}
       </h1>
       <p
         v-dompurify-html="content.description"
-        class="card-desc pl-2 text-base line-clamp-3 text-gray-800"
+        class="card-desc pl-2 text-base line-clamp-3 text-slate-200"
       ></p>
-      <ul class="flex p-2 absolute bottom-0 right-0">
-        <li v-for="genre of content.genres" class="text-2xl text-black">
-          <span>{{ genre.name }}</span>
+      <ul class="flex gap-2 pb-2 pr-2 absolute bottom-0 right-0">
+        <li
+          v-for="(genre, i) of content.genres"
+          :key="genre.id"
+          class="flex text-base text-white"
+        >
+          <p>{{ genre.name }}</p>
+          <span :class="[i === content.genres.length - 1 ? 'hidden' : '']"
+            >,</span
+          >
         </li>
       </ul>
     </div>

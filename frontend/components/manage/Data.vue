@@ -16,8 +16,8 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
-import { IGenre } from "@/types/genre/genre.interface";
-import { IPlatform } from "@/types/platform/platform.interface";
+import { IGenre } from "@/types/games/game.interface";
+import { IPlatform } from "@/types/games/game.interface";
 import { IGame } from "@/types/games/game.interface";
 import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
@@ -109,7 +109,7 @@ const saveChanges = async () => {
     platforms: selectedPlatforms.value.map((platforms) => platforms.id),
     tags: tags.value
       .split(",")
-      .map((tag) => tag.trim().replace(/[\s]+/g, "-").toLowerCase())
+      .map((tag) => tag.trim().replace(/[\s]+/g, " "))
       .filter((tag) => tag.length !== 0),
   };
 

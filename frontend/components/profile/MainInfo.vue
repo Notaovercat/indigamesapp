@@ -68,10 +68,10 @@ useHead({
       <div v-if="isLoading" class="flex justify-center items-center w-full">
         <LoadingSpinner />
       </div>
-      <p v-if="data && data.description?.length > 0" class="text-xl">
+      <p v-if="data && data.description?.length > 0" class="text-2xl">
         {{ data.description }}
       </p>
-      <div class="flex justify-center items-center w-full h-full">
+      <div v-else class="flex justify-center items-center w-full h-full">
         <p class="text-2xl">There is empty</p>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { IPlatform } from "@/types/platform/platform.interface";
+import { IPlatform } from "@/types/games/game.interface";
 
 export const usePlatforms = defineStore("platforms", () => {
   // define config to retreive api url

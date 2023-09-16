@@ -1,10 +1,6 @@
 import { IUser } from "@/types/user/user.interface";
 
 export const useUser = defineStore("users", () => {
-  // define config to retreive api url
-  const config = useRuntimeConfig();
-  const apiUrl = config.public.API_URL;
-
   const users = ref<IUser[]>([]);
   const isLoading = ref(false);
   const errorMsg = ref("");

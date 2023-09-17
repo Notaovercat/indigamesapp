@@ -1,4 +1,3 @@
-import axios, { AxiosError } from "axios";
 import { IGamePreview } from "@/types/games/gamePreview.interface";
 import { IGame } from "@/types/games/game.interface";
 

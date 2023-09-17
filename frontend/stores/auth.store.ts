@@ -1,7 +1,8 @@
-import { ICredentionals } from "@/types/user/creds.interface";
 import { ICreateUser } from "@/types/user/createUser.interface";
 
 export const useAuth = defineStore("auth", () => {
+  const config = useRuntimeConfig();
+  const apiUrl = config.public.API_URL;
   // error message for auth methods
   const errorMsg = ref("");
 
@@ -11,42 +12,26 @@ export const useAuth = defineStore("auth", () => {
   // is authed
   const isAuthed = ref(false);
 
-  async function logIn(creds: ICredentionals) {
-    errorMsg.value = "";
-    const { data, error } = await useMyFetch("auth/login", {
-      method: "POST",
-      body: creds,
-    });
+  // async function logIn(creds: ICredentionals) {
+  //   try {
+  //     errorMsg.value = "";
+  //     await axios.post(`${apiUrl}/auth/login`, creds, {
+  //       withCredentials: true,
+  //     });
 
-    if (error.value) {
-      if (error.value.statusCode === 401)
-        errorMsg.value = "Wrong email or password";
-      else errorMsg.value = "Server error, try again later";
-    }
+  //     // update userid
+  //     await checkIfLoggedIn();
 
-    if (data.value) {
-      await checkIfLoggedIn();
-      return navigateTo("/");
-    }
-    // try {
-    //   errorMsg.value = "";
-    //   await axios.post(`${apiUrl}/auth/login`, creds, {
-    //     withCredentials: true,
-    //   });
-
-    //   // update userid
-    //   await checkIfLoggedIn();
-
-    //   //redirect to the main page
-    //   return navigateTo("/");
-    // } catch (e) {
-    //   if (e instanceof AxiosError) {
-    //     if (e.response?.status === 401)
-    //       errorMsg.value = "Wrong email or password";
-    //     else errorMsg.value = "Server error, try again later";
-    //   }
-    // }
-  }
+  //     //redirect to the main page
+  //     return navigateTo("/");
+  //   } catch (e) {
+  //     if (e instanceof AxiosError) {
+  //       if (e.response?.status === 401)
+  //         errorMsg.value = "Wrong email or password";
+  //       else errorMsg.value = "Server error, try again later";
+  //     }
+  //   }
+  // }
 
   async function signUp(input: ICreateUser) {
     errorMsg.value = "";
@@ -59,6 +44,7 @@ export const useAuth = defineStore("auth", () => {
       if (error.value.statusCode === 400)
         errorMsg.value = "This email already in use";
       else errorMsg.value = "Server error, try again later";
+      return;
     }
 
     if (data.value) {
@@ -87,6 +73,7 @@ export const useAuth = defineStore("auth", () => {
 
   async function checkIfLoggedIn() {
     try {
+      console.log("checking");
       const { data } = await useMyFetch<string>(`/auth/check`, {
         method: "get",
       });
@@ -109,7 +96,7 @@ export const useAuth = defineStore("auth", () => {
   }
 
   return {
-    logIn,
+    // logIn,
     errorMsg,
     checkIfLoggedIn,
     userId,

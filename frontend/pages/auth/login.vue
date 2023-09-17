@@ -30,7 +30,7 @@ const validateEmail = (email: string) => {
   return /^[^@]+@\w+(\.\w+)+\w$/.test(email);
 };
 
-const handleLogin = () => {
+const handleLogin = async () => {
   // CLEAR ERRORS
   errorMsgEmail.value = "";
   errorMsgPassword.value = "";
@@ -49,7 +49,23 @@ const handleLogin = () => {
   if (!user.email || !user.password) return;
 
   // HANDLE LOGIN
-  authStore.logIn(user);
+  // authStore.logIn(user);
+  const { data, error } = await useMyFetch("auth/login", {
+    method: "POST",
+    body: user,
+  });
+
+  if (error.value) {
+    user.password = "";
+    if (error.value.statusCode === 401)
+      errorMsgAuth.value = "Wrong email or password";
+    else errorMsgAuth.value = "Server error, try again later";
+    return;
+  }
+
+  if (data.value) {
+    return navigateTo("/");
+  }
 };
 </script>
 

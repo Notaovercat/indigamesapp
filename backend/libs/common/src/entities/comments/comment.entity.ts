@@ -6,7 +6,7 @@ export class CommentEntity implements Comment {
   isRedacted: boolean;
   isDeleted: boolean;
   gameId: string | null;
-  userId: string | null;
+  userId: string;
   createdAt: Date;
   updatedAt: Date;
 }

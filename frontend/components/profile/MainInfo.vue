@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { UserIcon } from "@heroicons/vue/20/solid";
-import { IProfile } from "@/types/profile/profile.interface";
+import { IProfile } from "@workspace/shared";
 
 const useProfileStore = useProfile();
 const data = ref<IProfile>();
@@ -68,7 +68,7 @@ useHead({
       <div v-if="isLoading" class="flex justify-center items-center w-full">
         <LoadingSpinner />
       </div>
-      <p v-if="data && data.description?.length > 0" class="text-2xl">
+      <p v-if="data" class="text-2xl">
         {{ data.description }}
       </p>
       <div v-else class="flex justify-center items-center w-full h-full">

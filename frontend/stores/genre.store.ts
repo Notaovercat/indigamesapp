@@ -1,4 +1,4 @@
-import { IGenre } from "@/types/games/game.interface";
+import { IGenre } from "@workspace/shared";
 
 export const useGenres = defineStore("genres", () => {
   // define config to retreive api url

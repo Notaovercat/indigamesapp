@@ -21,7 +21,7 @@ import {
   ComboboxOption,
   ComboboxOptions,
 } from "@headlessui/vue";
-import { IGenre, IPlatform } from "@/types/games/game.interface";
+import { IGenre, IPlatform } from "@workspace/shared";
 import { ICreateGame } from "@/types/games/createGame.interface";
 import { IUser } from "@/types/user/user.interface";
 import { QuillEditor } from "@vueup/vue-quill";

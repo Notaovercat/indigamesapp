@@ -135,7 +135,8 @@ export class GamesService {
     userId?: string,
     isManage = false,
   ): Promise<IGame> {
-    if (isManage && !userId) throw new ForbiddenException('No such game');
+    if (isManage && !userId)
+      throw new ForbiddenException('You are not allowed');
     if (isManage && userId)
       await this.teamService.checkIsUserIsAuthor(gameId, userId);
 

@@ -21,7 +21,7 @@ import {
   WindowIcon,
   ArrowUturnLeftIcon,
 } from "@heroicons/vue/24/outline";
-import { IGame } from "@/types/games/game.interface";
+import { IGame } from "@workspace/shared";
 
 const categories = reactive([
   {

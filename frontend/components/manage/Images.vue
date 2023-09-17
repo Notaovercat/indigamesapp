@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { PhotoIcon } from "@heroicons/vue/20/solid";
+
 interface IImage {
   id: string;
   name: string;
 }
 interface Props {
   gameId: string;
-  coverImage?: IImage;
+  coverImage: IImage | null;
   screenshots: IImage[];
 }
 

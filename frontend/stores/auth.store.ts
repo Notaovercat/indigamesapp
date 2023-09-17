@@ -73,7 +73,6 @@ export const useAuth = defineStore("auth", () => {
 
   async function checkIfLoggedIn() {
     try {
-      console.log("checking");
       const { data } = await useMyFetch<string>(`/auth/check`, {
         method: "get",
       });

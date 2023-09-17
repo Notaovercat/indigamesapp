@@ -16,9 +16,9 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
-import { IGenre } from "@/types/games/game.interface";
-import { IPlatform } from "@/types/games/game.interface";
-import { IGame } from "@/types/games/game.interface";
+import { IGenre } from "@workspace/shared";
+import { IPlatform } from "@workspace/shared";
+import { IGame } from "@workspace/shared";
 import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
 

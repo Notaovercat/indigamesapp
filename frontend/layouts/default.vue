@@ -13,7 +13,7 @@ import {
   XMarkIcon,
   ArrowLeftOnRectangleIcon,
 } from "@heroicons/vue/24/outline";
-import { IProfile } from "@/types/profile/profile.interface";
+import { IProfile } from "@workspace/shared";
 import { UserIcon } from "@heroicons/vue/20/solid";
 
 const useAuthStore = useAuth();

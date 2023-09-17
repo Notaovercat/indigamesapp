@@ -1,11 +1,11 @@
 <script setup lang="ts">
+import { IGamePreview } from "@workspace/shared";
+
 interface Props {
   content: IGamePreview;
 }
 const config = useRuntimeConfig();
 const { API_URL } = config.public;
-
-import { IGamePreview } from "@/types/games/gamePreview.interface";
 
 const props = defineProps<Props>();
 

@@ -1,4 +1,4 @@
-import { IPlatform } from "@/types/games/game.interface";
+import { IPlatform } from "@workspace/shared";
 
 export const usePlatforms = defineStore("platforms", () => {
   // define config to retreive api url

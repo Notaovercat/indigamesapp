@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { IGame } from "@/types/games/game.interface";
+import { IGame } from "@workspace/shared";
 import { WrenchIcon } from "@heroicons/vue/20/solid";
-import { STATUS } from "@/types/games/game.interface";
 
 interface Props {
   content: IGame;
@@ -27,7 +26,7 @@ const { content } = defineProps<Props>();
             <!-- MANAGE BUTTON -->
             <NuxtLink
               class="block z-20 bg-black hover:bg-slate-800 transition-all text-white p-3 rounded shadow-xl text-sm"
-              v-if="useAuth().userId === content.team.author.id"
+              v-if="useAuth().userId === content.team?.author.id"
               :to="`${$route.params.id}/manage`"
             >
               <div class="flex justify-center items-center gap-2">
@@ -46,10 +45,7 @@ const { content } = defineProps<Props>();
           </div>
 
           <!-- STATUS -->
-          <div
-            v-if="content.status !== STATUS.NonProvided"
-            class="text-2xl py-3"
-          >
+          <div v-if="content.status !== 'NonProvided'" class="text-2xl py-3">
             <GamesStatus :status="content.status" />
           </div>
 
@@ -94,7 +90,7 @@ const { content } = defineProps<Props>();
               </span>
             </div>
           </div>
-          <GamesTeam :team="content.team" />
+          <GamesTeam v-if="content.team" :team="content.team" />
 
           <!-- DESCRIPTON -->
           <div class="relative">

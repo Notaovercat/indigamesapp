@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ITeam } from "@/types/games/game.interface";
+import { ITeam } from "@workspace/shared";
 
 interface Props {
   team: ITeam;

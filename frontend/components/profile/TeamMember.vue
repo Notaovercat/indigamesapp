@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IUserTeams } from "@/types/profile/userTeams.interface";
+import { IUserTeams } from "@workspace/shared";
 
 // OLD
 // interface Props {

@@ -1,5 +1,5 @@
-import { IGamePreview } from "@/types/games/gamePreview.interface";
-import { IGame } from "@/types/games/game.interface";
+import { IGamePreview } from "@workspace/shared";
+import { IGame } from "@workspace/shared";
 
 export const useGames = defineStore("game", () => {
   const errorlg = ref("");
@@ -39,11 +39,7 @@ export const useGames = defineStore("game", () => {
 
   async function getGameById(id: string, isManage = false) {
     const { data, error } = await useMyFetch<IGame>(
-      `games/${id}?isManage=${isManage}`,
-      {
-        method: "get",
-        cache: "no-cache",
-      }
+      `games/${id}?isManage=${isManage}`
     );
 
     if (error.value) {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { STATUS } from "@/types/games/game.interface";
+import { STATUS } from "@workspace/shared";
 
 interface Props {
   status: STATUS;
@@ -14,22 +14,22 @@ interface Status {
 const statuses: Status[] = [
   {
     name: "Under Development",
-    status: STATUS.InDevelopment,
+    status: "InDevelopment",
     color: "text-blue-500",
   },
   {
     name: "Early Access",
-    status: STATUS.EarlyAccess,
+    status: "EarlyAccess",
     color: "text-orange-500",
   },
   {
     name: "Released",
-    status: STATUS.Released,
+    status: "Released",
     color: "text-green-500",
   },
   {
     name: "Not Provided",
-    status: STATUS.NonProvided,
+    status: "NonProvided",
     color: "text-gray-500",
   },
 ];

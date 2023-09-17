@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IPlatform } from "@/types/games/game.interface";
+import { IPlatform } from "@workspace/shared";
 
 const platformsStore = usePlatforms();
 

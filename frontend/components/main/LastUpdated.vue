@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IGamePreview } from "@/types/games/gamePreview.interface";
+import { IGamePreview } from "@workspace/shared";
 
 const gameStore = useGames();
 

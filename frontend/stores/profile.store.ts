@@ -1,6 +1,6 @@
-import { IGameCard } from "@/types/profile/gameCard.interface";
-import { IUserTeams } from "@/types/profile/userTeams.interface";
-import { IProfile } from "@/types/profile/profile.interface";
+import { IGameCard } from "@workspace/shared";
+import { IUserTeams } from "@workspace/shared";
+import { IProfile } from "@workspace/shared";
 
 export const useProfile = defineStore("profile", () => {
   // define config to retreive api url

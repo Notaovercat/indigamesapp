@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IGameCard } from "@/types/profile/gameCard.interface";
+import { IGameCard } from "@workspace/shared";
 
 // OLD
 // interface Props {

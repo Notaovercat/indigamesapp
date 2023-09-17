@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IGenre } from "@/types/games/game.interface";
+import { IGenre } from "@workspace/shared";
 
 const genres: Ref<IGenre[]> = ref([]);
 

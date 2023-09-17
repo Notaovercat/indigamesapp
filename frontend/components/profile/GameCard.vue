@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { IGameCard } from "@/types/profile/gameCard.interface";
+import { IGameCard } from "@workspace/shared";
 
 interface Props {
   game: IGameCard;
 }
 
 const { game } = defineProps<Props>();
-const config = useRuntimeConfig();
-const { API_URL } = config.public;
 </script>
 
 <template>

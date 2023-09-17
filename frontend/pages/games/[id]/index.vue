@@ -2,7 +2,7 @@
 definePageMeta({
   name: "game-id",
 });
-import { IGame } from "@/types/games/game.interface";
+import { IGame } from "@workspace/shared";
 
 const route = useRoute();
 

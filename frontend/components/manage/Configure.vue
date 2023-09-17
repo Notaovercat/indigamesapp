@@ -26,10 +26,17 @@ import {
   CheckIcon,
 } from "@heroicons/vue/20/solid";
 import { IUser } from "@/types/user/user.interface";
-import { IGame, ITeamMember, STATUS } from "@/types/games/game.interface";
+import { IGame, ITeamMember, STATUS } from "@workspace/shared";
 
 interface Props {
   game: IGame;
+}
+
+interface IStatus {
+  name: string;
+  status: STATUS;
+  available: boolean;
+  color: string;
 }
 
 const useUserStore = useUser();
@@ -45,28 +52,28 @@ const { game } = defineProps<Props>();
 const openStatus = ref(false);
 const statusErrorMsg = ref("");
 
-const statuses = ref([
+const statuses = ref<IStatus[]>([
   {
     name: "Under Development",
-    status: STATUS.InDevelopment,
+    status: "InDevelopment",
     available: true,
     color: "blue",
   },
   {
     name: "Early Access",
-    status: STATUS.EarlyAccess,
+    status: "EarlyAccess",
     available: true,
     color: "orange",
   },
   {
     name: "Released",
-    status: STATUS.Released,
+    status: "Released",
     available: true,
     color: "green",
   },
   {
     name: "Not Provided",
-    status: STATUS.NonProvided,
+    status: "NonProvided",
     available: false,
     color: "gray",
   },
@@ -150,7 +157,7 @@ const filteredPeople = computed(() =>
       })
 );
 
-const team = ref<ITeamMember[]>(game.team.team_members);
+const team = ref<ITeamMember[]>(game.team ? game.team.team_members : []);
 const teamErrorMsg = ref("");
 const role = ref("");
 
@@ -189,7 +196,7 @@ const addUserToTheTeam = async () => {
 const handleDelete = async (userId: string) => {
   teamErrorMsg.value = "";
 
-  const teamMemberId = game.team.team_members.find(
+  const teamMemberId = game.team?.team_members.find(
     (member) => member.user.id === userId
   )?.id;
 
@@ -211,15 +218,15 @@ const handleDelete = async (userId: string) => {
   );
 
   if (error.value) {
-    console.log(error.value.message);
+    // console.log(error.value.message);
     teamErrorMsg.value = "Please, try again later";
   }
 
-  if (data.value) {
-    game.team.team_members = game.team.team_members.filter(
+  if (data.value && game.team) {
+    game.team.team_members = game.team?.team_members.filter(
       (member) => member.id !== data.value?.id
     );
-    team.value = game.team.team_members;
+    team.value = game.team?.team_members;
   }
   isLoading.value = false;
 };

@@ -128,7 +128,6 @@ export class GamesService {
   /* 
    find game by id
    if game is not visible, return 404,
-   if user requseting his game, return if userid provided 
    */
   async findGameById(
     gameId: string,
@@ -196,6 +195,7 @@ export class GamesService {
     // check if game is visible
     // if not visble and not user id provided - return 403
     if (!game.isVisible && !userId) throw new NotFoundException('No such game');
+    // if (!game.isVisible) throw new NotFoundException('No such game');
 
     // if userid provided, check if user is author
     if (!game.isVisible && userId) {
@@ -203,7 +203,6 @@ export class GamesService {
       return game;
     }
 
-    // REDO THIS LATER
     /*  
     await this.prisma.game.update({
       where: { id: gameId },
@@ -324,15 +323,95 @@ export class GamesService {
   }
 
   // find games created by user
-  async findMyGames(userId: string) {
+  findMyGames(userId: string): Promise<IGamePreview[]> {
     return this.prisma.game.findMany({
       where: {
         team: {
           authorId: userId,
         },
       },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        status: true,
+        rating: true,
+        views_count: true,
+        isFeatured: true,
+        isVisible: true,
+        coverImage: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        genres: {
+          select: { id: true, name: true },
+        },
+        createdAt: true,
+        updatedAt: true,
+      },
       orderBy: {
         createdAt: 'desc',
+      },
+    });
+  }
+
+  // find game created by user by id
+  findMyGameById(gameId: string, userId: string) {
+    return this.prisma.game.findFirstOrThrow({
+      where: {
+        id: gameId,
+        team: {
+          authorId: userId,
+        },
+      },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        status: true,
+        rating: true,
+        views_count: true,
+        isFeatured: true,
+        isVisible: true,
+        team: {
+          select: {
+            id: true,
+            author: {
+              select: {
+                id: true,
+                email: true,
+                username: true,
+              },
+            },
+            team_members: {
+              select: {
+                id: true,
+                role: true,
+                user: {
+                  select: {
+                    id: true,
+                    username: true,
+                    email: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        platforms: true,
+        tags: true,
+        genres: true,
+        coverImage: true,
+        screenshots: true,
+        createdAt: true,
+        updatedAt: true,
+        _count: {
+          select: {
+            rated: true,
+          },
+        },
       },
     });
   }

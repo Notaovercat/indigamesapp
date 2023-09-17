@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { IProfile, IUserTeams } from '@workspace/shared';
+import { IGameCard, IProfile, IUserTeams } from '@workspace/shared';
 import { PrismaService } from 'nestjs-prisma';
 
 @Injectable()
@@ -21,7 +21,7 @@ export class ProfileService {
     });
   }
 
-  findUserGames(userId: string, isYourProfile = false) {
+  findUserGames(userId: string, isYourProfile = false): Promise<IGameCard[]> {
     return this.prisma.game.findMany({
       where: {
         team: {
@@ -29,11 +29,11 @@ export class ProfileService {
         },
         isVisible: isYourProfile ? undefined : true,
       },
-
       select: {
         id: true,
         title: true,
         description: true,
+        isVisible: true,
         coverImage: {
           select: {
             id: true,

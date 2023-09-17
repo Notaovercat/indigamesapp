@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  ssr: false,
+  // ssr: false,
   devtools: { enabled: false },
   modules: ["@pinia/nuxt", "@nuxtjs/tailwindcss"],
   pinia: {
@@ -23,5 +23,9 @@ export default defineNuxtConfig({
     public: {
       API_URL: process.env.API_URL,
     },
+  },
+  routeRules: {
+    "games/*/manage": { ssr: false },
+    "games/my/**": { ssr: false },
   },
 });

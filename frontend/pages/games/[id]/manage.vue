@@ -203,7 +203,10 @@ useHead({
               <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
                 <NuxtLink
                   class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
-                  :to="{ name: 'game-id', params: { id: game.id } }"
+                  :to="{
+                    name: game.isVisible ? 'game-id' : 'my-game-id',
+                    params: { id: game.id },
+                  }"
                 >
                   Go Back
                 </NuxtLink>

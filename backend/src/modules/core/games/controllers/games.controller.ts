@@ -72,6 +72,12 @@ export class GamesController {
   }
 
   @UseGuards(JwtGuard)
+  @Get('my/:id')
+  getMyGameById(@CurrentUser() user: UserEntity, @Param('id') id: string) {
+    return this.gamesService.findMyGameById(id, user.id);
+  }
+
+  @UseGuards(JwtGuard)
   @Post('visible')
   changeVisibility(
     @Body() dto: ChangeVisibilityDto,

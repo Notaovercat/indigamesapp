@@ -5,7 +5,8 @@ export interface IGameCard {
   coverImage: ICoverImage | null;
   views_count: number;
   rating: number;
-  createdAt: string;
+  createdAt: Date;
+  isVisible: boolean;
   _count: {
     comments: number;
   };

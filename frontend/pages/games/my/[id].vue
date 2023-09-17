@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-  name: "game-id",
+  name: "my-game-id",
 });
 import { IGame } from "@workspace/shared";
 
@@ -9,14 +9,11 @@ const gameId = route.params.id as string;
 
 const content = ref();
 
-const { data, error } = await useMyFetch<IGame>(
-  `games/${gameId}?isManage=${false}`
-);
+const { data, error } = await useMyFetch<IGame>(`games/my/${gameId}`);
 
 if (error.value) {
   showError({
     statusCode: error.value.statusCode,
-    statusMessage: error.value.data.message,
   });
 }
 
@@ -35,4 +32,3 @@ useHead({
     <GamesGameInfo v-if="content" :content="content" />
   </div>
 </template>
-types/game.interface

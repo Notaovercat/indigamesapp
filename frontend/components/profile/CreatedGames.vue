@@ -54,7 +54,12 @@ watch(
       v-for="game of data"
       :game="game"
       :key="game.id"
-      @click="navigateTo({ name: 'game-id', params: { id: game.id } })"
+      @click="
+        navigateTo({
+          name: game.isVisible ? 'game-id' : 'my-game-id',
+          params: { id: game.id },
+        })
+      "
     />
     <div
       v-else

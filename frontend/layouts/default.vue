@@ -100,7 +100,7 @@ watch(
                 leave-to-class="transform opacity-0 scale-95"
               >
                 <MenuItems
-                  class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                  class="absolute right-0 z-50 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                 >
                   <MenuItem v-slot="{ active }">
                     <NavOpenProfileButton :active="active" />
@@ -143,6 +143,7 @@ watch(
       </div>
     </div>
 
+    <!-- MOBILE PROFILE INFO -->
     <DisclosurePanel class="sm:hidden">
       <div class="space-y-1 px-2 pb-3 pt-2">
         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
@@ -151,7 +152,6 @@ watch(
         <NavMobileButton name="Upload your game" path="upload" />
       </div>
 
-      <!-- MOBILE PROFILE INFO -->
       <div
         v-if="isAuthed && profile"
         class="border-t border-gray-700 pb-3 pt-4"
@@ -220,25 +220,3 @@ watch(
 
   <NavFooter />
 </template>
-
-<!-- <div class="navigation px-3 mt-4 sticky top-1 z-10">
-	<nav
-		class="flex h-[76px] bg-[#332088] rounded-lg shadow-xl gap-5 text-3xl items-center justify-between"
-	>
-		<div class="flex gap-7 text-white items-center">
-			<div>
-				<img src="../assets/images/logo.png" class="h-16" alt="logo" />
-			</div>
-
-			<div class="flex gap-5">
-				<NuxtLink to="/">Item 1</NuxtLink>
-				<NuxtLink to="/">Item 2</NuxtLink>
-				<NuxtLink to="/">Item 3</NuxtLink>
-				<NuxtLink to="/">Item 4</NuxtLink>
-				<NuxtLink to="/">Item 5</NuxtLink>
-				<NuxtLink to="/">Item 6</NuxtLink>
-			</div>
-		</div>
-		<div class="mr-4 w-16 h-16 bg-white"></div>
-	</nav>
-</div> -->

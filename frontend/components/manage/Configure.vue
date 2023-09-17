@@ -131,6 +131,7 @@ const handleVisibility = async () => {
 
   if (data.value) {
     visibility.value = !visibility.value;
+    game.isVisible = visibility.value;
   }
   openVisible.value = false;
   isLoading.value = false;

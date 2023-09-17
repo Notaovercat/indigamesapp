@@ -27,7 +27,7 @@ const { content } = defineProps<Props>();
             <NuxtLink
               class="block z-20 bg-black hover:bg-slate-800 transition-all text-white p-3 rounded shadow-xl text-sm"
               v-if="useAuth().userId === content.team?.author.id"
-              :to="`${$route.params.id}/manage`"
+              :to="`/games/${$route.params.id}/manage`"
             >
               <div class="flex justify-center items-center gap-2">
                 <WrenchIcon class="h-5 w-5" /> Manage

@@ -17,6 +17,7 @@ import {
 import { TeamsService } from '../../teams/services/teams.service';
 import { ImagesService } from '../../images/services/images.service';
 import { STATUS } from '@prisma/client';
+import { IGame, IGamePreview } from '@workspace/shared';
 
 @Injectable()
 export class GamesService {
@@ -72,7 +73,7 @@ export class GamesService {
   }
 
   // return all games
-  findAllGames(query: GameQueryDto): Promise<GameEntity[]> {
+  findAllGames(query: GameQueryDto): Promise<IGamePreview[]> {
     const { genre, platform, tags, take, skip, lastUpdated, isFeatured } =
       query;
 
@@ -101,7 +102,15 @@ export class GamesService {
       },
       take,
       skip,
-      include: {
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        status: true,
+        rating: true,
+        views_count: true,
+        isFeatured: true,
+        isVisible: true,
         coverImage: {
           select: {
             id: true,
@@ -109,21 +118,23 @@ export class GamesService {
           },
         },
         genres: {
-          select: {
-            id: true,
-            name: true,
-          },
+          select: { id: true, name: true },
         },
+        createdAt: true,
+        updatedAt: true,
       },
     });
   }
-
   /* 
    find game by id
    if game is not visible, return 404,
    if user requseting his game, return if userid provided 
    */
-  async findGameById(gameId: string, userId?: string, isManage = false) {
+  async findGameById(
+    gameId: string,
+    userId?: string,
+    isManage = false,
+  ): Promise<IGame> {
     if (isManage && !userId) throw new ForbiddenException('No such game');
     if (isManage && userId)
       await this.teamService.checkIsUserIsAuthor(gameId, userId);
@@ -132,7 +143,15 @@ export class GamesService {
       where: {
         id: gameId,
       },
-      include: {
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        status: true,
+        rating: true,
+        views_count: true,
+        isFeatured: true,
+        isVisible: true,
         team: {
           select: {
             id: true,
@@ -146,6 +165,7 @@ export class GamesService {
             team_members: {
               select: {
                 id: true,
+                role: true,
                 user: {
                   select: {
                     id: true,
@@ -153,7 +173,6 @@ export class GamesService {
                     email: true,
                   },
                 },
-                role: true,
               },
             },
           },
@@ -163,6 +182,8 @@ export class GamesService {
         genres: true,
         coverImage: true,
         screenshots: true,
+        createdAt: true,
+        updatedAt: true,
         _count: {
           select: {
             rated: true,
@@ -243,24 +264,6 @@ export class GamesService {
       data: {
         ...updateGameData,
         status: updateGameData.status as STATUS,
-        // platforms: platforms
-        //   ? {
-        //       connect: platforms.map((platformId) => ({ id: platformId })),
-        //     }
-        //   : undefined,
-        // tags: tags
-        //   ? {
-        //       connectOrCreate: tags.map((tag) => ({
-        //         where: { name: tag },
-        //         create: { name: tag },
-        //       })),
-        //     }
-        //   : undefined,
-        // genres: genres
-        //   ? {
-        //       connect: genres.map((genreId) => ({ id: genreId })),
-        //     }
-        //   : undefined,
         genres: genres
           ? {
               set: genres.map((genresId) => ({ id: genresId })),

@@ -1,11 +1,12 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
+import { IProfile, IUserTeams } from '@workspace/shared';
 import { PrismaService } from 'nestjs-prisma';
 
 @Injectable()
 export class ProfileService {
   constructor(private prisma: PrismaService) {}
 
-  findUserProfile(userId: string) {
+  findUserProfile(userId: string): Promise<IProfile> {
     return this.prisma.user.findFirstOrThrow({
       where: {
         id: userId,
@@ -51,7 +52,7 @@ export class ProfileService {
     });
   }
 
-  findUserTeams(userId: string, isYourProfile = false) {
+  findUserTeams(userId: string, isYourProfile = false): Promise<IUserTeams[]> {
     return this.prisma.teamMember.findMany({
       where: {
         userId,

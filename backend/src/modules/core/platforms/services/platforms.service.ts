@@ -1,16 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePlatformDto, UpdatePlatformDto } from '@app/common';
 import { PrismaService } from 'nestjs-prisma';
+import { IPlatform } from '@workspace/shared';
 
 @Injectable()
 export class PlatformsService {
   constructor(private prisma: PrismaService) {}
 
-  findAllPlatforms() {
+  findAllPlatforms(): Promise<IPlatform[]> {
     return this.prisma.platform.findMany();
   }
 
-  findPlatformById(id: string) {
+  findPlatformById(id: string): Promise<IPlatform> {
     return this.prisma.platform.findUniqueOrThrow({
       where: {
         id,
@@ -27,10 +28,9 @@ export class PlatformsService {
   }
 
   async updatePlatform(platformId: string, dto: UpdatePlatformDto) {
-    const platform = await this.findPlatformById(platformId);
     return this.prisma.platform.update({
       where: {
-        id: platform.id,
+        id: platformId,
       },
       data: {
         ...dto,

@@ -28,7 +28,7 @@ export interface IGame {
 
 export interface ITeam {
   id: string;
-  author: IAuthor | null;
+  author: IAuthor;
   team_members: ITeamMember[];
 }
 

@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { IProfile, IUserTeams } from '@workspace/shared';
 import { PrismaService } from 'nestjs-prisma';
 

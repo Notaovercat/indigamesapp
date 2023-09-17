@@ -2,7 +2,7 @@ export interface IGameCard {
   id: string;
   title: string;
   description: string;
-  coverImage?: ICoverImage;
+  coverImage: ICoverImage | null;
   views_count: number;
   rating: number;
   createdAt: string;

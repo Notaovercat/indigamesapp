@@ -6,8 +6,8 @@ export interface IUserTeams {
 
 interface Team {
   id: string;
-  author: Author | null;
-  game: Game | null;
+  author: Author;
+  game: Game;
 }
 
 interface Author {

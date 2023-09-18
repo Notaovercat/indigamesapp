@@ -25,6 +25,7 @@ export default defineNuxtConfig({
     },
   },
   routeRules: {
+    "games/upload": { ssr: false },
     "games/*/manage": { ssr: false },
     "games/my/**": { ssr: false },
   },

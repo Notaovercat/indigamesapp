@@ -65,7 +65,6 @@ export class GamesService {
       await this.teamService.createTeam(teamMembers);
     } catch (err) {
       // if an error occures in the team servise, deleting the game
-      console.log(err);
       this.deleteGame(game.id);
     }
 

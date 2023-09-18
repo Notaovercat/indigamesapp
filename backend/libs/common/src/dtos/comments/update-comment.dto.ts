@@ -1,9 +1,9 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class CreateCommentDto {
+export class UpdateCommentDto {
   @IsString()
   @IsNotEmpty()
-  gameId: string;
+  commentId: string;
 
   @IsString()
   @IsNotEmpty()

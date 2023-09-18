@@ -21,11 +21,6 @@ const errorMsgEmail = ref("");
 const errorMsgPassword = ref("");
 const errorMsgAuth = ref("");
 
-watch(
-  () => authStore.errorMsg,
-  () => (errorMsgAuth.value = authStore.errorMsg)
-);
-
 const validateEmail = (email: string) => {
   return /^[^@]+@\w+(\.\w+)+\w$/.test(email);
 };

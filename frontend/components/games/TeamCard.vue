@@ -17,13 +17,20 @@ const onDelete = () => {
 </script>
 
 <template>
-  <div class="flex bg-slate-100 rounded shadow text-black overflow-hidden">
-    <div class="flex justify-center items-center bg-slate-200 px-3">
+  <div
+    class="group flex bg-gradient-to-l from-violet-500 via-purple-700 to-violet-900 shadow text-white overflow-hidden rounded-lg"
+  >
+    <div class="flex justify-center items-center px-3">
       <UserIcon class="w-10 bg-slate-400 rounded-full" />
     </div>
 
     <div class="flex flex-col gap-2 p-4">
-      <p>{{ username }}</p>
+      <NuxtLink
+        class="font-bold transition-all cursor-pointer hover:text-slate-300"
+        :to="{ name: 'profile', params: { id: userId } }"
+      >
+        {{ username }}
+      </NuxtLink>
       <p><span class="font-bold pr-1">Role:</span>{{ role }}</p>
     </div>
 

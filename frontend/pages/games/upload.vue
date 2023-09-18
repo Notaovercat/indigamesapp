@@ -27,14 +27,14 @@ import { IUser } from "@/types/user/user.interface";
 import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
 
-const useGenreStore = useGenres();
-const usePlatformStore = usePlatforms();
-const useUserStore = useUser();
+const genreStore = useGenres();
+const platformStore = usePlatforms();
+const userStore = useUser();
 
 await Promise.all([
-  useGenreStore.getGenres(),
-  usePlatformStore.getPlatforms(),
-  useUserStore.getUsers(),
+  genreStore.getGenres(),
+  platformStore.getPlatforms(),
+  userStore.getUsers(),
 ]);
 
 // game form
@@ -48,26 +48,14 @@ const game = reactive<ICreateGame>({
 });
 
 // genres
-const genres: Ref<IGenre[]> = ref([]);
+const genres = computed(() => genreStore.genres);
 const genresErrorMsg = ref("");
-
-watch(
-  () => useGenreStore.genres,
-  () => (genres.value = useGenreStore.genres),
-  { immediate: true }
-);
 
 const selectedGenre = ref<IGenre[]>([]);
 
 // plarforms
-const platforms: Ref<IPlatform[]> = ref([]);
+const platforms = computed(() => platformStore.platforms);
 const platformsErrorMsg = ref("");
-
-watch(
-  () => usePlatformStore.platforms,
-  () => (platforms.value = usePlatformStore.platforms),
-  { immediate: true }
-);
 
 const selectedplatforms = ref<IPlatform[]>([]);
 
@@ -75,13 +63,7 @@ const selectedplatforms = ref<IPlatform[]>([]);
 const tags = ref("");
 
 // users
-const users: Ref<IUser[]> = ref([]);
-
-watch(
-  () => useUserStore.users,
-  () => (users.value = useUserStore.users),
-  { immediate: true }
-);
+const users = computed(() => userStore.users);
 
 const query = ref("");
 const selectedPerson = ref<IUser>();
@@ -156,8 +138,6 @@ const createGame = async () => {
     .map((tag) => tag.trim().replace(/[\s]+/g, " "))
     .filter((tag) => tag.length !== 0);
   game.team = team.value;
-
-  // console.log(game);
 
   const config = useRuntimeConfig();
   const apiUrl = config.public.API_URL;

@@ -32,7 +32,9 @@ export const useProfile = defineStore("profile", () => {
     });
 
     // if error, set errorMsg value
-    if (error.value) profileErrorMsg.value = "Please try again later";
+    if (error.value) {
+      profileErrorMsg.value = "Please try again later";
+    }
 
     //
     if (data.value) profileInfo.value = data.value;
@@ -71,6 +73,20 @@ export const useProfile = defineStore("profile", () => {
     if (data.value) profileTeams.value = data.value;
   }
 
+  function reset() {
+    profileGames.value = [];
+    profileTeams.value = [];
+    profileInfo.value = undefined;
+
+    gameErrorMsg.value = "";
+    teamErrorMsg.value = "";
+    profileErrorMsg.value = "";
+
+    gameLoading.value = false;
+    teamLoading.value = false;
+    profileLoading.value = false;
+  }
+
   return {
     getProfile,
     getProfileGames,
@@ -84,5 +100,6 @@ export const useProfile = defineStore("profile", () => {
     profileInfo,
     profileErrorMsg,
     profileLoading,
+    reset,
   };
 });

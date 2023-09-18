@@ -123,7 +123,22 @@ const { content } = defineProps<Props>();
           </div>
         </div>
         <GamesDownload />
-        <GamesComments />
+
+        <div class="relative">
+          <div class="absolute inset-0 flex items-center" aria-hidden="true">
+            <div class="w-full sm:w-1/2 border-t border-white" />
+          </div>
+          <div class="relative flex justify-center sm:justify-start sm:pl-2">
+            <span
+              class="bg-[#241468] px-3 text-lg font-semibold leading-6 text-white rounded"
+            >
+              Comments
+            </span>
+          </div>
+        </div>
+        <ClientOnly>
+          <CommentsList :game-id="content.id" />
+        </ClientOnly>
       </div>
 
       <div class="game-additional overflow-y-scroll pt-4">

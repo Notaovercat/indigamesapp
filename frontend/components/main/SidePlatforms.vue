@@ -5,13 +5,7 @@ const platformsStore = usePlatforms();
 
 if (platformsStore.platforms.length <= 0) await platformsStore.getPlatforms();
 
-const platforms: Ref<IPlatform[]> = ref([]);
-
-watch(
-  () => platformsStore.platforms,
-  () => (platforms.value = platformsStore.platforms),
-  { immediate: true }
-);
+const platforms = computed(() => platformsStore.platforms);
 </script>
 
 <template>

@@ -1,31 +1,25 @@
 <script setup lang="ts">
 definePageMeta({
-  // middleware: ["auth-check"],
   name: "profile",
 });
 
 const route = useRoute();
-const useAuthStore = useAuth();
+const authStore = useAuth();
 const profileId = route.params["id"] as string;
 let isYourProfile = false;
 
-// const useProfileStore = useProfile();
+const profileStore = useProfile();
+isYourProfile = profileId === authStore.userId;
 
-// onBeforeMount(async () => {
-const useProfileStore = useProfile();
-isYourProfile = profileId === useAuthStore.userId;
-
-// make requests to the server via pinia
 await Promise.all([
-  useProfileStore.getProfileGames(profileId, isYourProfile),
-  useProfileStore.getProfileTeams(profileId, isYourProfile),
-  useProfileStore.getProfile(profileId),
+  profileStore.getProfileGames(profileId, isYourProfile),
+  profileStore.getProfileTeams(profileId, isYourProfile),
+  profileStore.getProfile(profileId),
 ]);
 
-// await useProfileStore.getProfileGames(profileId, isYourProfile);
-// await useProfileStore.getProfile(profileId);
-// await useProfileStore.getProfileTeams(profileId, isYourProfile);
-// });
+onDeactivated(() => {
+  profileStore.reset();
+});
 </script>
 
 <template>

@@ -16,28 +16,15 @@ import {
 import { IProfile } from "@workspace/shared";
 import { UserIcon } from "@heroicons/vue/20/solid";
 
-const useAuthStore = useAuth();
-const useProfileStore = useProfile();
-const isAuthed = ref(useAuthStore.isAuthed);
+const authStore = useAuth();
+const profileStore = useProfile();
+const isAuthed = computed(() => authStore.isAuthed);
+const profile = computed(() => profileStore.profileInfo);
 const router = useRouter();
-const profile = ref<IProfile>();
-
-watch(
-  () => useAuthStore.isAuthed,
-  () => {
-    isAuthed.value = useAuthStore.isAuthed;
-  }
-);
 
 const getProfile = async () => {
-  await useProfileStore.getProfile(useAuthStore.userId);
+  await profileStore.getProfile(authStore.userId);
 };
-
-watch(
-  () => useProfileStore.profileInfo,
-  () => (profile.value = useProfileStore.profileInfo),
-  { immediate: true }
-);
 </script>
 <template>
   <Disclosure

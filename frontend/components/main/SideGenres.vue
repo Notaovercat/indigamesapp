@@ -1,16 +1,11 @@
 <script setup lang="ts">
 import { IGenre } from "@workspace/shared";
 
-const genres: Ref<IGenre[]> = ref([]);
-
 const genresStore = useGenres();
-if (genresStore.genres.length <= 0) await genresStore.getGenres();
 
-watch(
-  () => genresStore.genres,
-  () => (genres.value = genresStore.genres),
-  { immediate: true }
-);
+const genres = computed(() => genresStore.genres);
+
+if (genresStore.genres.length <= 0) await genresStore.getGenres();
 </script>
 
 <template>

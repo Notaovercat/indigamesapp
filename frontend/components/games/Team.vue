@@ -30,9 +30,9 @@ const { team } = defineProps<Props>();
     <div v-if="team.team_members.length > 0">
       <p class="p-3 text-xl font-bold">Team:</p>
       <ul class="hidden md:grid grid-cols-3 bg-[#34218a86] py-2 gap-2 rounded">
-        <li v-for="member in team.team_members" class="bg-purple-700">
+        <li v-for="member in team.team_members">
           <GamesTeamCard
-            :user-id="member.id"
+            :user-id="member.user.id"
             :is-manage="false"
             :username="member.user.username"
             :role="member.role"
@@ -57,17 +57,3 @@ const { team } = defineProps<Props>();
     </div>
   </div>
 </template>
-
-<!-- <div class="flex items-center gap-x-6 p-2 bg-purple-700 text-white">
-	<div>
-		<UserIcon class="h-8 w-8 rounded-full" />
-	</div>
-	<div>
-		<h3 class="text-base font-semibold leading-7 tracking-tight">
-			{{ person.name }}
-		</h3>
-		<p class="text-sm font-semibold leading-6 text-pink-500">
-			 {{ person.role }}
-		</p>
-	</div>
-</div> -->

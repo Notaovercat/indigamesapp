@@ -41,14 +41,14 @@ const onDelete = () => {
     </button>
   </div>
 
-  <Dialog as="div" class="relative z-10" :open="open" @close="open = false">
+  <div as="div" class="relative z-10" v-if="open">
     <div class="fixed inset-0 bg-gray-500 bg-opacity-75" />
 
     <div class="fixed inset-0 z-10 overflow-y-auto">
       <div
         class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0"
       >
-        <DialogPanel
+        <div
           class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all"
         >
           <div>
@@ -68,8 +68,8 @@ const onDelete = () => {
               <XMarkIcon class="h-5 w-5" />
             </button>
           </div>
-        </DialogPanel>
+        </div>
       </div>
     </div>
-  </Dialog>
+  </div>
 </template>

@@ -119,7 +119,6 @@ const saveChanges = async () => {
   });
 
   if (error.value) {
-    console.log(error.value);
     cgErrorMsg.value = "Error while game updating, please, try again later";
   }
   if (data.value) {

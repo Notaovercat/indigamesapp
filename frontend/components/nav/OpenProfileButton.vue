@@ -5,12 +5,7 @@ interface Props {
 
 const { active } = defineProps<Props>();
 const useAuthStore = useAuth();
-const profileId = ref(useAuthStore.userId);
-
-watch(
-  () => useAuthStore.userId,
-  () => (profileId.value = useAuthStore.userId)
-);
+const profileId = computed(() => useAuthStore.userId);
 </script>
 
 <template>

@@ -16,27 +16,10 @@ import { IGameCard } from "@workspace/shared";
 //   isYourProfile
 // );
 
-const useProfileStore = useProfile();
-const data = ref<IGameCard[]>([]);
-const errorMsg = ref("");
-const isLoading = ref(false);
-
-// WATCH PINIA DATA
-watch(
-  () => useProfileStore.profileGames,
-  () => (data.value = useProfileStore.profileGames),
-  { immediate: true }
-);
-
-watch(
-  () => useProfileStore.gameErrorMsg,
-  () => (errorMsg.value = useProfileStore.gameErrorMsg)
-);
-
-watch(
-  () => useProfileStore.gameLoading,
-  () => (isLoading.value = useProfileStore.gameLoading)
-);
+const profileStore = useProfile();
+const data = computed(() => profileStore.profileGames);
+const errorMsg = computed(() => profileStore.gameErrorMsg);
+const isLoading = computed(() => profileStore.gameLoading);
 </script>
 <template>
   <div class="games-container flex flex-col gap-2 px-2 w-full">

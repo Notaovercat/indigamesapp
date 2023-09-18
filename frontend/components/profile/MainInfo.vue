@@ -2,27 +2,10 @@
 import { UserIcon } from "@heroicons/vue/20/solid";
 import { IProfile } from "@workspace/shared";
 
-const useProfileStore = useProfile();
-const data = ref<IProfile>();
-const errorMsg = ref("");
-const isLoading = ref(false);
-
-// WATCH PINIA DATA
-watch(
-  () => useProfileStore.profileInfo,
-  () => (data.value = useProfileStore.profileInfo),
-  { immediate: true }
-);
-
-watch(
-  () => useProfileStore.profileErrorMsg,
-  () => (errorMsg.value = useProfileStore.profileErrorMsg)
-);
-
-watch(
-  () => useProfileStore.profileLoading,
-  () => (isLoading.value = useProfileStore.gameLoading)
-);
+const profileStore = useProfile();
+const data = computed(() => profileStore.profileInfo);
+const errorMsg = computed(() => profileStore.profileErrorMsg);
+const isLoading = computed(() => profileStore.gameLoading);
 
 useHead({
   title: `Games - ${data.value?.username}'s Profile`,

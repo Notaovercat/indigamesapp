@@ -16,27 +16,10 @@ import { IUserTeams } from "@workspace/shared";
 //   isYourProfile
 // );
 
-const useProfileStore = useProfile();
-const data = ref<IUserTeams[]>([]);
-const errorMsg = ref("");
-const isLoading = ref(false);
-
-// WATCH PINIA DATA
-watch(
-  () => useProfileStore.profileTeams,
-  () => (data.value = useProfileStore.profileTeams),
-  { immediate: true }
-);
-
-watch(
-  () => useProfileStore.teamErrorMsg,
-  () => (errorMsg.value = useProfileStore.teamErrorMsg)
-);
-
-watch(
-  () => useProfileStore.teamLoading,
-  () => (isLoading.value = useProfileStore.teamLoading)
-);
+const profileStore = useProfile();
+const data = computed(() => profileStore.profileTeams);
+const errorMsg = computed(() => profileStore.teamErrorMsg);
+const isLoading = computed(() => profileStore.teamLoading);
 </script>
 <template>
   <div class="games-container flex flex-col gap-2 px-2 w-full">

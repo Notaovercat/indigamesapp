@@ -138,13 +138,7 @@ const handleVisibility = async () => {
 };
 
 // status
-const users: Ref<IUser[]> = ref([]);
-
-watch(
-  () => useUserStore.users,
-  () => (users.value = useUserStore.users),
-  { immediate: true }
-);
+const users = computed(() => useUserStore.users);
 
 const query = ref("");
 const selectedPerson = ref<IUser>();

@@ -6,7 +6,8 @@
   "description": "",
   "scripts": {
     "dev": "pnpm --stream -r run dev",
-    "build": "pnpm --stream -r run build"
+    "build": "pnpm --stream -r run build",
+    "start": "pnpm --stream -r run start:prod"
   },
   "keywords": [],
   "author": "",

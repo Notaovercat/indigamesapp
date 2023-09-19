@@ -49,9 +49,9 @@ model Team {
 
 model TeamMember {
   id        String   @id @default(uuid())
-  team      Team     @relation(fields: [teamId], references: [id])
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
   teamId    String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
   role      String
   createdAt DateTime @default(now())
@@ -85,7 +85,7 @@ model Game {
 model Rating {
   id String @id @default(uuid())
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
   game   Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
@@ -144,10 +144,11 @@ model Screenshot {
 
   name String @unique
 
-  game Game[]
+  game Game @relation(fields: [gameId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  gameId    String
 }
 
 model CoverImage {
@@ -169,10 +170,10 @@ model Comment {
   isRedacted Boolean @default(false)
   isDeleted  Boolean @default(false)
 
-  game   Game   @relation(fields: [gameId], references: [id])
+  game   Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
   gameId String
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
   createdAt DateTime @default(now())

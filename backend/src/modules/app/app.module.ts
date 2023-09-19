@@ -11,6 +11,8 @@ import { PassportModule } from '@nestjs/passport';
 import * as Joi from 'joi';
 import { CoreModule } from '../core/core.module';
 import { LoggerModule } from 'nestjs-pino';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -39,13 +41,25 @@ import { LoggerModule } from 'nestjs-pino';
         },
       },
     }),
-
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60,
+        limit: 100,
+      },
+    ]),
     AuthModule,
     UserModule,
     PassportModule,
     CoreModule,
   ],
-  providers: [ConfigService, providePrismaClientExceptionFilter()],
+  providers: [
+    ConfigService,
+    providePrismaClientExceptionFilter(),
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
   controllers: [],
 })
 export class AppModule {}

@@ -12,6 +12,7 @@ import { CreateUserDto, JwtGuard, LocalGuard, Public } from '@app/common';
 import { CurrentUser, UserEntity } from '@app/common';
 import { Response } from 'express';
 import { AuthService } from '../services/auth.service';
+import { Throttle } from '@nestjs/throttler';
 
 @Controller('auth')
 export class AuthController {
@@ -24,6 +25,7 @@ export class AuthController {
     return 'Success';
   }
 
+  @Throttle({ default: { limit: 5, ttl: 60000 } })
   @UseGuards(LocalGuard)
   @Post('login')
   @HttpCode(HttpStatus.OK)

@@ -5,6 +5,7 @@ import * as cookieParser from 'cookie-parser';
 import { ConfigService } from '@nestjs/config';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -27,6 +28,7 @@ async function bootstrap() {
   });
   app.useStaticAssets(join(__dirname, '../uploads'));
   app.use(cookieParser());
+  app.use(helmet());
   await app.listen(port);
 }
 bootstrap();

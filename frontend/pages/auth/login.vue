@@ -54,6 +54,8 @@ const handleLogin = async () => {
     user.password = "";
     if (error.value.statusCode === 401)
       errorMsgAuth.value = "Wrong email or password";
+    else if (error.value.statusCode === 429)
+      errorMsgAuth.value = "Too many attemps, please, try again later";
     else errorMsgAuth.value = "Server error, try again later";
     return;
   }

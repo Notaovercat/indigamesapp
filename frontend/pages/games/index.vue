@@ -70,3 +70,20 @@ watch(
     </section>
   </div>
 </template>
+
+<style scoped>
+::-webkit-scrollbar-track {
+  background-color: #241468;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #861598;
+}
+</style>

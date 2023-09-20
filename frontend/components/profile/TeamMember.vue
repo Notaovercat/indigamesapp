@@ -1,21 +1,4 @@
 <script setup lang="ts">
-import { IUserTeams } from "@workspace/shared";
-
-// OLD
-// interface Props {
-//   userId: string;
-//   isYourProfile: boolean;
-// }
-
-// const { userId, isYourProfile } = defineProps<Props>();
-
-// const useProfileStore = useProfile();
-
-// const { data, error } = await useProfileStore.getProfileTeams(
-//   userId,
-//   isYourProfile
-// );
-
 const profileStore = useProfile();
 const data = computed(() => profileStore.profileTeams);
 const errorMsg = computed(() => profileStore.teamErrorMsg);

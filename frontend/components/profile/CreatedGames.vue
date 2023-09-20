@@ -1,21 +1,4 @@
 <script setup lang="ts">
-import { IGameCard } from "@workspace/shared";
-
-// OLD
-// interface Props {
-//   userId: string;
-//   isYourProfile: boolean;
-// }
-
-// const { userId, isYourProfile } = defineProps<Props>();
-
-// const useProfileStore = useProfile();
-
-// const { data, error } = await useProfileStore.getProfileGames(
-//   userId,
-//   isYourProfile
-// );
-
 const profileStore = useProfile();
 const data = computed(() => profileStore.profileGames);
 const errorMsg = computed(() => profileStore.gameErrorMsg);

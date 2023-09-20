@@ -25,9 +25,9 @@ export const useGames = defineStore("game", () => {
 
   async function getLastGames() {
     const { data, error } = await useMyFetch<IGamePreview[]>("games", {
-      query: {
-        lastUpdated: true,
-      },
+      // query: {
+      //   lastUpdated: true,
+      // },
     });
 
     if (error.value)

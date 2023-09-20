@@ -31,13 +31,13 @@ const { content } = props;
       alt="noGameCover"
     />
 
-    <div class="card-info px-2 pt-1 pb-0 flex flex-col gap-3">
-      <h1 class="card-title text-3xl font-bold text-white">
+    <div class="px-2 pt-1 pb-0 flex flex-col gap-3">
+      <h1 class="text-3xl font-bold text-white line-clamp-2">
         {{ content.title }}
       </h1>
       <p
+        class="pl-2 text-base line-clamp-3 text-slate-200"
         v-dompurify-html="content.description"
-        class="card-desc pl-2 text-base line-clamp-3 text-slate-200"
       ></p>
       <ul class="flex gap-2 pb-2 pr-2 absolute bottom-0 right-0">
         <li

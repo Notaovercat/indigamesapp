@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Dialog, DialogPanel, DialogTitle } from "@headlessui/vue";
 import { XMarkIcon } from "@heroicons/vue/20/solid";
 
 const open = ref(false);
@@ -41,7 +40,7 @@ const onDelete = () => {
     </button>
   </div>
 
-  <div as="div" class="relative z-10" v-if="open">
+  <div class="relative z-10" v-if="open">
     <div class="fixed inset-0 bg-gray-500 bg-opacity-75" />
 
     <div class="fixed inset-0 z-10 overflow-y-auto">

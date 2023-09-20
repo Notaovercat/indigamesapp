@@ -3,7 +3,7 @@ import { IGamePreview } from "@workspace/shared";
 
 const gameStore = useGames();
 
-if (gameStore.lastGames.length <= 0) await gameStore.getLastGames();
+await gameStore.getLastGames();
 
 const games: Ref<IGamePreview[]> = ref(gameStore.lastGames);
 

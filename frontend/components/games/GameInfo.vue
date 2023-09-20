@@ -13,19 +13,22 @@ const { content } = defineProps<Props>();
   <div class="relative pb-8 md:pb-0">
     <GamesCoverImage :coverImageName="content.coverImage?.name" />
   </div>
-  <div class="game-main rounded-xl m-1">
-    <div class="game-info grid grid-cols-1 md:grid-cols-3 md:gap-4 md:p-5">
+  <div class="rounded-xl m-1">
+    <div class="grid grid-cols-1 md:grid-cols-3 md:gap-4 md:p-5">
       <div class="col-span-2 flex flex-col gap-7">
-        <div class="game-description flex flex-col">
+        <div class="flex flex-col">
           <!-- TITLE -->
           <h1
-            class="game-title flex justify-center sm:justify-start font-bold text-4xl pt-6 gap-4"
+            class="flex justify-center sm:justify-start font-bold text-4xl pt-6"
           >
             {{ content.title }}
 
             <!-- MANAGE BUTTON -->
+          </h1>
+
+          <div class="flex">
             <NuxtLink
-              class="block z-20 bg-black hover:bg-slate-800 transition-all text-white p-3 rounded shadow-xl text-sm"
+              class="block bg-black hover:bg-slate-800 transition-all text-white p-3 rounded shadow-xl text-sm"
               v-if="useAuth().userId === content.team?.author.id"
               :to="`/games/${$route.params.id}/manage`"
             >
@@ -33,7 +36,7 @@ const { content } = defineProps<Props>();
                 <WrenchIcon class="h-5 w-5" /> Manage
               </div>
             </NuxtLink>
-          </h1>
+          </div>
 
           <!-- RATING and views -->
           <div class="px-7 pt-4 pb-5">

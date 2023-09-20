@@ -34,7 +34,7 @@ const handleCoverUpload = async () => {
   let formData = new FormData();
 
   formData.append("cover", coverInput.value);
-  const { data, error } = await useMyFetch(`games/${gameId}/cover`, {
+  const { data, error } = await useMyFetch<IImage>(`games/${gameId}/cover`, {
     method: "PATCH",
     body: formData,
   });
@@ -43,7 +43,11 @@ const handleCoverUpload = async () => {
     coverErrorMsg.value =
       "Error while trying upload cover, please, tru againg later";
 
-  if (data.value) coverSuccMsg.value = "Cover image has been updated";
+  if (data.value) {
+    coverInput.value = undefined;
+    cover.value = data.value;
+    coverSuccMsg.value = "Cover image has been updated";
+  }
 };
 
 const handleCoverDiscard = () => {
@@ -101,16 +105,20 @@ const handleDelete = async (id: string) => {
   isLoading.value = true;
   screenErrorMsg.value = "";
 
-  const { data, error } = await useMyFetch(`games/${gameId}/screenshot/${id}`, {
-    method: "DELETE",
-  });
+  const { data, error } = await useMyFetch<IImage>(
+    `games/${gameId}/screenshot/${id}`,
+    {
+      method: "DELETE",
+    }
+  );
 
   if (error.value)
     screenErrorMsg.value =
       "Error while deleting screenshots, please, try again later";
 
   if (data.value) {
-    screens.value = screenshots.filter((screen) => screen.id !== id);
+    const ind = screens.value.findIndex((val) => val.id === data.value?.id);
+    if (ind !== -1) screens.value.splice(ind, 1);
   }
 
   isLoading.value = false;
@@ -245,7 +253,7 @@ const handleDelete = async (id: string) => {
             class="flex flex-col justify-center items-center p-9 gap-2"
             v-if="screenInput"
           >
-            <img :src="screenUrl" alt="upload-screen" class="h-80 w-80" />
+            <img :src="screenUrl" alt="upload-screen" class="w-80" />
 
             <div class="flex gap-6">
               <button

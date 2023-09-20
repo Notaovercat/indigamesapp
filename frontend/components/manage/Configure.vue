@@ -181,10 +181,12 @@ const addUserToTheTeam = async () => {
 
   if (data.value)
     team.value.push({
-      id: selectedPerson.value.id,
-      role: role.value,
+      id: data.value.id,
+      role: data.value.role,
       user: selectedPerson.value,
     });
+
+  role.value = "";
   isLoading.value = false;
 };
 
@@ -218,10 +220,14 @@ const handleDelete = async (userId: string) => {
   }
 
   if (data.value && game.team) {
-    game.team.team_members = game.team?.team_members.filter(
-      (member) => member.id !== data.value?.id
+    const index = game.team.team_members.findIndex(
+      (val) => val.id === data.value?.id
     );
-    team.value = game.team?.team_members;
+    if (index !== -1) game.team.team_members.splice(index, 1);
+    // game.team.team_members = game.team?.team_members.filter(
+    //   (member) => member.id !== data.value?.id
+    // );
+    // team.value = game.team?.team_members;
   }
   isLoading.value = false;
 };

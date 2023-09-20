@@ -36,7 +36,7 @@ watch(
 
         <div class="col-span-3">
           <div
-            class="flex flex-col pl-6 items-center md:items-start md:h-[72rem] overflow-hidden"
+            class="flex flex-col pl-6 items-center md:items-start md:h-[72rem] overflow-y-scroll"
           >
             <h1 class="pt-2 font-bold text-3xl pb-6">
               All

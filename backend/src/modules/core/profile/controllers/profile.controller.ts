@@ -3,7 +3,7 @@ import { ProfileService } from '../services/profile.service';
 
 @Controller('profile')
 export class ProfileController {
-  private logger = new Logger();
+  private logger = new Logger(ProfileController.name);
 
   constructor(private profileService: ProfileService) {}
 

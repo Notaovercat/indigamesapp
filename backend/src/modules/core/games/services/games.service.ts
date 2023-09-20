@@ -1,5 +1,6 @@
 import {
   ForbiddenException,
+  Inject,
   Injectable,
   Logger,
   NotFoundException,
@@ -18,15 +19,21 @@ import { TeamsService } from '../../teams/services/teams.service';
 import { ImagesService } from '../../images/services/images.service';
 import { STATUS } from '@prisma/client';
 import { IGame, IGamePreview } from '@workspace/shared';
+import { Cache } from 'cache-manager';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { CacheService } from '../utils/cache-pattern';
 
 @Injectable()
 export class GamesService {
   private readonly logger = new Logger(GamesService.name);
 
   constructor(
+    @Inject(CACHE_MANAGER)
+    private cacheManager: Cache,
     private prisma: PrismaService,
     private teamService: TeamsService,
     private imagesService: ImagesService,
+    private cacheService: CacheService,
   ) {}
 
   // create a game
@@ -68,15 +75,25 @@ export class GamesService {
       this.deleteGame(game.id);
     }
 
+    // clear cache
+    await this.cacheService.clearCacheWithPattern('games');
+
     return game;
   }
 
   // return all games
-  findAllGames(query: GameQueryDto): Promise<IGamePreview[]> {
+  async findAllGames(query: GameQueryDto): Promise<IGamePreview[]> {
+    const queryKey = JSON.stringify(query);
+    const cachedData = await this.cacheManager.get<IGamePreview[]>(
+      `games:${queryKey}`,
+    );
+
+    if (cachedData) return cachedData;
+
     const { genre, platform, tags, take, skip, lastUpdated, isFeatured } =
       query;
 
-    return this.prisma.game.findMany({
+    const games = await this.prisma.game.findMany({
       where: {
         isVisible: true,
         isFeatured: isFeatured ? true : undefined,
@@ -97,7 +114,7 @@ export class GamesService {
           : undefined,
       },
       orderBy: {
-        createdAt: lastUpdated ? 'desc' : 'asc',
+        createdAt: 'desc',
       },
       take,
       skip,
@@ -123,7 +140,13 @@ export class GamesService {
         updatedAt: true,
       },
     });
+
+    await this.cacheManager.set(`games:${queryKey}`, games, 3600 * 1000);
+    this.logger.debug(`Caching games:${queryKey}`);
+
+    return games;
   }
+
   /* 
    find game by id
    if game is not visible, return 404,
@@ -256,6 +279,9 @@ export class GamesService {
       });
     }
 
+    // clear cache
+    await this.cacheService.clearCacheWithPattern('game');
+
     return this.prisma.game.update({
       where: {
         id: gameId,
@@ -295,6 +321,9 @@ export class GamesService {
   async changeVisibility(dto: ChangeVisibilityDto, userId: string) {
     await this.isUserAuthor(dto.gameId, userId);
 
+    // clear cache
+    await this.cacheService.clearCacheWithPattern('game');
+
     return this.prisma.game.update({
       where: {
         id: dto.gameId,
@@ -305,7 +334,10 @@ export class GamesService {
     });
   }
 
-  deleteGame(gameId: string) {
+  async deleteGame(gameId: string) {
+    // clear cache
+    await this.cacheService.clearCacheWithPattern('game');
+
     return this.prisma.game.delete({ where: { id: gameId } });
   }
 
@@ -415,62 +447,65 @@ export class GamesService {
     });
   }
 
-  async removePlatformFromGame(
-    gameId: string,
-    platformId: string,
-    userId: string,
-  ) {
-    // check if user author
-    await this.isUserAuthor(gameId, userId);
+  // async removePlatformFromGame(
+  //   gameId: string,
+  //   platformId: string,
+  //   userId: string,
+  // ) {
+  //   // check if user author
+  //   await this.isUserAuthor(gameId, userId);
 
-    const game = await this.prisma.game.findUniqueOrThrow({
-      where: {
-        id: gameId,
-      },
-    });
+  //   const game = await this.prisma.game.findUniqueOrThrow({
+  //     where: {
+  //       id: gameId,
+  //     },
+  //   });
 
-    return this.prisma.game.update({
-      where: {
-        id: game.id,
-      },
-      data: {
-        platforms: {
-          disconnect: {
-            id: platformId,
-          },
-        },
-      },
-    });
-  }
+  //   return this.prisma.game.update({
+  //     where: {
+  //       id: game.id,
+  //     },
+  //     data: {
+  //       platforms: {
+  //         disconnect: {
+  //           id: platformId,
+  //         },
+  //       },
+  //     },
+  //   });
+  // }
 
-  async removeTagFromGame(gameId: string, tagId: string, userId: string) {
-    // check if user author
-    await this.isUserAuthor(gameId, userId);
+  // async removeTagFromGame(gameId: string, tagId: string, userId: string) {
+  //   // check if user author
+  //   await this.isUserAuthor(gameId, userId);
 
-    const game = await this.prisma.game.findUniqueOrThrow({
-      where: {
-        id: gameId,
-      },
-    });
+  //   const game = await this.prisma.game.findUniqueOrThrow({
+  //     where: {
+  //       id: gameId,
+  //     },
+  //   });
 
-    return this.prisma.game.update({
-      where: {
-        id: game.id,
-      },
-      data: {
-        tags: {
-          disconnect: {
-            id: tagId,
-          },
-        },
-      },
-    });
-  }
+  //   return this.prisma.game.update({
+  //     where: {
+  //       id: game.id,
+  //     },
+  //     data: {
+  //       tags: {
+  //         disconnect: {
+  //           id: tagId,
+  //         },
+  //       },
+  //     },
+  //   });
+  // }
 
   // upload cover for the game
   async uploadCover(gameId: string, userId: string, file: Express.Multer.File) {
     // check if user author
     await this.isUserAuthor(gameId, userId);
+
+    // clear cache
+    await this.cacheService.clearCacheWithPattern('game');
 
     return this.imagesService.createCoverImage(file.filename, gameId);
   }
@@ -488,22 +523,30 @@ export class GamesService {
   }
 
   // delete cover from game
-  async deleteCover(gameId: string, userId: string, coverId: string) {
-    // check if user author
-    await this.isUserAuthor(gameId, userId);
-    return this.imagesService.deleteCover(coverId);
-    // const deletedCover = await this.imagesService.deleteCover(coverId);
+  // async deleteCover(gameId: string, userId: string, coverId: string) {
+  //   // check if user author
+  //   await this.isUserAuthor(gameId, userId);
+  //   const deltedCover = await this.imagesService.deleteCover(coverId);
 
-    // deleting from folder
-    // const filePath =
-    //   path.join(__dirname, '../uploads/images/') + deletedCover.name;
-    // return fs.unlink(filePath, (err) => console.log(err));
-  }
+  //   // deleting from folder
+  //   if (!deltedCover) throw new ServiceUnavailableException();
+
+  //   const imagePath = path.join(
+  //     __dirname,
+  //     '../uploads/images',
+  //     deltedCover.name,
+  //   );
+
+  //   this.logger.debug(imagePath);
+
+  //   return unlink(imagePath);
+  // }
 
   // delete screenshot from game
   async deleteScreenshot(gameId: string, userId: string, screenId: string) {
     // check if user author
     await this.isUserAuthor(gameId, userId);
+
     return this.imagesService.deleteScreenshot(screenId);
   }
 

@@ -132,15 +132,15 @@ export class GamesController {
     return this.gamesService.uploadScreenshot(id, user.id, file);
   }
 
-  @UseGuards(JwtGuard)
-  @Delete(':id/cover')
-  deleteCover(
-    @Param('id') id: string,
-    @CurrentUser() user: UserEntity,
-    @Body('imageId') imageId: string,
-  ) {
-    return this.gamesService.deleteCover(id, user.id, imageId);
-  }
+  // @UseGuards(JwtGuard)
+  // @Delete(':id/cover')
+  // deleteCover(
+  //   @Param('id') id: string,
+  //   @CurrentUser() user: UserEntity,
+  //   @Body('imageId') imageId: string,
+  // ) {
+  //   return this.gamesService.deleteCover(id, user.id, imageId);
+  // }
 
   @UseGuards(JwtGuard)
   @Patch(':id/rating')
@@ -162,27 +162,27 @@ export class GamesController {
     return this.gamesService.deleteScreenshot(gameId, user.id, screenId);
   }
 
-  @UseGuards(JwtGuard)
-  @Patch(':gameId/rmplatform/:platformId')
-  removePlatform(
-    @Param('gameId') gameId: string,
-    @Param('platformId') platformId: string,
-    @CurrentUser() user: UserEntity,
-  ) {
-    return this.gamesService.removePlatformFromGame(
-      gameId,
-      platformId,
-      user.id,
-    );
-  }
+  // @UseGuards(JwtGuard)
+  // @Patch(':gameId/rmplatform/:platformId')
+  // removePlatform(
+  //   @Param('gameId') gameId: string,
+  //   @Param('platformId') platformId: string,
+  //   @CurrentUser() user: UserEntity,
+  // ) {
+  //   return this.gamesService.removePlatformFromGame(
+  //     gameId,
+  //     platformId,
+  //     user.id,
+  //   );
+  // }
 
-  @UseGuards(JwtGuard)
-  @Patch(':gameId/rmtag/:tagId')
-  removeTag(
-    @Param('gameId') gameId: string,
-    @Param('tagId') tagId: string,
-    @CurrentUser() user: UserEntity,
-  ) {
-    return this.gamesService.removeTagFromGame(gameId, tagId, user.id);
-  }
+  // @UseGuards(JwtGuard)
+  // @Patch(':gameId/rmtag/:tagId')
+  // removeTag(
+  //   @Param('gameId') gameId: string,
+  //   @Param('tagId') tagId: string,
+  //   @CurrentUser() user: UserEntity,
+  // ) {
+  //   return this.gamesService.removeTagFromGame(gameId, tagId, user.id);
+  // }
 }

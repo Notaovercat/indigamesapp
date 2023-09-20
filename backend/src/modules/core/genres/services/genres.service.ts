@@ -1,11 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import { CreateGenreDto, UpdateGenreDto } from '@app/common';
 import { IGenre } from '@workspace/shared';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class GenresService {
-  constructor(private prisma: PrismaService) {}
+  private logger: Logger = new Logger(GenresService.name);
+
+  constructor(
+    @Inject(CACHE_MANAGER)
+    private cacheManager: Cache,
+    private prisma: PrismaService,
+  ) {}
 
   findAllGenres(): Promise<IGenre[]> {
     return this.prisma.genre.findMany();
@@ -19,14 +27,31 @@ export class GenresService {
     });
   }
 
-  createGenre(dto: CreateGenreDto) {
+  async createGenre(dto: CreateGenreDto) {
+    // clear cache
+    await this.cacheManager.del('genres');
+
     return this.prisma.genre.create({ data: { ...dto } });
   }
 
-  updaetGenre(genre: string, dto: UpdateGenreDto) {
+  async updaetGenre(genreId: string, dto: UpdateGenreDto) {
+    // clear cache
+    await this.cacheManager.del('genres');
+
     return this.prisma.genre.update({
-      where: { id: genre },
+      where: { id: genreId },
       data: { ...dto },
+    });
+  }
+
+  async deleteGenre(genreId: string) {
+    // clear cache
+    await this.cacheManager.del('genres');
+
+    return this.prisma.genre.delete({
+      where: {
+        id: genreId,
+      },
     });
   }
 }

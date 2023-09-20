@@ -1,11 +1,14 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  Logger,
   Param,
   Patch,
   Post,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { GenresService } from '../services/genres.service';
 import {
@@ -15,11 +18,17 @@ import {
   Roles,
   UpdateGenreDto,
 } from '@app/common';
+import { CacheInterceptor, CacheKey, CacheTTL } from '@nestjs/cache-manager';
 
 @Controller('genres')
 export class GenresController {
+  private logger: Logger = new Logger(GenresController.name);
+
   constructor(private genresService: GenresService) {}
 
+  @UseInterceptors(CacheInterceptor)
+  @CacheKey('genres')
+  @CacheTTL(3600000)
   @Get()
   getAllGenres() {
     return this.genresService.findAllGenres();
@@ -34,7 +43,7 @@ export class GenresController {
   @UseGuards(RoleGuard)
   @UseGuards(JwtGuard)
   @Post()
-  createPlatform(@Body() dto: CreateGenreDto) {
+  async createPlatform(@Body() dto: CreateGenreDto) {
     return this.genresService.createGenre(dto);
   }
 
@@ -42,7 +51,15 @@ export class GenresController {
   @UseGuards(RoleGuard)
   @UseGuards(JwtGuard)
   @Patch(':id')
-  updatePlatform(@Param('id') id: string, @Body() dto: UpdateGenreDto) {
+  async updatePlatform(@Param('id') id: string, @Body() dto: UpdateGenreDto) {
     return this.genresService.updaetGenre(id, dto);
+  }
+
+  @Roles('admin')
+  @UseGuards(RoleGuard)
+  @UseGuards(JwtGuard)
+  @Delete(':id')
+  async deletePlatform(@Param('id') id: string) {
+    return this.genresService.deleteGenre(id);
   }
 }

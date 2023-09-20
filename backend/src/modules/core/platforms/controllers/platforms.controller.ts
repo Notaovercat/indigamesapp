@@ -6,6 +6,9 @@ import {
   Patch,
   Param,
   UseGuards,
+  Logger,
+  Delete,
+  UseInterceptors,
 } from '@nestjs/common';
 import { PlatformsService } from '../services/platforms.service';
 import {
@@ -15,13 +18,19 @@ import {
   Roles,
   UpdatePlatformDto,
 } from '@app/common';
+import { CacheInterceptor, CacheKey, CacheTTL } from '@nestjs/cache-manager';
 
 @Controller('platforms')
 export class PlatformsController {
+  private logger: Logger = new Logger(PlatformsController.name);
+
   constructor(private readonly platformsService: PlatformsService) {}
 
+  @UseInterceptors(CacheInterceptor)
+  @CacheKey('platforms')
+  @CacheTTL(3600000)
   @Get()
-  getAllPlatforms() {
+  async getAllPlatforms() {
     return this.platformsService.findAllPlatforms();
   }
 
@@ -34,7 +43,7 @@ export class PlatformsController {
   @UseGuards(RoleGuard)
   @UseGuards(JwtGuard)
   @Post()
-  createPlatform(@Body() dto: CreatePlatformDto) {
+  async createPlatform(@Body() dto: CreatePlatformDto) {
     return this.platformsService.createPlatform(dto);
   }
 
@@ -42,7 +51,18 @@ export class PlatformsController {
   @UseGuards(RoleGuard)
   @UseGuards(JwtGuard)
   @Patch(':id')
-  updatePlatform(@Param('id') id: string, @Body() dto: UpdatePlatformDto) {
+  async updatePlatform(
+    @Param('id') id: string,
+    @Body() dto: UpdatePlatformDto,
+  ) {
     return this.platformsService.updatePlatform(id, dto);
+  }
+
+  @Roles('admin')
+  @UseGuards(RoleGuard)
+  @UseGuards(JwtGuard)
+  @Delete(':id')
+  async deletePlatform(@Param('id') id: string) {
+    return this.platformsService.deletePlatform(id);
   }
 }

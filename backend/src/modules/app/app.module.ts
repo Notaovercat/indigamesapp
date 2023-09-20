@@ -13,6 +13,8 @@ import { CoreModule } from '../core/core.module';
 import { LoggerModule } from 'nestjs-pino';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { CacheModule } from '@nestjs/cache-manager';
+import * as redisStore from 'cache-manager-redis-store';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { APP_GUARD } from '@nestjs/core';
         JWT_EXPIRES_IN: Joi.number().required(),
         APP_PORT: Joi.number().required(),
         CLIENT_API: Joi.string().required(),
+        REDIS_HOST: Joi.string().required(),
+        REDIS_PORT: Joi.number().required(),
       }),
     }),
     PrismaModule.forRoot({
@@ -47,6 +51,13 @@ import { APP_GUARD } from '@nestjs/core';
         limit: 100,
       },
     ]),
+    // CacheModule.registerAsync(cacheConfig()),
+    CacheModule.register({
+      isGlobal: true,
+      store: redisStore,
+      host: process.env.REDIS_HOST,
+      port: process.env.REDIS_PORT,
+    }),
     AuthModule,
     UserModule,
     PassportModule,

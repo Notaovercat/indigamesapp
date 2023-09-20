@@ -8,7 +8,7 @@
     "dev": "pnpm --stream -r run dev",
     "migrate": "pnpm --filter backend run migrate",
     "build": "pnpm --stream -r run build",
-    "start": "pnpm --stream -r run start:prod"
+    "start": "pnpm --stream -r run prod"
   },
   "keywords": [],
   "author": "",

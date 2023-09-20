@@ -13,8 +13,6 @@ import { CoreModule } from '../core/core.module';
 import { LoggerModule } from 'nestjs-pino';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
-import { CacheModule } from '@nestjs/cache-manager';
-import * as redisStore from 'cache-manager-redis-store';
 
 @Module({
   imports: [
@@ -51,13 +49,6 @@ import * as redisStore from 'cache-manager-redis-store';
         limit: 100,
       },
     ]),
-    // CacheModule.registerAsync(cacheConfig()),
-    CacheModule.register({
-      isGlobal: true,
-      store: redisStore,
-      host: process.env.REDIS_HOST,
-      port: process.env.REDIS_PORT,
-    }),
     AuthModule,
     UserModule,
     PassportModule,

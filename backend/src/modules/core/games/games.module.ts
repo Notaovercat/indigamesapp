@@ -4,11 +4,11 @@ import { GamesService } from './services/games.service';
 import { TeamsModule } from '../teams/teams.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { ImagesModule } from '../images/images.module';
-import { CacheService } from './utils/cache-pattern';
+import { CacheModule } from '../../cache/cache.module';
 
 @Module({
-  imports: [TeamsModule, ImagesModule, MulterModule.register()],
+  imports: [CacheModule, TeamsModule, ImagesModule, MulterModule.register()],
   controllers: [GamesController],
-  providers: [GamesService, CacheService],
+  providers: [GamesService],
 })
 export class GamesModule {}

@@ -53,11 +53,4 @@ export class AuthController {
     if (user) return user.id;
     else return null;
   }
-
-  // @UseGuards(JwtGuard)
-  // @Get('check')
-  // @HttpCode(HttpStatus.OK)
-  // async check(@CurrentUser() user: UserEntity) {
-  //   return user.id;
-  // }
 }

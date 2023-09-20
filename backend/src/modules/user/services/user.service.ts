@@ -2,10 +2,14 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto, UserEntity } from '@app/common';
 import { PrismaService } from 'nestjs-prisma';
 import { compare } from 'bcryptjs';
+import { CacheService } from '../../cache/services/cache.service';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private cacheService: CacheService,
+    private prisma: PrismaService,
+  ) {}
 
   findUsers() {
     return this.prisma.user.findMany({
@@ -17,7 +21,8 @@ export class UserService {
     });
   }
 
-  create(createUserDto: CreateUserDto): Promise<UserEntity> {
+  async create(createUserDto: CreateUserDto): Promise<UserEntity> {
+    await this.cacheService.deleteCache('users');
     return this.prisma.user.create({
       data: {
         ...createUserDto,

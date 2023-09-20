@@ -1,12 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { faker } from '@faker-js/faker';
-import { UserService } from '../services/user.service';
+import { UserService } from './user.service';
 import { mockDeep, DeepMockProxy } from 'jest-mock-extended';
 import { PrismaModule, PrismaService } from 'nestjs-prisma';
 import { PrismaClient } from '@prisma/client';
 import { CreateUserDto, UserEntity } from '@app/common';
 import { UnauthorizedException } from '@nestjs/common';
 import { hash, hashSync } from 'bcryptjs';
+import { createMock } from '@golevelup/ts-jest';
 
 describe('User Service', () => {
   let userService: UserService;
@@ -28,6 +29,7 @@ describe('User Service', () => {
       providers: [UserService],
       imports: [PrismaModule],
     })
+      .useMocker(createMock)
       .overrideProvider(PrismaService)
       .useValue(mockDeep<PrismaClient>())
       .compile();
@@ -54,7 +56,7 @@ describe('User Service', () => {
 
   it('should find user by id', async () => {
     const { password, ...userWithoutPassword } = fakeUser;
-    prisma.user.findUnique.mockResolvedValueOnce(
+    prisma.user.findFirstOrThrow.mockResolvedValueOnce(
       userWithoutPassword as UserEntity,
     );
     const user = await userService.findById(userWithoutPassword.id);
@@ -62,7 +64,7 @@ describe('User Service', () => {
   });
 
   it('should find user by email', async () => {
-    prisma.user.findUnique.mockResolvedValueOnce(fakeUser);
+    prisma.user.findFirst.mockResolvedValueOnce(fakeUser);
     const user = await userService.findByEmail(fakeUser.email);
     expect(user).toEqual(fakeUser);
   });

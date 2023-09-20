@@ -4,23 +4,17 @@ import { hash } from 'bcryptjs';
 import { CreateUserDto, Payload, UserEntity } from '@app/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { Response, response } from 'express';
-import { Cache } from 'cache-manager';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @Inject(CACHE_MANAGER)
-    private cacheManager: Cache,
     private userService: UserService,
     private configService: ConfigService,
     private jwtService: JwtService,
   ) {}
 
   async register(createUserDto: CreateUserDto) {
-    await this.cacheManager.del('users');
-
     const user = await this.userService.findByEmail(createUserDto.email);
     if (user) throw new BadRequestException('This email already in use');
 

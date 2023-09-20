@@ -11,14 +11,23 @@ export class CacheService {
     private cacheManager: Cache,
   ) {}
 
+  setCache(key: string, value: unknown, ttl?: number) {
+    return this.cacheManager.set(key, value, ttl);
+  }
+
+  getCache<T>(key: string) {
+    return this.cacheManager.get<T>(key);
+  }
+
+  deleteCache(key: string) {
+    return this.cacheManager.del(key);
+  }
+
   async clearCacheWithPattern(pattern: string): Promise<void> {
-    // Step 1: Retrieve all keys from the cache
     const allKeys = await this.cacheManager.store.keys();
 
-    // Step 2: Filter keys based on the pattern
     const keysToDelete = allKeys.filter((key) => key.includes(pattern));
 
-    // Step 3: Delete the matching keys
     for (const key of keysToDelete) {
       this.logger.debug(`Deletenig ${key}`);
       await this.cacheManager.del(key);

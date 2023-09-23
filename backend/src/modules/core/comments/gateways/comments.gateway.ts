@@ -32,7 +32,6 @@ export class CommentsGateway implements OnGatewayDisconnect {
   constructor(private commentsService: CommentsService) {}
 
   handleDisconnect(client: Socket) {
-    // this.logger.log(`${client.id} disconnected`);
     client.disconnect();
   }
 
@@ -42,7 +41,6 @@ export class CommentsGateway implements OnGatewayDisconnect {
     @ConnectedSocket() client: Socket,
   ) {
     client.join(gameId);
-    // this.logger.debug(`Client ${client.id} joined gameId ${gameId}`);
     const comments = await this.commentsService.getGameComments(gameId);
     this.server.to(gameId).emit('getComments', comments);
   }
@@ -56,9 +54,6 @@ export class CommentsGateway implements OnGatewayDisconnect {
   ) {
     const comment = await this.commentsService.createComment(dto, user.id);
     this.server.to(dto.gameId).emit('newComment', comment);
-    // this.logger.debug(
-    //   `Game: ${dto.gameId}, recieved comment from ${user.username} - ${dto.content}`,
-    // );
   }
 
   @UseGuards(WsJwtGuard)

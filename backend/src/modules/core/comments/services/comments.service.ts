@@ -9,7 +9,6 @@ export class CommentsService {
   logger = new Logger(CommentsService.name);
 
   createComment(dto: CreateCommentDto, userId: string): Promise<IComment> {
-    // this.logger.debug(dto, userId);
     return this.prisma.comment.create({
       data: {
         content: dto.content,

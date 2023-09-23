@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Logger,
   Param,
   Patch,
@@ -24,29 +26,7 @@ import {
 } from '@app/common';
 import { GamesService } from '../services/games.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { Request } from 'express';
-
-const storageOptions = {
-  storage: diskStorage({
-    destination: './uploads/images',
-    filename: (
-      req: Request,
-      file: Express.Multer.File,
-      cb: (error: Error | null, filename: string) => void,
-    ) => {
-      const now = new Date();
-      const dateStr = now.toLocaleDateString().replace(/\//g, '-');
-      const timeStr = now
-        .toLocaleTimeString()
-        .replace(/:/g, '-')
-        .replace(/\s/g, '');
-      const originalFilename = file.originalname.replace(/\s/g, '_');
-      const filename = `${dateStr}_${timeStr}_${originalFilename}`;
-      cb(null, filename);
-    },
-  }),
-};
+import { storageOptions } from '../utils/multer';
 
 @Controller('games')
 export class GamesController {
@@ -55,30 +35,35 @@ export class GamesController {
   constructor(private gamesService: GamesService) {}
 
   @UseGuards(JwtGuard)
+  @HttpCode(HttpStatus.CREATED)
   @Post()
   createGame(@Body() dto: CreateGameDto, @CurrentUser() user: UserEntity) {
-    return this.gamesService.createGame(dto, user);
+    return this.gamesService.createGame(dto, user.id);
   }
 
+  @HttpCode(HttpStatus.OK)
   @Get()
   getAllGames(@Query() query: GameQueryDto) {
     return this.gamesService.findAllGames(query);
   }
 
   @UseGuards(JwtGuard)
+  @HttpCode(HttpStatus.OK)
   @Get('my')
   getMyGames(@CurrentUser() user: UserEntity) {
     return this.gamesService.findMyGames(user.id);
   }
 
   @UseGuards(JwtGuard)
+  @HttpCode(HttpStatus.OK)
   @Get('my/:id')
   getMyGameById(@CurrentUser() user: UserEntity, @Param('id') id: string) {
     return this.gamesService.findMyGameById(id, user.id);
   }
 
   @UseGuards(JwtGuard)
-  @Post('visible')
+  @Patch('visible')
+  @HttpCode(HttpStatus.OK)
   changeVisibility(
     @Body() dto: ChangeVisibilityDto,
     @CurrentUser() user: UserEntity,
@@ -88,17 +73,14 @@ export class GamesController {
 
   @Public()
   @UseGuards(JwtGuard)
+  @HttpCode(HttpStatus.OK)
   @Get(':id')
-  getGameById(
-    @Param('id') gameId: string,
-    @Query('isManage') isManage: boolean,
-    @CurrentUser() user?: UserEntity,
-  ) {
-    // this.logger.debug(user);
-    return this.gamesService.findGameById(gameId, user?.id, isManage);
+  getGameById(@Param('id') gameId: string, @CurrentUser() user?: UserEntity) {
+    return this.gamesService.findGameById(gameId, user?.id);
   }
 
   @UseGuards(JwtGuard)
+  @HttpCode(HttpStatus.OK)
   @Patch(':id')
   updateGame(
     @Body() dto: UpdateGameDto,
@@ -110,6 +92,7 @@ export class GamesController {
 
   @UseGuards(JwtGuard)
   @UseInterceptors(FileInterceptor('cover', storageOptions))
+  @HttpCode(HttpStatus.OK)
   @Patch(':id/cover')
   uploadCover(
     @Param('id') id: string,
@@ -122,6 +105,7 @@ export class GamesController {
 
   @UseGuards(JwtGuard)
   @UseInterceptors(FileInterceptor('screenshot', storageOptions))
+  @HttpCode(HttpStatus.OK)
   @Patch(':id/screenshot')
   uploadScreenshot(
     @Param('id') id: string,
@@ -132,19 +116,10 @@ export class GamesController {
     return this.gamesService.uploadScreenshot(id, user.id, file);
   }
 
-  // @UseGuards(JwtGuard)
-  // @Delete(':id/cover')
-  // deleteCover(
-  //   @Param('id') id: string,
-  //   @CurrentUser() user: UserEntity,
-  //   @Body('imageId') imageId: string,
-  // ) {
-  //   return this.gamesService.deleteCover(id, user.id, imageId);
-  // }
-
   @UseGuards(JwtGuard)
+  @HttpCode(HttpStatus.OK)
   @Patch(':id/rating')
-  rateGame(
+  async rateGame(
     @Param('id') gameId: string,
     @CurrentUser() user: UserEntity,
     @Body('rating') rating: number,
@@ -153,6 +128,7 @@ export class GamesController {
   }
 
   @UseGuards(JwtGuard)
+  @HttpCode(HttpStatus.OK)
   @Delete(':gameId/screenshot/:screenId')
   deleteScreenshot(
     @Param('gameId') gameId: string,
@@ -161,28 +137,4 @@ export class GamesController {
   ) {
     return this.gamesService.deleteScreenshot(gameId, user.id, screenId);
   }
-
-  // @UseGuards(JwtGuard)
-  // @Patch(':gameId/rmplatform/:platformId')
-  // removePlatform(
-  //   @Param('gameId') gameId: string,
-  //   @Param('platformId') platformId: string,
-  //   @CurrentUser() user: UserEntity,
-  // ) {
-  //   return this.gamesService.removePlatformFromGame(
-  //     gameId,
-  //     platformId,
-  //     user.id,
-  //   );
-  // }
-
-  // @UseGuards(JwtGuard)
-  // @Patch(':gameId/rmtag/:tagId')
-  // removeTag(
-  //   @Param('gameId') gameId: string,
-  //   @Param('tagId') tagId: string,
-  //   @CurrentUser() user: UserEntity,
-  // ) {
-  //   return this.gamesService.removeTagFromGame(gameId, tagId, user.id);
-  // }
 }

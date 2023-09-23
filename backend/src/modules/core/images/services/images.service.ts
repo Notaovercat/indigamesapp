@@ -17,14 +17,15 @@ export class ImagesService {
     });
 
     if (image) {
-      await Promise.all([
-        await this.prisma.coverImage.delete({
-          where: {
-            id: image.id,
-          },
-        }),
-        await this.deleteFile(image.name),
-      ]);
+      await this.deleteFile(image.name);
+      return this.prisma.coverImage.update({
+        where: {
+          id: image.id,
+        },
+        data: {
+          name: filename,
+        },
+      });
     }
 
     return this.prisma.coverImage.create({
@@ -52,18 +53,6 @@ export class ImagesService {
     });
   }
 
-  async deleteCover(coverId: string) {
-    const deletedCover = await this.prisma.coverImage.delete({
-      where: {
-        id: coverId,
-      },
-    });
-
-    // deleting from folder
-    await this.deleteFile(deletedCover.name);
-    return deletedCover;
-  }
-
   async deleteScreenshot(screenId: string) {
     const deletedScreen = await this.prisma.screenshot.delete({
       where: {
@@ -77,7 +66,8 @@ export class ImagesService {
   }
 
   async deleteFile(name: string) {
-    const imagePath = join(__dirname, '../uploads/images', name);
+    // const imagePath = join(__dirname, '../uploads/images', name);
+    const imagePath = join(process.cwd(), '/uploads/images', name);
     await unlink(imagePath);
   }
 }

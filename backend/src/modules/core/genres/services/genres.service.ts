@@ -25,14 +25,14 @@ export class GenresService {
     });
   }
 
-  async createGenre(dto: CreateGenreDto) {
+  async createGenre(dto: CreateGenreDto): Promise<IGenre> {
     // clear cache
     await this.cacheService.deleteCache('genres');
 
     return this.prisma.genre.create({ data: { ...dto } });
   }
 
-  async updaetGenre(genreId: string, dto: UpdateGenreDto) {
+  async updateGenre(genreId: string, dto: UpdateGenreDto): Promise<IGenre> {
     // clear cache
     await this.cacheService.deleteCache('genres');
 
@@ -42,7 +42,7 @@ export class GenresService {
     });
   }
 
-  async deleteGenre(genreId: string) {
+  async deleteGenre(genreId: string): Promise<IGenre> {
     // clear cache
     await this.cacheService.deleteCache('genres');
 

@@ -52,7 +52,7 @@ export class GenresController {
   @UseGuards(JwtGuard)
   @Patch(':id')
   async updatePlatform(@Param('id') id: string, @Body() dto: UpdateGenreDto) {
-    return this.genresService.updaetGenre(id, dto);
+    return this.genresService.updateGenre(id, dto);
   }
 
   @Roles('admin')

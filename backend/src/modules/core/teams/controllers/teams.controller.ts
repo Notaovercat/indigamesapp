@@ -2,7 +2,8 @@ import {
   Body,
   Controller,
   Delete,
-  Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
   UseGuards,
@@ -20,12 +21,8 @@ import {
 export class TeamController {
   constructor(private teamsService: TeamsService) {}
 
-  @Get('game/:id')
-  getTeamByGAmeId(@Param('id') gameId: string) {
-    return this.teamsService.getTeamByGameId(gameId);
-  }
-
   @UseGuards(JwtGuard)
+  @HttpCode(HttpStatus.CREATED)
   @Post('game/:id')
   addUserToTheTeam(
     @Param('id') gameId: string,
@@ -36,6 +33,7 @@ export class TeamController {
   }
 
   @UseGuards(JwtGuard)
+  @HttpCode(HttpStatus.OK)
   @Delete('game/:id')
   removeUserFromTeam(
     @Param('id') gameId: string,

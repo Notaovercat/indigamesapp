@@ -17,7 +17,7 @@ import {
 import { TeamsService } from '../../teams/services/teams.service';
 import { ImagesService } from '../../images/services/images.service';
 import { STATUS } from '@prisma/client';
-import { IGame, IGamePreview } from '@workspace/shared';
+import { IGame, IGamePreview, IImage } from '@workspace/shared';
 import { CacheService } from '../../../cache/services/cache.service';
 
 @Injectable()
@@ -32,7 +32,7 @@ export class GamesService {
   ) {}
 
   // create a game
-  async createGame(dto: CreateGameDto, user: UserEntity): Promise<GameEntity> {
+  async createGame(dto: CreateGameDto, userId: string): Promise<GameEntity> {
     const { team, tags, platforms, genres, ...createGameDto } = dto;
 
     const game = await this.prisma.game.create({
@@ -58,7 +58,7 @@ export class GamesService {
     // trying to create team
     try {
       const teamMembers = {
-        authorId: user.id,
+        authorId: userId,
         teamMembers: team,
         gameId: game.id,
       } as CreateTeamDto;
@@ -67,11 +67,11 @@ export class GamesService {
       await this.teamService.createTeam(teamMembers);
     } catch (err) {
       // if an error occures in the team servise, deleting the game
-      this.deleteGame(game.id);
+      return this.prisma.game.delete({ where: { id: game.id } });
     }
 
     // clear cache
-    await this.cacheService.clearCacheWithPattern('games');
+    // await this.cacheService.clearCacheWithPattern('games');
 
     return game;
   }
@@ -146,19 +146,11 @@ export class GamesService {
    find game by id
    if game is not visible, return 404,
    */
-  async findGameById(
-    gameId: string,
-    userId?: string,
-    isManage = false,
-  ): Promise<IGame> {
-    if (isManage && !userId)
-      throw new ForbiddenException('You are not allowed');
-    if (isManage && userId)
-      await this.teamService.checkIsUserIsAuthor(gameId, userId);
-
+  async findGameById(gameId: string, userId?: string): Promise<IGame> {
     const game = await this.prisma.game.findFirstOrThrow({
       where: {
         id: gameId,
+        isVisible: true,
       },
       select: {
         id: true,
@@ -209,33 +201,15 @@ export class GamesService {
       },
     });
 
-    // check if game is visible
-    // if not visble and not user id provided - return 403
-    if (!game.isVisible && !userId) throw new NotFoundException('No such game');
-    // if (!game.isVisible) throw new NotFoundException('No such game');
-
-    // if userid provided, check if user is author
-    if (!game.isVisible && userId) {
-      await this.isUserAuthor(game.id, userId);
-      return game;
-    }
-
-    /*  
-    await this.prisma.game.update({
-      where: { id: gameId },
-      data: {
-        views_count: {
-          increment: 1,
+    if (userId !== game.team?.author.id) {
+      await this.prisma.game.update({
+        where: { id: gameId },
+        data: {
+          views_count: {
+            increment: 1,
+          },
         },
-      },
-    });
-    */
-    if (userId !== game.team?.author?.id) {
-      await this.prisma.$queryRaw`
-      UPDATE "Game"
-      SET "views_count" = "views_count" + 1
-      WHERE "id" = ${gameId}
-    `;
+      });
     }
 
     return game;
@@ -442,7 +416,11 @@ export class GamesService {
     });
   }
 
-  async uploadCover(gameId: string, userId: string, file: Express.Multer.File) {
+  async uploadCover(
+    gameId: string,
+    userId: string,
+    file: Express.Multer.File,
+  ): Promise<IImage> {
     // check if user author
     await this.isUserAuthor(gameId, userId);
 
@@ -457,7 +435,7 @@ export class GamesService {
     gameId: string,
     userId: string,
     file: Express.Multer.File,
-  ) {
+  ): Promise<IImage> {
     // check if user author
     await this.isUserAuthor(gameId, userId);
 
@@ -465,7 +443,11 @@ export class GamesService {
   }
 
   // delete screenshot from game
-  async deleteScreenshot(gameId: string, userId: string, screenId: string) {
+  async deleteScreenshot(
+    gameId: string,
+    userId: string,
+    screenId: string,
+  ): Promise<IImage> {
     // check if user author
     await this.isUserAuthor(gameId, userId);
 
@@ -482,7 +464,6 @@ export class GamesService {
     });
 
     if (!rating) {
-      this.logger.debug('creating');
       await this.prisma.rating.create({
         data: {
           userId,
@@ -491,7 +472,6 @@ export class GamesService {
         },
       });
     } else {
-      this.logger.debug('updating');
       await this.prisma.rating.update({
         where: {
           id: rating.id,

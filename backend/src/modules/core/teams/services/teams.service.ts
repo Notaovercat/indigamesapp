@@ -11,6 +11,7 @@ import {
   TeamEntity,
 } from '@app/common';
 import { UserService } from '../../../user/services/user.service';
+import { ITeamMember } from '@workspace/shared';
 
 @Injectable()
 export class TeamsService {
@@ -23,14 +24,14 @@ export class TeamsService {
     const { authorId, teamMembers, gameId } = teamDto;
 
     // creating team
-    const team = (await this.prisma.team.create({
+    const team: TeamEntity = await this.prisma.team.create({
       data: {
         authorId,
         gameId,
       },
-    })) as TeamEntity;
+    });
 
-    // add team id for everu team member object for createMany
+    // add team id for every team member object for createMany
     const members = teamMembers.map((member) => ({
       ...member,
       teamId: team.id,
@@ -57,35 +58,35 @@ export class TeamsService {
   }
 
   // return team by game id
-  async getTeamByGameId(gameId: string) {
-    return this.prisma.team.findUniqueOrThrow({
-      where: {
-        gameId,
-      },
-      include: {
-        team_members: {
-          select: {
-            id: true,
-            role: true,
-            user: {
-              select: {
-                id: true,
-                email: true,
-                username: true,
-              },
-            },
-          },
-        },
-      },
-    });
-  }
+  // async getTeamByGameId(gameId: string) {
+  //   return this.prisma.team.findUniqueOrThrow({
+  //     where: {
+  //       gameId,
+  //     },
+  //     include: {
+  //       team_members: {
+  //         select: {
+  //           id: true,
+  //           role: true,
+  //           user: {
+  //             select: {
+  //               id: true,
+  //               email: true,
+  //               username: true,
+  //             },
+  //           },
+  //         },
+  //       },
+  //     },
+  //   });
+  // }
 
   // add user to the team
   async addUserToTheTeam(
     gameId: string,
     memberDto: CreateTeamMemberDto,
-    userId: string,
-  ) {
+    authorId: string,
+  ): Promise<ITeamMember> {
     // find team
     const team = await this.prisma.team.findFirst({
       where: { gameId },
@@ -94,7 +95,7 @@ export class TeamsService {
     if (!team) throw new NotFoundException('Team not found');
 
     // check if user is author of the game
-    const check = this.checkIsUserIsAuthor(team.id, userId);
+    const check = this.checkIsUserIsAuthor(team.id, authorId);
 
     if (!check) throw new ForbiddenException('You are not in the team');
 
@@ -110,14 +111,25 @@ export class TeamsService {
         userId: user.id,
         role: memberDto.role,
       },
+      select: {
+        id: true,
+        user: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+          },
+        },
+        role: true,
+      },
     });
   }
 
   async removeUserFromTeam(
     gameId: string,
     dto: RemoveTeamMemberDto,
-    userId: string,
-  ) {
+    authorId: string,
+  ): Promise<ITeamMember> {
     // find team
     const team = await this.prisma.team.findFirst({
       where: { gameId },
@@ -126,13 +138,24 @@ export class TeamsService {
     if (!team) throw new NotFoundException('Team not found');
 
     // check if user is author of the game
-    const check = this.checkIsUserIsAuthor(team.id, userId);
+    const check = this.checkIsUserIsAuthor(team.id, authorId);
 
     if (!check) throw new ForbiddenException('You are not in the team');
 
     return this.prisma.teamMember.delete({
       where: {
         id: dto.teamMemberId,
+      },
+      select: {
+        id: true,
+        user: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+          },
+        },
+        role: true,
       },
     });
   }

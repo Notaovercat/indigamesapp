@@ -117,7 +117,7 @@ const handleVisibility = async () => {
   visibilityErrorMsg.value = "";
 
   const { data, error } = await useMyFetch("games/visible", {
-    method: "POST",
+    method: "PATCH",
     body: {
       gameId: game.id,
       isVisible: !visibility.value,

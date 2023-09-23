@@ -18,7 +18,7 @@ export class PlatformsService {
   }
 
   findPlatformById(id: string): Promise<IPlatform> {
-    return this.prisma.platform.findUniqueOrThrow({
+    return this.prisma.platform.findFirstOrThrow({
       where: {
         id,
       },

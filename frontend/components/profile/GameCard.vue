@@ -18,7 +18,7 @@ const { game } = defineProps<Props>();
     <div class="flex flex-col gap-1 text-lg">
       <h4 class="text-xl font-bold">{{ game.title }}</h4>
       <p v-dompurify-html="game.description" class="mt-1 line-clamp-1"></p>
-      <p>Rating: {{ game.rating }}/10</p>
+      <p>Rating: {{ game.rating * 2 }}/10</p>
       <p>Views: {{ game.views_count }}</p>
       <p>Comments: {{ game._count.comments }}</p>
     </div>

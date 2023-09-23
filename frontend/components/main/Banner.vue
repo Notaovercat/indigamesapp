@@ -1,7 +1,7 @@
 <template>
   <img
     src="../../assets/images/banner.png"
-    class="object-cover md:object-contain max-w-full rounded h-56"
+    class="object-cover md:object-contain max-w-full rounded max-h-96"
     alt="banner"
   />
 </template>

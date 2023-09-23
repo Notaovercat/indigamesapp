@@ -9,9 +9,7 @@ const gameId = route.params.id as string;
 
 const content = ref();
 
-const { data, error } = await useMyFetch<IGame>(
-  `games/${gameId}?isManage=${false}`
-);
+const { data, error } = await useMyFetch<IGame>(`games/${gameId}`);
 
 if (error.value) {
   showError({

@@ -48,9 +48,18 @@ const useGameStore = useGames();
 
 const gameId = route.params.id as string;
 
-await useGameStore.getGameById(gameId, true);
+let game = {} as unknown as IGame;
 
-const game = useGameStore.game as IGame;
+const { data, error } = await useMyFetch<IGame>(`games/my/${gameId}`);
+
+if (error.value) {
+  showError({
+    statusCode: error.value.statusCode,
+    message: error.value.message,
+  });
+}
+
+if (data.value) game = data.value;
 
 const openGoBack = ref(false);
 

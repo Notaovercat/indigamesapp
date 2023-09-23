@@ -37,10 +37,8 @@ export const useGames = defineStore("game", () => {
     if (data.value) lastGames.value = data.value;
   }
 
-  async function getGameById(id: string, isManage = false) {
-    const { data, error } = await useMyFetch<IGame>(
-      `games/${id}?isManage=${isManage}`
-    );
+  async function getGameById(id: string) {
+    const { data, error } = await useMyFetch<IGame>(`games/${id}`);
 
     if (error.value) {
       showError({

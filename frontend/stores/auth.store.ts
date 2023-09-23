@@ -1,9 +1,6 @@
 import { ICreateUser } from "@/types/user/createUser.interface";
 
 export const useAuth = defineStore("auth", () => {
-  const config = useRuntimeConfig();
-  const apiUrl = config.public.API_URL;
-  // error message for auth methods
   const errorMsg = ref("");
 
   // user id
@@ -11,27 +8,6 @@ export const useAuth = defineStore("auth", () => {
 
   // is authed
   const isAuthed = ref(false);
-
-  // async function logIn(creds: ICredentionals) {
-  //   try {
-  //     errorMsg.value = "";
-  //     await axios.post(`${apiUrl}/auth/login`, creds, {
-  //       withCredentials: true,
-  //     });
-
-  //     // update userid
-  //     await checkIfLoggedIn();
-
-  //     //redirect to the main page
-  //     return navigateTo("/");
-  //   } catch (e) {
-  //     if (e instanceof AxiosError) {
-  //       if (e.response?.status === 401)
-  //         errorMsg.value = "Wrong email or password";
-  //       else errorMsg.value = "Server error, try again later";
-  //     }
-  //   }
-  // }
 
   async function signUp(input: ICreateUser) {
     errorMsg.value = "";
@@ -50,18 +26,6 @@ export const useAuth = defineStore("auth", () => {
     if (data.value) {
       return navigateTo({ name: "login" });
     }
-    // try {
-    //   errorMsg.value = "";
-    //   await axios.post(`${apiUrl}/auth/register`, data);
-    //   //redirect to the main page
-    //   return navigateTo({ name: "login" });
-    // } catch (e) {
-    //   if (e instanceof AxiosError) {
-    //     if (e.response?.status === 400)
-    //       errorMsg.value = "This email already in use";
-    //     else errorMsg.value = "Server error, try again later";
-    //   }
-    // }
   }
 
   async function logOut() {
@@ -95,7 +59,6 @@ export const useAuth = defineStore("auth", () => {
   }
 
   return {
-    // logIn,
     errorMsg,
     checkIfLoggedIn,
     userId,

@@ -26,7 +26,7 @@ async function bootstrap() {
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   });
-  app.useStaticAssets(join(__dirname, '../uploads'));
+  app.useStaticAssets(join(process.cwd(), 'uploads'));
   app.use(cookieParser());
   app.use(helmet());
   await app.listen(port);

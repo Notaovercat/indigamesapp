@@ -32,17 +32,17 @@ import { APP_GUARD } from '@nestjs/core';
     PrismaModule.forRoot({
       isGlobal: true,
     }),
-    LoggerModule.forRoot({
-      pinoHttp: {
-        transport: {
-          target: 'pino-pretty',
-          options: {
-            singleLine: true,
-            colorize: true,
-          },
-        },
-      },
-    }),
+    // LoggerModule.forRoot({
+    //   pinoHttp: {
+    //     transport: {
+    //       target: 'pino-pretty',
+    //       options: {
+    //         singleLine: true,
+    //         colorize: true,
+    //       },
+    //     },
+    //   },
+    // }),
     ThrottlerModule.forRoot([
       {
         ttl: 60,

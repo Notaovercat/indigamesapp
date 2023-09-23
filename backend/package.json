@@ -21,7 +21,7 @@
     "test:watch": "jest --maxWorkers=50% --silent=false --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --silent=false --config ./test/jest-e2e.json "
+    "test:e2e": "dotenv -e .env.test -- jest --runInBand --detectOpenHandles --forceExit --silent=false --config ./test/jest-e2e.json "
   },
   "dependencies": {
     "@faker-js/faker": "^8.0.2",
@@ -45,7 +45,6 @@
     "class-transformer": "^0.3.1",
     "class-validator": "^0.14.0",
     "cookie-parser": "^1.4.6",
-    "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "helmet": "^7.0.0",
     "jest-mock-extended": "^3.0.4",
@@ -78,7 +77,6 @@
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
-    "cross-env": "^7.0.3",
     "eslint": "^8.46.0",
     "eslint-config-prettier": "^8.9.0",
     "eslint-plugin-prettier": "^4.2.1",

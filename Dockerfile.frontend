@@ -1,0 +1,17 @@
+FROM node:alpine 
+
+ENV NODE_ENV production
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+RUN rm -rf backend
+RUN npm i -g pnpm
+
+# Install dependencies for backend
+RUN pnpm --filter frontend install --prod --frozen-lockfile
+
+RUN pnpm run front:build
+
+CMD [ "pnpm", "run", "front:start" ]

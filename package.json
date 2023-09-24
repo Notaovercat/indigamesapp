@@ -6,9 +6,14 @@
   "description": "",
   "scripts": {
     "dev": "pnpm --stream -r run dev",
-    "migrate": "pnpm --filter backend run migrate",
     "build": "pnpm --stream -r run build",
-    "start": "pnpm --stream -r run prod"
+    "start": "pnpm --stream -r run prod",
+    "back:build": "pnpm --filter backend run build",
+    "back:start": "pnpm --filter backend run start:prod",
+    "front:build": "pnpm --filter frontend run build",
+    "front:start": "pnpm --filter frontend run prod",
+    "prisma:generate": "pnpm --filter backend run prisma:generate",
+    "prisma:deploy": "pnpm --filter backend run prisma:deploy"
   },
   "keywords": [],
   "author": "",

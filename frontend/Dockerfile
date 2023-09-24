@@ -1,25 +1,37 @@
-FROM node:lts as build-stage
+# use node 16 alpine image as build image
+FROM node:16-alpine as builder
 
+# create work directory in app folder
 WORKDIR /app
 
-COPY . .
+# install required packages for node image
+RUN apk --no-cache add openssh g++ make python3 git
 
-RUN npm install
+RUN npm i -g pnpm
+# copy over package.json files
+COPY package.json /app/
 
+# install all depencies
+RUN pnpm install 
+
+# copy over all files to the work directory
+ADD . /app
+
+# build the project
 RUN npm run build
 
-RUN rm -rf node_modules && \
-	NODE_ENV=production npm install \
-	--prefer-offline \
-	--pure-lockfile \
-	--non-interactive \
-	--production=true
+# start final image
+FROM node:16-alpine
 
-
-FROM node:lts as prod-stage
 
 WORKDIR /app
 
-COPY --from=build-stage /app/.output/  ./.output/
+# copy over build files from builder step
+COPY --from=builder /app  /app
 
-CMD [ "node", ".output/server/index.mjs" ]
+# expose the host and port 3000 to the server
+ENV HOST 0.0.0.0
+EXPOSE 3000
+
+# run the build project with node
+ENTRYPOINT ["node", ".output/server/index.mjs"]

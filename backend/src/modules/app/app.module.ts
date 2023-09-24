@@ -25,8 +25,7 @@ import { APP_GUARD } from '@nestjs/core';
         JWT_EXPIRES_IN: Joi.number().required(),
         APP_PORT: Joi.number().required(),
         CLIENT_API: Joi.string().required(),
-        REDIS_HOST: Joi.string().required(),
-        REDIS_PORT: Joi.number().required(),
+        REDIS_URL: Joi.string().required(),
       }),
     }),
     PrismaModule.forRoot({

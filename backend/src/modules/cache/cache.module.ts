@@ -9,7 +9,8 @@ import { CacheService } from './services/cache.service';
     CacheProvider.register({
       isGlobal: true,
       store: redisStore,
-      url: process.env.REDIS_URL,
+      host: process.env.REDIS_HOST,
+      port: process.env.REDIS_PORT,
     }),
   ],
   providers: [CacheService],

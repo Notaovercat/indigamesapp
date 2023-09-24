@@ -1,0 +1,33 @@
+FROM node:18 as build
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+RUN rm -rf frontend
+
+RUN npm i -g pnpm  
+
+RUN pnpm install
+
+RUN pnpm run prisma:generate
+
+RUN pnpm run back:build
+
+
+
+FROM node:18 as prod
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+RUN rm -rf frontend
+
+RUN npm i -g pnpm  
+
+COPY --from=build /usr/src/app/backend/dist /usr/src/app/backend/.
+
+RUN pnpm install --production
+
+CMD [ "pnpm", "run", "back:start" ]

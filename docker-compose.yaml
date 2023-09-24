@@ -1,0 +1,87 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    hostname: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - backend
+
+  redis:
+    image: redis
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/data
+    networks:
+      - backend
+
+  backend:
+    container_name: backend
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile.backend
+    ports:
+      - 3333:3333
+    volumes:
+      - backend_data:/usr/src/app
+    depends_on:
+      - postgres
+    networks:
+      - backend
+      - frontend
+
+  frontend:
+    container_name: frontend
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile.frontend
+    ports:
+      - 3000:3000
+    volumes:
+      - frontend_data:/usr/src/app
+    depends_on:
+      - backend
+    networks:
+      - frontend
+
+  pgadmin4:
+    container_name: pgadmin4
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@a48zomro.ml
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "5500:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      - backend
+
+volumes:
+  postgres_data:
+  redis_data:
+  backend_data:
+  frontend_data:
+  pgadmin_data:
+
+networks:
+  backend:
+  frontend:

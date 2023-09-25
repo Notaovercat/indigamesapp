@@ -28,15 +28,15 @@ useHead({
       </div>
       <div
         v-if="data"
-        class="flex flex-col gap-3 items-center justify-center w-full h-full"
+        class="flex flex-col md:text-3xl gap-3 items-center justify-center w-full h-full"
       >
-        <UserIcon class="w-40 rounded-full" />
+        <UserIcon class="md:w-40 w-20 rounded-full" />
         <div class="flex justify-between gap-2">
-          <span class="text-3xl">{{ data.username }}</span>
+          <span>{{ data.username }}</span>
         </div>
         <div class="flex justify-between gap-2">
-          <span class="text-3xl text-slate-400">Email:</span>
-          <span class="text-3xl">{{ data.email }}</span>
+          <span class="text-slate-400">Email:</span>
+          <span>{{ data.email }}</span>
         </div>
       </div>
     </div>

@@ -131,12 +131,12 @@ const getProfile = async () => {
     </div>
 
     <!-- MOBILE PROFILE INFO -->
-    <DisclosurePanel class="sm:hidden">
+    <DisclosurePanel v-slot="{ close }" class="sm:hidden">
       <div class="space-y-1 px-2 pb-3 pt-2">
         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
 
-        <NavMobileButton name="All games" path="all" />
-        <NavMobileButton name="Upload your game" path="upload" />
+        <NavMobileButton @click="close" name="All games" path="all" />
+        <NavMobileButton @click="close" name="Upload your game" path="upload" />
       </div>
 
       <div
@@ -174,11 +174,13 @@ const getProfile = async () => {
           >
         </div> -->
           <NavOpenProfileButton
+            @click="close"
             class="block rounded-md hover:bg-[#EA1179] px-3 py-2 text-base font-medium text-white"
             :active="false"
           />
 
           <NavLogoutButton
+            @click="close"
             class="block rounded-md hover:bg-[#EA1179] px-3 py-2 text-base font-medium text-white"
             :active="false"
           />
@@ -187,18 +189,18 @@ const getProfile = async () => {
 
       <!-- MOBILE LOGIN BUTTON -->
       <div v-else>
-        <div class="flex justify-center items-center">
-          <button
-            type="button"
+        <div class="flex justify-center items-center p-3">
+          <NuxtLink
             class="flex justify-center bg-gray-800 items-center rounded-full p-1 text-white focus:outline-none hover:bg-[#EA1179] focus:ring-2 transition-all"
-            @click="router.push({ name: 'login' })"
+            :to="{ name: 'login' }"
+            @click="close"
           >
             <ArrowLeftOnRectangleIcon
               class="h-8 w-8 rounded-full"
               aria-hidden="true"
             />
             <span>Login</span>
-          </button>
+          </NuxtLink>
         </div>
       </div>
     </DisclosurePanel>

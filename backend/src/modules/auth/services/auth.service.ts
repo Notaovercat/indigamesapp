@@ -1,4 +1,9 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { UserService } from '../../user/services/user.service';
 import { hash } from 'bcryptjs';
 import { CreateUserDto, Payload, UserEntity } from '@app/common';
@@ -8,6 +13,7 @@ import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
+  logger = new Logger(AuthService.name);
   constructor(
     private userService: UserService,
     private configService: ConfigService,
@@ -36,9 +42,13 @@ export class AuthService {
 
     const token = this.jwtService.sign(tokenPaylaod);
 
+    const secure = process.env.NODE_ENV === 'development' ? false : true;
+
     response.cookie('Authentication', token, {
       httpOnly: true,
       expires,
+      sameSite: 'none',
+      secure,
     });
   }
 }

@@ -25,11 +25,10 @@ const { API_URL } = config.public;
   <div v-else class="flex relative w-full overflow-hidden rounded">
     <img
       class="object-none w-full h-80 relative z-10"
-      :src="`http://localhost:3333/images/${coverImageName}`"
+      :src="`${API_URL}/../images/${coverImageName}`"
       alt="cover-image-bg"
     />
 
-    <!-- :src="`${API_URL}/images/${coverImageName}`" -->
     <img
       class="absolute w-full h-80 object-cover blur-xl"
       :src="`${API_URL}/../images/${coverImageName}`"

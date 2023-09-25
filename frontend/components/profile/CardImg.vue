@@ -11,7 +11,7 @@ const { coverName } = defineProps<Props>();
   <div class="flex overflow-hidden" v-if="coverName">
     <img
       class="object-contain rounded-sm text-gray-300 sm:w-64"
-      :src="`${API_URL}/images/${coverName}`"
+      :src="`${API_URL}/../images/${coverName}`"
     />
   </div>
 

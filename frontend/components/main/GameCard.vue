@@ -20,7 +20,7 @@ const { content } = props;
     <img
       class="h-44 w-full object-cover object-left"
       v-if="content.coverImage"
-      :src="`${API_URL}/images/${content.coverImage.name}`"
+      :src="`${API_URL}/../images/${content.coverImage.name}`"
       alt="gameCover"
     />
 

@@ -1,13 +1,11 @@
 [![My Skills](https://skillicons.dev/icons?i=ts,nodejs,nest,nuxt,prisma,postgres,redis,socketio)](https://skillicons.dev)
 # IndiegamesApp
 
-[TOC]
-
 **About**
 This full-stack web application built with Node.js, Nuxt.js, Nest.js, Prisma, PostgreSQL, and Redis. It allows users to upload their games, manage them, and engage with other users through comments using Socket.io. 
 
-##Getting started
-###Prerequisites
+## Getting started
+### Prerequisites
 Before you begin, make sure you have the following installed on your system:
 
 - Node.js
@@ -15,8 +13,9 @@ Before you begin, make sure you have the following installed on your system:
 - Redis
 - pnpm
 
-###Installation
+### Installation
 1. Clone the repository:
+
 ```bash 
 https://github.com/Notaovercat/indigamesapp.git
 ```
@@ -30,7 +29,7 @@ cd indigamesapp
 pnpm i
 ```
 
-##Configuration
+## Configuration
 Make sure to configure the following environment variables in backend .env file:
 ```env
 DATABASE_URL=postgres://postgres:postgres@your-postgres-host:5432/postgres
@@ -53,8 +52,8 @@ Configure the following environment variables in frontend .env file:
 API_URL=your_api_url
 ```
 
-##Startig
-###Usage
+## Startig
+### Usage
 For starting dev server run this following commands:
 ```bash
 pnpm run prisma:dev

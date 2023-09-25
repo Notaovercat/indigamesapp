@@ -26,9 +26,14 @@ async function bootstrap() {
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   });
+  app.setGlobalPrefix('api');
   app.useStaticAssets(join(process.cwd(), 'uploads'));
   app.use(cookieParser());
-  app.use(helmet());
+  app.use(
+    helmet({
+      crossOriginResourcePolicy: false,
+    }),
+  );
   await app.listen(port);
 }
 bootstrap();

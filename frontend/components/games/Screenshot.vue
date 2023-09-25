@@ -27,7 +27,7 @@ const onDelete = () => {
     <img
       @click="open = true"
       class="max-w-[20rem] max-h-[80rem] object-cover shrink-0 cursor-pointer hover:opacity-75 hover:shadow-2xl transition-all ease-in-out duration-75"
-      :src="`${API_URL}/images/${screenName}`"
+      :src="`${API_URL}/../images/${screenName}`"
       alt="screenshot"
     />
 
@@ -53,7 +53,7 @@ const onDelete = () => {
           <div>
             <div class="flex justify-center items-start p-2">
               <img
-                :src="`${API_URL}/images/${screenName}`"
+                :src="`${API_URL}/../images/${screenName}`"
                 alt="screenshot-full"
               />
             </div>

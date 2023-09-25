@@ -2,6 +2,7 @@
 # IndiegamesApp
 
 **About**
+
 This full-stack web application built with Node.js, Nuxt.js, Nest.js, Prisma, PostgreSQL, and Redis. It allows users to upload their games, manage them, and engage with other users through comments using Socket.io. 
 
 ## Getting started

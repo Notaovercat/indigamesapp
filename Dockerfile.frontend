@@ -10,21 +10,4 @@ RUN npm i -g pnpm
 
 RUN pnpm install
 
-RUN pnpm run front:build
-
-
-FROM node:18 as prod
-
-WORKDIR /usr/src/app
-
-COPY . .
-
-RUN rm -rf backend
-
-RUN npm i -g pnpm  
-
-COPY --from=build /usr/src/app/frontend/.output /usr/src/app/frontend/.
-
-RUN pnpm install --production
-
 CMD [ "pnpm", "run", "front:start" ]

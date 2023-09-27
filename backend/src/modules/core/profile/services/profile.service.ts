@@ -11,6 +11,9 @@ export class ProfileService {
       where: {
         id: userId,
       },
+      orderBy: {
+        createdAt: 'desc',
+      },
       select: {
         id: true,
         email: true,
@@ -28,6 +31,9 @@ export class ProfileService {
           authorId: userId,
         },
         isVisible: isYourProfile ? undefined : true,
+      },
+      orderBy: {
+        createdAt: 'desc',
       },
       select: {
         id: true,

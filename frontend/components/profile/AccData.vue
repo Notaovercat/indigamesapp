@@ -21,7 +21,7 @@ const categories = reactive([
   <TabGroup
     vertical
     as="div"
-    class="flex flex-col md:flex-row md:justify-between w-full h-full md:h-[31rem] p-2 gap-3"
+    class="flex flex-col md:flex-row md:justify-between w-full h-full min-h-screen p-2 gap-3"
   >
     <TabList
       as="ul"
@@ -46,9 +46,7 @@ const categories = reactive([
         </button>
       </Tab>
     </TabList>
-    <div
-      class="add-data-container w-full md:w-3/4 md:h-[30rem] overflow-y-scroll"
-    >
+    <div class="w-full md:w-3/4">
       <TabPanels>
         <TabPanel>
           <ProfileCreatedGames />

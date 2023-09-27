@@ -5,7 +5,7 @@ const errorMsg = computed(() => profileStore.gameErrorMsg);
 const isLoading = computed(() => profileStore.gameLoading);
 </script>
 <template>
-  <div class="flex flex-col gap-2 px-2 w-full">
+  <div class="flex flex-col gap-2 px-2 w-full h-full">
     <div v-if="errorMsg" class="w-full text-xl text-center">
       <p>{{ errorMsg }}</p>
     </div>

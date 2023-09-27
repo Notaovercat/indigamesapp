@@ -16,7 +16,7 @@
       </div>
       <div class="mt-8 md:order-1 md:mt-0">
         <p class="text-center text-xs leading-5 text-white">
-          &copy; 2023 IndieGamesApp, Notaovercat.
+          &copy; 2023 IndieGamesApp, notaovercat@gmail.com
         </p>
       </div>
     </div>

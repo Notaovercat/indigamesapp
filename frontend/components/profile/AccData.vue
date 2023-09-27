@@ -21,7 +21,7 @@ const categories = reactive([
   <TabGroup
     vertical
     as="div"
-    class="flex flex-col md:flex-row md:justify-between w-full h-full md:h-[33rem] p-2 gap-3"
+    class="flex flex-col md:flex-row md:justify-between w-full h-full md:h-[31rem] p-2 gap-3"
   >
     <TabList
       as="ul"

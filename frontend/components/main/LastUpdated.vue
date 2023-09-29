@@ -13,7 +13,7 @@ const errorMsg = ref(gameStore.errorMsg);
 <template>
   <!-- <h1 class="feat-title pt-2 pl-2 font-bold text-3xl">Last Updated</h1> -->
   <div
-    class="flex flex-col pl-6 items-center md:items-start md:h-[72rem] md:overflow-y-scroll"
+    class="flex flex-col pl-0 md:pl-6 items-center md:items-start md:h-[72rem] md:overflow-y-scroll"
   >
     <h1 class="pt-2 font-bold text-3xl pb-6">All games</h1>
     <ul

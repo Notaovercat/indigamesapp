@@ -40,17 +40,17 @@ const getProfile = async () => {
             class="flex-shrink-0 relative cursor-pointer group"
           >
             <img
-              class="block h-10 w-auto sm:hidden relative z-10 group-hover:scale-150 duration-75 transition-all"
+              class="block h-14 w-auto sm:hidden relative z-10 md:group-hover:scale-150 duration-75 transition-all"
               src="../assets/images/logo.png"
               alt="logo1"
             />
             <img
-              class="hidden h-20 w-auto sm:block relative z-10 group-hover:scale-110 duration-75 transition-all"
+              class="hidden h-20 w-auto sm:block relative z-10 md:group-hover:scale-110 duration-75 transition-all"
               src="../assets/images/logo.png"
               alt="logo2"
             />
             <div
-              class="bg-cyan-300 top-0 absolute h-16 rounded-full w-full blur-md block opacity-0 group-hover:opacity-100 transition-all duration-75"
+              class="bg-cyan-300 top-0 absolute h-16 rounded-full w-full blur-md block opacity-0 md:group-hover:opacity-100 transition-all duration-75"
             />
           </NuxtLink>
           <div class="hidden sm:ml-6 sm:block">

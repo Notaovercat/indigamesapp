@@ -4,8 +4,7 @@ import { IGame } from "@workspace/shared";
 export const useGames = defineStore("game", () => {
   const errorlg = ref("");
   const errorMsg = ref("");
-  // @ts-ignore
-  const game: Ref<IGame> = ref({});
+  const game = ref({}) as Ref<IGame>;
   const lastGames: Ref<IGamePreview[]> = ref([]);
   const featuredGames: Ref<IGamePreview[]> = ref([]);
 

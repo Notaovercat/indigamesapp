@@ -22,7 +22,10 @@ const errorMsg = ref(gameStore.errorMsg);
           <MainGameCard :content="game" />
         </li>
       </ul>
-      <div class="flex w-full items-center justify-center pt-8">
+      <div
+        v-if="games.length === 6"
+        class="flex w-full items-center justify-center pt-8"
+      >
         <NuxtLink :to="{ name: 'all' }">
           <button
             class="bg-gradient-to-tl from-indigo-900 to-fuchsia-700 px-9 py-2 text-3xl rounded shadow md:hover:scale-110 transition-all duration-75"

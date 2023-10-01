@@ -17,7 +17,7 @@ const sideBar = ref(false);
     </section>
 
     <section class="main m-2">
-      <div class="grid md:grid-cols-4 grid-cols-1 gap-4">
+      <div class="grid md:grid-cols-4 grid-cols-1 gap-4 h-auto">
         <div class="hidden md:block">
           <MainSideMenu />
         </div>
@@ -40,7 +40,7 @@ const sideBar = ref(false);
 
         <div
           v-if="sideBar"
-          class="z-30 h-screen w-full flex absolute bg-black left-0 top-0 bg-opacity-60"
+          class="z-30 min-h-screen w-full flex fixed bg-black left-0 top-0 bg-opacity-60"
         ></div>
 
         <div class="col-span-3">
